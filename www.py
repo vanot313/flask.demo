@@ -1,3 +1,4 @@
+# coding:utf-8
 from application import app
 from controllers.index import index_page
 from flask_debugtoolbar import DebugToolbarExtension

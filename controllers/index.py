@@ -1,3 +1,4 @@
+# coding:utf-8
 from flask import Blueprint, render_template
 from common.models.user import User
 from common.models.account import Account

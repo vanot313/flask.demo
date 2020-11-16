@@ -1,3 +1,4 @@
+# coding:utf-8
 #本地开发配置文件
 from config.base_setting import *
 #这样的话就可以覆盖配置了
