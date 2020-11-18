@@ -1,6 +1,8 @@
 {% extends "common/layout.html" %}
 {% block content %}
-<p> flask 查询数据库</p>
+<p>
+    {{ title }}}
+</p>
 <p>
     {% for item in result %}
     {{ item['id'] }}  {{ item['name'] }}  {{ item['password'] }}

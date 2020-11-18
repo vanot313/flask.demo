@@ -13,4 +13,6 @@ def index():
     # result = User.query.all()
     result = Account.query.all()
     context['result'] = result
+    title = 'it works'
+    context['title'] = title
     return render_template("index.html", **context)
