@@ -1,6 +1,7 @@
 # coding:utf-8
 from application import app, manager
 from flask_script import Server, Command
+
 from www import *
 
 # web server
@@ -24,7 +25,6 @@ def main():
 
 if __name__ == "__main__":
     try:
-        # 这里是干嘛的
         import sys
         sys.exit(main())
 
