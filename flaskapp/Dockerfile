@@ -5,6 +5,7 @@ RUN mkdir /app
 WORKDIR /app
 
 ADD . /app
-RUN pip install -r requirements.txt && pip install uwsgi
 
-CMD["uwsig","--ini","uwsgi.ini"]
+RUN pip install -i https://pypi.doubanio.com/simple/  --trusted-host pypi.doubanio.com -r requirements.txt && pip install uwsgi -i https://pypi.doubanio.com/simple/  --trusted-host pypi.doubanio.com
+
+CMD ["uwsgi","--ini","uwsgi.ini"]
