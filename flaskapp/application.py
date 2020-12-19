@@ -2,6 +2,7 @@
 from flask import Flask
 from flask_script import Manager
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 import os
 
 
@@ -18,6 +19,7 @@ class Application(Flask):
         #     self.config.from_pyfile("config/%s_setting.py" % (os.environ['ops_config']))
 
         # 将Flaks应用作为参数传入，初始化database
+        CORS(self, supports_credentials=True)
         db.init_app(self)
 
 

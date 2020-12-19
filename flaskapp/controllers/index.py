@@ -1,5 +1,5 @@
 # coding:utf-8
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, jsonify
 from common.models.user import User
 from common.models.account import Account
 
@@ -13,7 +13,9 @@ def index():
     context = {}
     # result = User.query.all()
     result = Account.query.all()
-    context['result'] = result
+    # context['result'] = result
     title = 'it works'
     context['title'] = title
     return render_template("index.html", **context)
+    return jsonify(context)
+    # return render_template("index.html", **context)
