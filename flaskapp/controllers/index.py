@@ -4,12 +4,11 @@ from common.models.user import User
 from common.models.account import Account
 
 # 创建一个蓝图对象
-index_page = Blueprint("index_page", __name__)
-first_page = Blueprint("first_page", __name__)
+data = Blueprint("data", __name__)
 
 
 # 注册路由，指定静态文件夹
-@index_page.route("/", methods=['GET'])
+@data.route("/", methods=['GET'])
 def index():
     context = {}
     # result = User.query.all()
@@ -20,8 +19,8 @@ def index():
     return jsonify(context)
     # return render_template("index.html", **context)
 
-@first_page.route("/a", methods=['GET'])
-def index():
+@data.route("/a", methods=['GET'])
+def a():
     context = {}
     # result = User.query.all()
     result = Account.query.all()
