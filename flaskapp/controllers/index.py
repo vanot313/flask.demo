@@ -9,7 +9,7 @@ first_page = Blueprint("first_page", __name__)
 
 
 # 注册路由，指定静态文件夹
-@index_page.route("/")
+@index_page.route("/", methods=['GET'])
 def index():
     context = {}
     # result = User.query.all()
@@ -20,7 +20,7 @@ def index():
     return jsonify(context)
     # return render_template("index.html", **context)
 
-@first_page.route("/a")
+@first_page.route("/a", methods=['GET'])
 def index():
     context = {}
     # result = User.query.all()
