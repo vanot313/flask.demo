@@ -5,6 +5,7 @@ from common.models.account import Account
 
 # 创建一个蓝图对象
 index_page = Blueprint("index_page", __name__)
+first_page = Blueprint("first_page", __name__)
 
 
 # 注册路由，指定静态文件夹
@@ -15,6 +16,17 @@ def index():
     result = Account.query.all()
     # context['result'] = result
     title = 'it works'
+    context['title'] = title
+    return jsonify(context)
+    # return render_template("index.html", **context)
+
+@first_page.route("/a")
+def index():
+    context = {}
+    # result = User.query.all()
+    result = Account.query.all()
+    # context['result'] = result
+    title = 'ohhhh'
     context['title'] = title
     return jsonify(context)
     # return render_template("index.html", **context)
