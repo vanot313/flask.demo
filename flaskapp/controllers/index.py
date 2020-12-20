@@ -16,6 +16,5 @@ def index():
     # context['result'] = result
     title = 'it works'
     context['title'] = title
-    return render_template("index.html", **context)
     return jsonify(context)
     # return render_template("index.html", **context)
