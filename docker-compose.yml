@@ -17,3 +17,7 @@ services:
     restart: always
     ports:
       - "80:80"
+    links:
+      - flask
+    depends_on:
+      - flask
