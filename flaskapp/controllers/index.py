@@ -8,7 +8,7 @@ index_page = Blueprint("index_page", __name__)
 
 
 # 注册路由，指定静态文件夹
-@index_page.route("/api/")
+@index_page.route("/")
 def index():
     context = {}
     # result = User.query.all()
