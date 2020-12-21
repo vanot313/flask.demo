@@ -5,3 +5,7 @@ flask-script
 flask_debugtoolbar
 pymysql
 flask_cors
+
+pandas
+sklearn
+numpy
