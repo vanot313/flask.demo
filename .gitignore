@@ -91,7 +91,7 @@ applogo/
 ### 临时文件 ###
 target/
 out/
-build/
+#build/
 
 ### windows ###
 Thumbs.db

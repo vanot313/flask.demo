@@ -7,11 +7,10 @@ from common.models.account import Account
 data = Blueprint("data", __name__)
 
 
-# 注册路由，指定静态文件夹
+# 注册路由
 @data.route("/", methods=['GET'])
 def index():
     context = {}
-    # result = User.query.all()
     result = Account.query.all()
     # context['result'] = result
     title = 'it works'
