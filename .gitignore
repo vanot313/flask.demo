@@ -99,9 +99,9 @@ ehthumbs.db
 Desktop.ini
  
 ### linux ###
-.*
+# .*
 !.gitignore
-*~
+# *~
  
 ## mac os x
 .DS_Store
