@@ -2,33 +2,39 @@ import pandas as pd
 import numpy as np
 import random
 
-
+# 读取四份训练集csv文件
 base_train = pd.read_csv('datasets/base_train_sum.csv', engine='python', encoding="gbk")
 knowledge_train = pd.read_csv('datasets/knowledge_train_sum.csv', engine='python', encoding="gbk")
 money_train = pd.read_csv('datasets/money_report_train_sum.csv', engine='python', encoding="gbk")
 year_train = pd.read_csv('datasets/year_report_train_sum.csv', engine='python', encoding="gbk")
 
+# 将一些字符串数字化（方便后续处理空值）
 mapstrategy = {'零售业': 1, '服务业': 2, '工业': 3, '商业服务业': 4, '社区服务': 5, '交通运输业': 6}
 mapstrategy2 = {'有限责任公司': 10, '合伙企业': 20, '股份有限公司': 30, '农民专业合作社': 40, '集体所有制企业': 50}
 mapstrategy3 = {'自然人': 10, '企业法人': 20}
+
 base_train['行业'] = base_train['行业'].map(mapstrategy)
 base_train['企业类型'] = base_train['企业类型'].map(mapstrategy2)
 base_train['控制人类型'] = base_train['控制人类型'].map(mapstrategy3)
+
+# 删除区域信息（低联系信息）
 base_train_data = base_train.drop(columns=["区域"])
 
-
+# 处理表中空值（sum函数针对列求和） 对表中有缺失值的列进行遍历处理
+# 1
 for column in list(base_train_data.columns[base_train_data.isnull().sum() > 0]):
+    # 求该列平均值 TODO 是否会产生额外的数值
     a = base_train_data[column].mean()
     base_train_data[column].fillna(a, inplace=True)
-
+# 2
 for column in list(knowledge_train.columns[knowledge_train.isnull().sum() > 0]):
     a = round(knowledge_train[column].mean())
     knowledge_train[column].fillna(a, inplace=True)
 
-# 合并base_train和knowledge_train
+# 根据ID 合并base_train和knowledge_train
 base_knowledge_train = pd.merge(base_train_data, knowledge_train, on='ID', how='inner')
 
-# 处理money_train和year_train,先根据ID和year合并两个数据
+# 根据ID、year 合并money_train和year_train
 money_year_train = pd.merge(money_train, year_train, on=['ID', 'year'])
 
 # 将2015，2016，2017年的数据分别提取出来
