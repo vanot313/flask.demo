@@ -4,4 +4,4 @@ export const selectSingle = () => get(`/upload`);
 
 export const test = () => get(`/data/temp`);
 
-export const tests = () => get(`/data/uploader/upload`);
+export const tests = () => get(`/data/single`);
