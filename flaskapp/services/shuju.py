@@ -130,6 +130,7 @@ verify1_data = verify1_data.drop(columns=["year_x", "year_y", "year"])
 for column in list(verify1_data.columns[verify1_data.isnull().sum() > 0]):
     a = int(verify1_data[column].mean())
     verify1_data[column].fillna(a, inplace=True)
+verify1_data = verify1_data.drop(columns=["控制人ID"])
 # 最终的训练数据：
 verify1_data.to_csv("verify.csv")
 
