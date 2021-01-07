@@ -14,7 +14,7 @@ uploader = Blueprint("uploader", __name__)
 def upload():
     if request.method == 'POST':
         f = request.files['file']
-        f.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), "uploadfile."+secure_filename(f.filename)))
+        f.save(os.path.join(os.path.abspath(os.path.join(os.getcwd(), "../flaskapp/static")), "uploadfile."+secure_filename(f.filename)))
         return 'file uploaded successfully'
 
 
