@@ -37,18 +37,8 @@
           },
           {
             icon: 'el-icon-document',
-            index: 'consumer',
-            title: '用户管理'
-          },
-          {
-            icon: 'el-icon-document',
-            index: 'singer',
-            title: '歌手管理'
-          },
-          {
-            icon: 'el-icon-document',
-            index: 'songList',
-            title: '歌单管理'
+            index: 'main',
+            title: '企业管理'
           },
         ]
       }

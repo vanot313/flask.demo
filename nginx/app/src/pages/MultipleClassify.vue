@@ -1,15 +1,89 @@
 <template>
-    <div>
-      批量企业分类
-    </div>
+  <div>
+    <!--gutter：间距-->
+    <el-row :gutter="20" class="mgb20">
+      <!--共24，故可分2列-->
+      <el-col :span="24">
+        <h3 class="mgb20">僵尸企业比例</h3>
+        <div style="background-color: white">
+          <!--ve-pie：饼图-->
+          <ve-pie :data="companyType" :theme="options1"></ve-pie>
+        </div>
+      </el-col>
+<!--      <el-col :span="12">-->
+<!--        <h3 class="mgb20">企业类型分布</h3>-->
+<!--        <div style="background-color: white">-->
+<!--          &lt;!&ndash;ve-histogram：饼图&ndash;&gt;-->
+<!--          <ve-histogram :data="songStyle" ></ve-histogram>-->
+<!--        </div>-->
+<!--      </el-col>-->
+    </el-row>
+
+
+  </div>
 </template>
 
 <script>
-    export default {
-        name: "MultipleClassify"
+
+  export default {
+    data(){
+      return{
+        companyCount: 0,
+        company: [],
+        res: [],
+        companyType: {  //按性别分类,colums与rows对应
+          columns: ['类型','总数'],
+          rows: [
+            {'类型': '僵尸企业','总数': 0},
+            {'类型': '非僵尸企业','总数': 0}
+          ]
+        },
+        options1: {
+          color: ['#ffc0cb','#87cefa']
+        },
+      }
+    },
+    created() {
+
+      this.res = this.$route.query.res;
+      console.log(this.res['data'][0][2]);
+      this.getCompany();
+    },
+    methods: {
+      getCompany(){
+        this.companyCount = this.res.length;
+        this.companyType.rows[0]['总数'] = this.setCompanyType(true,this.res['data']);
+        this.companyType.rows[1]['总数'] = this.setCompanyType(false,this.res['data']);
+      },
+      setCompanyType(type,company){
+        let count = 0;
+        for(let item of company){
+          if(type == item[2]){
+            count++;
+          }
+        }
+        return count;
+      },
     }
+  }
 </script>
 
 <style scoped>
+  .grid-content {
+    display: flex;
+    align-items: center;/*垂直方向居中*/
+    height: 50px;
+  }
 
+  .grid-cont-center {
+    flex: 1;
+    text-align: center;/*水平方向居中*/
+    font-size: 14px;
+    color: #a9a9a9;
+  }
+
+  .grid-num {
+    font-size: 30px;
+    font-weight: bold;
+  }
 </style>

@@ -4,7 +4,7 @@
     <div class="collapse-btn" @click="collapseChange">
       <i class="el-icon-menu"></i>
     </div>
-    <div class="logo">music后台管理</div>
+    <div class="logo">企业分类管理</div>
     <div class="header-right">
 
     </div>

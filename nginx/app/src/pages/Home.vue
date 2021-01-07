@@ -25,35 +25,36 @@
                   上传文件
                 </el-button>
               </el-upload>
-              <el-button size="mini" @click="">确定</el-button>
             </div>
           </div>
         </el-card>
       </el-col>
 
-<!--      <el-col :span="12">-->
-<!--        <el-card>-->
-<!--          <div class="grid-content">-->
-<!--            <div class="grid-cont-center">-->
-<!--              <div><i class="el-icon-document-copy"></i></div>-->
-<!--              <br>-->
-<!--              <div style="font-size: 20px">批量企业分类</div>-->
-<!--              <div style="text-align: left">-->
-<!--                通过手动输入或csv文件批量上传企业信息，其中包含每个企业的ID以及是否可能成为僵尸企业的结果-->
-<!--              </div>-->
-<!--              <br>-->
-<!--              <el-upload  :before-upload="beforeDocumentUpload" :on-success="handleDocumentSuccess"-->
-<!--                          multiple>-->
-<!--                <el-button size="mini" type="primary">-->
-<!--                  <i class="el-icon-upload" style="font-size: 14px"></i>-->
-<!--                  上传文件-->
-<!--                </el-button>-->
-<!--              </el-upload>-->
-<!--              <el-button size="mini" @click="">确定</el-button>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </el-card>-->
-<!--      </el-col>-->
+      <el-col :span="12">
+        <el-card>
+          <div class="grid-content">
+            <div class="grid-cont-center">
+              <div><i class="el-icon-document-copy"></i></div>
+              <br>
+              <div style="font-size: 20px">批量企业分类</div>
+              <div style="text-align: left">
+                通过手动输入或csv文件批量上传企业信息，其中包含每个企业的ID以及是否可能成为僵尸企业的结果
+              </div>
+              <br>
+              <el-upload
+                action="http://49.235.73.129/uploader/upload"
+                :before-upload="beforeDocumentUpload"
+                :on-success="handleDocumentsSuccess"
+                multiple>
+                <el-button size="mini" type="primary">
+                  <i class="el-icon-upload" style="font-size: 14px"></i>
+                  上传文件
+                </el-button>
+              </el-upload>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -65,7 +66,7 @@
   import Swiper from "../components/Swiper";
   import {mixin} from "../mixins";
   import {selectSingle} from "../api";
-  import {mapGetters} from'vuex';
+  import {test,tests} from "../api";
 
   export default {
     mixins: [mixin],
@@ -77,7 +78,8 @@
     data(){
       return {
         collapse: false,
-        id: 1
+        id: 1,
+        res: [],
       }
     },
     created(){
@@ -110,7 +112,31 @@
         console.log('upload success');
         console.log(res);
         this.notify("上传成功","success");
+        this.tests();
+        this.notify("上传成功","success");
       },
+      handleDocumentsSuccess(res){
+        console.log('upload success');
+        console.log(res);
+        this.test();
+        this.notify("上传成功","success");
+      },
+
+      test(){
+        test()
+        .then(res => {
+          this.res = res;
+          this.$router.push({path: `/multipleClassify`,query:{res}});
+        })
+      },
+
+      tests(){
+        tests()
+          .then(res => {
+            this.res = res;
+            this.$router.push({path: `/singleClassify`,query:{res}});
+          })
+      }
     },
   }
 </script>
