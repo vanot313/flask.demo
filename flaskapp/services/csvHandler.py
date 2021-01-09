@@ -74,10 +74,10 @@ def buildVertifyFile():
 def buildTrainFile():
     # 读取四份训练集csv文件
 
-    base_train = pd.read_csv('services/datasets/base_train_sum.csv', engine='python', encoding="gbk")
-    knowledge_train = pd.read_csv('services/datasets/knowledge_train_sum.csv', engine='python', encoding="gbk")
-    money_train = pd.read_csv('services/datasets/money_report_train_sum.csv', engine='python', encoding="gbk")
-    year_train = pd.read_csv('services/datasets/year_report_train_sum.csv', engine='python', encoding="gbk")
+    base_train = pd.read_csv('static/datasets/base_train_sum.csv', engine='python', encoding="gbk")
+    knowledge_train = pd.read_csv('static/datasets/knowledge_train_sum.csv', engine='python', encoding="gbk")
+    money_train = pd.read_csv('static/datasets/money_report_train_sum.csv', engine='python', encoding="gbk")
+    year_train = pd.read_csv('static/datasets/year_report_train_sum.csv', engine='python', encoding="gbk")
 
     # 将一些字符串数字化（方便后续处理空值）
     mapstrategy = {'零售业': 1, '服务业': 2, '工业': 3, '商业服务业': 4, '社区服务': 5, '交通运输业': 6}
@@ -139,69 +139,8 @@ def buildTrainFile():
         a = int(train_data[column].mean())
         train_data[column].fillna(a, inplace=True)
     # 最终的训练数据：
-    train_data.to_csv("services/train.csv")
+    train_data.to_csv("static/train.csv")
 
-    # -------------------------------------datasets-------------------------------------
-
-    base_verify1 = pd.read_csv('services/datasets/base_verify.csv', engine='python', encoding="gbk")
-    knowledge_verify1 = pd.read_csv('services/datasets/paient_information_verify.csv', engine='python', encoding="gbk")
-    money_verify1 = pd.read_csv('services/datasets/money_information_verify.csv', engine='python', encoding="gbk")
-    year_verify1 = pd.read_csv('services/datasets/year_report_verify.csv', engine='python', encoding="gbk")
-
-    base_verify1['行业'] = base_verify1['行业'].map(mapstrategy)
-    base_verify1['企业类型'] = base_verify1['企业类型'].map(mapstrategy2)
-    base_verify1['控制人类型'] = base_verify1['控制人类型'].map(mapstrategy3)
-    base_verify1_data = base_verify1.drop(columns=["区域"])
-    # print(base_verify1)
-
-    for column in list(base_verify1_data.columns[base_verify1_data.isnull().sum() > 0]):
-        a = base_verify1_data[column].mean()
-        base_verify1_data[column].fillna(a, inplace=True)
-
-    for column in list(knowledge_verify1.columns[knowledge_verify1.isnull().sum() > 0]):
-        a = round(knowledge_verify1[column].mean())
-        knowledge_verify1[column].fillna(a, inplace=True)
-
-    # 合并base_train和knowledge_train
-    base_knowledge_verify1 = pd.merge(base_verify1_data, knowledge_verify1, on='ID', how='inner')
-    # print(base_knowledge_verify1)
-    # 处理money_train和year_train,先根据ID和year合并两个数据
-    money_year_verify1 = pd.merge(money_verify1, year_verify1, on=['ID', 'year'])
-
-    # 将2015，2016，2017年的数据分别提取出来
-
-    money_year_verify1_2015 = money_year_verify1.loc[money_year_verify1['year'] == 2015].add_suffix('_2015')
-    money_year_verify1_2015.rename(columns={'ID_2015': 'ID', 'year_2015': 'year'}, inplace=True)
-
-    money_year_verify1_2016 = money_year_verify1.loc[money_year_verify1['year'] == 2016].add_suffix('_2016')
-    money_year_verify1_2016.rename(columns={'ID_2016': 'ID', 'year_2016': 'year'}, inplace=True)
-
-    money_year_verify1_2017 = money_year_verify1.loc[money_year_verify1['year'] == 2017].add_suffix('_2017')
-    money_year_verify1_2017.rename(columns={'ID_2017': 'ID', 'year_2017': 'year'}, inplace=True)
-
-    # 将151617合并成一张表
-
-    money_year_verify1_20152016 = pd.merge(money_year_verify1_2015, money_year_verify1_2016, on='ID')
-    # print(money_year_verify1_20152016)
-    money_year_verify1_151617 = pd.merge(money_year_verify1_20152016, money_year_verify1_2017, on='ID')
-    # print(money_year_verify1_2017)
-    # 将money_year_train_151617和之前获得的base_knowledge_train表合在一起
-
-    verify1_data = pd.merge(money_year_verify1_151617, base_knowledge_verify1, on='ID')
-    print(money_year_verify1_151617)
-    # 将"year_x","year_y","year"三列去除，因为这三列丝毫不影响该公司是否为僵尸企业，年度特征我们已经通过加后缀来区分（可以用PCA降维来说明）
-
-    verify1_data = verify1_data.drop(columns=["year_x", "year_y", "year"])
-
-    # 再一次对缺失值用均值填充：
-
-    for column in list(verify1_data.columns[verify1_data.isnull().sum() > 0]):
-        a = int(verify1_data[column].mean())
-        verify1_data[column].fillna(a, inplace=True)
-
-    verify1_data = verify1_data.drop(columns=["控制人ID"])
-    # 最终的训练数据：
-    verify1_data.to_csv("services/verify.csv")
 
 
 # ---------------------------------------datasets---------------------------------------

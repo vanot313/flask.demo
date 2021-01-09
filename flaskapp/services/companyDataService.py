@@ -5,7 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 def multiple():
-    data = pd.read_csv("services/train.csv")
+    data = pd.read_csv("static/train.csv")
     x = data.iloc[:, data.columns != "flag"]
     y = data.iloc[:, data.columns == "flag"]
 
@@ -38,7 +38,7 @@ def multiple():
 
 
 def single():
-    data = pd.read_csv("services/verify.csv")
+    data = pd.read_csv("static/train.csv")
     x = data.iloc[:, data.columns != "flag"]
     y = data.iloc[:, data.columns == "flag"]
 
