@@ -1,5 +1,5 @@
 # coding:utf-8
-from flask import Blueprint, render_template, jsonify
+from flask import Blueprint, render_template, jsonify, request
 from common.models.user import User
 from common.models.account import Account
 from services import companyDataService
@@ -23,6 +23,7 @@ def index():
     # return render_template("index.html", **context)c
 
 
+# 在生产环境中弃用
 @data.route("/single", methods=['GET'])
 def singleJudge():
     # dict = companyDataService.single()
@@ -57,3 +58,10 @@ def multipleJudge():
     dict = companyDataService.multiple()
 
     return dict
+
+
+@data.route("/getDataById", methods=['GET'])
+def getDataByid():
+    id = request.args.get('id')
+
+    return id

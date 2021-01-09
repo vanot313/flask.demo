@@ -12,6 +12,7 @@ import os
 uploader = Blueprint("uploader", __name__)
 
 
+# 在生产环境中弃用
 @uploader.route("/upload", methods=['POST', 'GET'])
 def upload():
     if request.method == 'POST':

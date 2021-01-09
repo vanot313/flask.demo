@@ -101,6 +101,7 @@ def multiple():
     return dict
 
 
+# 在生产环境中弃用
 def single():
     data = pd.read_csv("uploadfile/train.csv")
     x = data.iloc[:, data.columns != "flag"]
