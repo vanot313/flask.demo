@@ -7,7 +7,6 @@ from util import strTools
 
 import random
 
-
 # 创建一个蓝图对象
 data = Blueprint("data", __name__)
 
@@ -26,7 +25,6 @@ def index():
 
 @data.route("/single", methods=['GET'])
 def singleJudge():
-
     # dict = companyDataService.single()
 
     dict = {}
@@ -36,16 +34,15 @@ def singleJudge():
 
     di = []
     while time > 0:
-        tuple = []
+        d = {}
 
         randint = random.randint(0, 3)
         flag = (randint == 0)
         name = strTools.ranstr(6)
 
-        tuple.append(count)
-        tuple.append(name)
-        tuple.append(flag)
-        di.append(tuple)
+        d['id'] = count
+        d['flag'] = flag
+        di.append(d)
 
         count = count + 1
         time = time - 1
@@ -57,11 +54,6 @@ def singleJudge():
 
 @data.route("/multiple", methods=['GET'])
 def multipleJudge():
-
     dict = companyDataService.multiple()
 
-
-
     return dict
-
-
