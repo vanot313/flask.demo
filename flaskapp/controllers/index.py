@@ -3,6 +3,9 @@ from flask import Blueprint, render_template, jsonify
 from common.models.user import User
 from common.models.account import Account
 from services import companyDataService
+from util import strTools
+
+import random
 
 
 # 创建一个蓝图对象
@@ -24,7 +27,30 @@ def index():
 @data.route("/single", methods=['GET'])
 def singleJudge():
 
-    dict = companyDataService.single()
+    # dict = companyDataService.single()
+
+    dict = {}
+
+    count = 1
+    time = 100
+
+    di = []
+    while time > 0:
+        tuple = []
+
+        randint = random.randint(0, 3)
+        flag = (randint == 0)
+        name = strTools.ranstr(6)
+
+        tuple.append(count)
+        tuple.append(name)
+        tuple.append(flag)
+        di.append(tuple)
+
+        count = count + 1
+        time = time - 1
+
+    dict["data"] = di
 
     return dict
 
@@ -34,28 +60,7 @@ def multipleJudge():
 
     dict = companyDataService.multiple()
 
-    # dict = {}
-    #
-    # count = 1
-    # time = 100
-    #
-    # di = []
-    # while time > 0:
-    #     tuple = []
-    #
-    #     randint = random.randint(0, 3)
-    #     flag = (randint == 0)
-    #     name = ranstr(6)
-    #
-    #     tuple.append(count)
-    #     tuple.append(name)
-    #     tuple.append(flag)
-    #     di.append(tuple)
-    #
-    #     count = count + 1
-    #     time = time - 1
-    #
-    # dict["data"] = di
+
 
     return dict
 
