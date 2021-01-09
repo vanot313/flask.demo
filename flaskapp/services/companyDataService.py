@@ -5,11 +5,11 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 def multiple():
-    data = pd.read_csv("services/verify.csv")
+    data = pd.read_csv("services/train.csv")
     x = data.iloc[:, data.columns != "flag"]
     y = data.iloc[:, data.columns == "flag"]
 
-    test = pd.read_csv('services/train.csv')
+    test = pd.read_csv('static/verify.csv')
     Xtest = test.iloc[:, test.columns != "flag"]
     Ytest = test.iloc[:, test.columns == "flag"]
 

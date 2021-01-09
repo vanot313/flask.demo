@@ -3,6 +3,8 @@ from flask import Blueprint, render_template, jsonify, request
 from common.models.user import User
 from common.models.account import Account
 from werkzeug.utils import secure_filename
+from services import csvHandler
+
 
 import os
 
@@ -25,6 +27,9 @@ def uploadMultiple():
         for fs in f:
             fs.save(os.path.join(os.path.abspath(os.path.join(os.getcwd(), "./static")),
                             "uploadfile." + secure_filename(fs.filename)))
+
+        csvHandler.buildVertifyFile()
+
         return 'multiple uploaded successfully'
 
 @uploader.route("/")

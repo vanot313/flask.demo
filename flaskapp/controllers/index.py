@@ -3,7 +3,6 @@ from flask import Blueprint, render_template, jsonify
 from common.models.user import User
 from common.models.account import Account
 from services import companyDataService
-from services import *
 
 
 # 创建一个蓝图对象
@@ -31,7 +30,7 @@ def singleJudge():
 
 
 @data.route("/multiple", methods=['GET'])
-def datatemp():
+def multipleJudge():
 
     dict = companyDataService.multiple()
 
