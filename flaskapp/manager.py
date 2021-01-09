@@ -2,6 +2,7 @@
 from application import app, manager
 from flask_script import Server, Command
 
+from services import csvHandler
 from www import *
 
 
@@ -21,6 +22,8 @@ manager.add_command("create_all", create_all)
 
 # 被调用的实际主函数
 def main():
+    # 初始化训练集
+    csvHandler.buildTrainFile()
     # 启动manager的shell命令控制
     manager.run()
 
