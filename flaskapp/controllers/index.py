@@ -62,6 +62,6 @@ def multipleJudge():
 
 @data.route("/getDataById", methods=['GET'])
 def getDataByid():
-    id = request.args.get('id')
-
-    return id
+    id = int(request.args.get('id'))
+    dict = companyDataService.fenxi(id)
+    return dict

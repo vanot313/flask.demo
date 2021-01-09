@@ -5,13 +5,13 @@ from sklearn import tree
 from sklearn.ensemble import RandomForestClassifier
 
 
-def fenxi():
-    ID = 29
+def fenxi(id):
+    ID = id
 
     mapstrategy1 = {1: '零售业', 2: '服务业', 3: '工业',  4: '商业服务业',  5: '社区服务',  6: '交通运输业'}
     mapstrategy2 = {10: '有限责任公司', 20: '合伙企业',  30: '股份有限公司', 40: '农民专业合作社',  50: '集体所有制企业'}
     mapstrategy3 = {10: '自然人', 20: '企业法人'}
-    df = pd.read_csv("t.csv", index_col='ID')
+    df = pd.read_csv("uploadfile/verify.csv", index_col='ID')
 
     try:
         industry = mapstrategy1[np.array(df.loc[[ID], ['行业']])[0][0]]
