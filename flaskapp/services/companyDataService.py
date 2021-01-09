@@ -34,7 +34,6 @@ def fenxi():
     fengxianAvgDiv = (abs(np.array(df.loc[[ID], ['净利润_2015']])[0][0]-fengxianAvg)+abs(np.array(df.loc[[ID], ['净利润_2016']])[0][0]-fengxianAvg)+abs(np.array(df.loc[[ID], ['净利润_2017']])[0][0]-fengxianAvg))/3
     fengxian = fengxianAvgDiv/fengxianAvg
 
-
     rongziSum = np.array(df.loc[[ID], ['项目融资和政策融资额度_2015']])[0][0]+np.array(df.loc[[ID], ['项目融资和政策融资额度_2016']])[0][0]+np.array(df.loc[[ID], ['项目融资和政策融资额度_2017']])[0][0]
     yilai = rongziSum/(fengxianAvg + 1)
 
