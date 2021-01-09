@@ -5,11 +5,11 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 def multiple():
-    data = pd.read_csv("static/train.csv")
+    data = pd.read_csv("uploadfile/train.csv")
     x = data.iloc[:, data.columns != "flag"]
     y = data.iloc[:, data.columns == "flag"]
 
-    test = pd.read_csv('static/verify.csv')
+    test = pd.read_csv('uploadfile/verify.csv')
     Xtest = test.iloc[:, test.columns != "flag"]
     Ytest = test.iloc[:, test.columns == "flag"]
 
@@ -38,11 +38,11 @@ def multiple():
 
 
 def single():
-    data = pd.read_csv("static/train.csv")
+    data = pd.read_csv("uploadfile/train.csv")
     x = data.iloc[:, data.columns != "flag"]
     y = data.iloc[:, data.columns == "flag"]
 
-    test = pd.read_csv("static/uploadfile.t.csv")
+    test = pd.read_csv("uploadfile/uploadfile.t.csv")
     Xtest = test.iloc[:, test.columns != "flag"]
 
     fenleiqi = tree.DecisionTreeClassifier(criterion="entropy", random_state=20, splitter="random")

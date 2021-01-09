@@ -11,10 +11,10 @@ def buildVertifyFile():
     mapstrategy2 = {'有限责任公司': 10, '合伙企业': 20, '股份有限公司': 30, '农民专业合作社': 40, '集体所有制企业': 50}
     mapstrategy3 = {'自然人': 10, '企业法人': 20}
 
-    base_verify1 = pd.read_csv('static/uploadfile.base_verify.csv', engine='python', encoding="gbk")
-    knowledge_verify1 = pd.read_csv('static/uploadfile.paient_information_verify.csv', engine='python', encoding="gbk")
-    money_verify1 = pd.read_csv('static/uploadfile.money_information_verify.csv', engine='python', encoding="gbk")
-    year_verify1 = pd.read_csv('static/uploadfile.year_report_verify.csv', engine='python', encoding="gbk")
+    base_verify1 = pd.read_csv('uploadfile/uploadfile.base_verify.csv', engine='python', encoding="gbk")
+    knowledge_verify1 = pd.read_csv('uploadfile/uploadfile.paient_information_verify.csv', engine='python', encoding="gbk")
+    money_verify1 = pd.read_csv('uploadfile/uploadfile.money_information_verify.csv', engine='python', encoding="gbk")
+    year_verify1 = pd.read_csv('uploadfile/uploadfile.year_report_verify.csv', engine='python', encoding="gbk")
 
     base_verify1['行业'] = base_verify1['行业'].map(mapstrategy)
     base_verify1['企业类型'] = base_verify1['企业类型'].map(mapstrategy2)
@@ -68,16 +68,16 @@ def buildVertifyFile():
 
     verify1_data = verify1_data.drop(columns=["控制人ID"])
     # 最终的训练数据：
-    verify1_data.to_csv("static/verify.csv")
+    verify1_data.to_csv("uploadfile/verify.csv")
 
 
 def buildTrainFile():
     # 读取四份训练集csv文件
 
-    base_train = pd.read_csv('static/datasets/base_train_sum.csv', engine='python', encoding="gbk")
-    knowledge_train = pd.read_csv('static/datasets/knowledge_train_sum.csv', engine='python', encoding="gbk")
-    money_train = pd.read_csv('static/datasets/money_report_train_sum.csv', engine='python', encoding="gbk")
-    year_train = pd.read_csv('static/datasets/year_report_train_sum.csv', engine='python', encoding="gbk")
+    base_train = pd.read_csv('datasets/base_train_sum.csv', engine='python', encoding="gbk")
+    knowledge_train = pd.read_csv('datasets/knowledge_train_sum.csv', engine='python', encoding="gbk")
+    money_train = pd.read_csv('datasets/money_report_train_sum.csv', engine='python', encoding="gbk")
+    year_train = pd.read_csv('datasets/year_report_train_sum.csv', engine='python', encoding="gbk")
 
     # 将一些字符串数字化（方便后续处理空值）
     mapstrategy = {'零售业': 1, '服务业': 2, '工业': 3, '商业服务业': 4, '社区服务': 5, '交通运输业': 6}
@@ -139,7 +139,7 @@ def buildTrainFile():
         a = int(train_data[column].mean())
         train_data[column].fillna(a, inplace=True)
     # 最终的训练数据：
-    train_data.to_csv("static/train.csv")
+    train_data.to_csv("uploadfile/train.csv")
 
 
 
