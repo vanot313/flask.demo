@@ -4,6 +4,7 @@ from common.models.user import User
 from common.models.account import Account
 from services import companyDataService
 from util import strTools
+from services import csvHandler
 
 import random
 
@@ -55,6 +56,7 @@ def singleJudge():
 
 @data.route("/multiple", methods=['GET'])
 def multipleJudge():
+    csvHandler.buildVertifyFile()
     dict = companyDataService.multiple()
 
     return dict
@@ -65,3 +67,5 @@ def getDataByid():
     id = int(request.args.get('id'))
     dict = companyDataService.fenxi(id)
     return dict
+
+

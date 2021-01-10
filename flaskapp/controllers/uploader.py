@@ -29,8 +29,6 @@ def uploadMultiple():
             fs.save(os.path.join(os.path.abspath(os.path.join(os.getcwd(), "./uploadfile")),
                             "uploadfile." + secure_filename(fs.filename)))
 
-        csvHandler.buildVertifyFile()
-
         return 'multiple uploaded successfully'
 
 @uploader.route("/")
