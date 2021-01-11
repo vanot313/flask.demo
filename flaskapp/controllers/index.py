@@ -32,7 +32,7 @@ def singleJudge():
     dict = {}
 
     count = 1
-    time = 100
+    time = 30000
 
     di = []
     while time > 0:
