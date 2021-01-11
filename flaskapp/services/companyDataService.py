@@ -85,7 +85,7 @@ def multiple():
     for i in range(0, len(Xtest)):
         dictt = {}
 
-        id = Xtest.iloc[i]['ID']
+        id = int(Xtest.iloc[i]['ID'])
 
 
         dictt['id'] = id
