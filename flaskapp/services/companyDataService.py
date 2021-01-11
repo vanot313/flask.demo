@@ -8,9 +8,24 @@ from sklearn.ensemble import RandomForestClassifier
 def fenxi(id):
     ID = id
 
+    data = pd.read_csv("uploadfile/verify.csv")
+    x = data.iloc[:, data.columns != "flag"]
+    y = data.iloc[:, data.columns == "flag"]
+
     mapstrategy1 = {1: '零售业', 2: '服务业', 3: '工业',  4: '商业服务业',  5: '社区服务',  6: '交通运输业'}
     mapstrategy2 = {10: '有限责任公司', 20: '合伙企业',  30: '股份有限公司', 40: '农民专业合作社',  50: '集体所有制企业'}
     mapstrategy3 = {10: '自然人', 20: '企业法人'}
+
+    df = pd.read_csv("uploadfile/verify.csv")
+    df = df.iloc[:, df.columns != "flag"]
+    fenleiqi = RandomForestClassifier(n_estimators=47, random_state=20)
+    fenleiqi = fenleiqi.fit(x, y.astype('int').values.ravel())
+    flag = fenleiqi.predict(df[df['ID'] == ID])
+    if flag == 1:
+        flag = "僵尸企业"
+    elif flag == 0:
+        flag = "非僵尸企业"
+
     df = pd.read_csv("uploadfile/verify.csv", index_col='ID')
 
     try:
@@ -38,10 +53,33 @@ def fenxi(id):
     yilai = rongziSum/(fengxianAvg + 1)
 
     yingyeSum = np.array(df.loc[[ID], ['营业总收入_2015']])[0][0]+np.array(df.loc[[ID], ['营业总收入_2016']])[0][0]+np.array(df.loc[[ID], ['营业总收入_2017']])[0][0]
-    zhouzhuan = yingyeSum/(np.array(df.loc[[ID], ['资产总额_2016']])[0][0]+1)
+    zhouzhuan = yingyeSum/(np.array(df.loc[[ID], ['资产总额_2017']])[0][0]+1)
 
     fuzhaiSum = np.array(df.loc[[ID], ['负债总额_2015']])[0][0]+np.array(df.loc[[ID], ['负债总额_2016']])[0][0]+np.array(df.loc[[ID], ['负债总额_2017']])[0][0]
     fuzhai = fuzhaiSum/(np.array(df.loc[[ID], ['资产总额_2016']])[0][0]+1)
+
+    rongzi_2015 = np.array(df.loc[[ID], ['债权融资额度_2015']])[0][0] + np.array(df.loc[[ID], ['股权融资额度_2015']])[0][0] + np.array(df.loc[[ID], ['内部融资和贸易融资额度_2015']])[0][0] + np.array(df.loc[[ID], ['项目融资和政策融资额度_2015']])[0][0]
+    rongzi_2016 = np.array(df.loc[[ID], ['债权融资额度_2016']])[0][0] + np.array(df.loc[[ID], ['股权融资额度_2016']])[0][0] + np.array(df.loc[[ID], ['内部融资和贸易融资额度_2016']])[0][0] + np.array(df.loc[[ID], ['项目融资和政策融资额度_2016']])[0][0]
+    rongzi_2017 = np.array(df.loc[[ID], ['债权融资额度_2017']])[0][0] + np.array(df.loc[[ID], ['股权融资额度_2017']])[0][0] + np.array(df.loc[[ID], ['内部融资和贸易融资额度_2017']])[0][0] + np.array(df.loc[[ID], ['项目融资和政策融资额度_2017']])[0][0]
+
+    rongzicb_2015 = np.array(df.loc[[ID], ['债权融资成本_2015']])[0][0] + np.array(df.loc[[ID], ['股权融资成本_2015']])[0][0] + np.array(df.loc[[ID], ['内部融资和贸易融资成本_2015']])[0][0] + np.array(df.loc[[ID], ['项目融资和政策融资成本_2015']])[0][0]
+    rongzicb_2016 = np.array(df.loc[[ID], ['债权融资成本_2016']])[0][0] + np.array(df.loc[[ID], ['股权融资成本_2016']])[0][0] + np.array(df.loc[[ID], ['内部融资和贸易融资成本_2016']])[0][0] + np.array(df.loc[[ID], ['项目融资和政策融资成本_2016']])[0][0]
+    rongzicb_2017 = np.array(df.loc[[ID], ['债权融资成本_2017']])[0][0] + np.array(df.loc[[ID], ['股权融资成本_2017']])[0][0] + np.array(df.loc[[ID], ['内部融资和贸易融资成本_2017']])[0][0] + np.array(df.loc[[ID], ['项目融资和政策融资成本_2017']])[0][0]
+
+    zonghe_2015 = (np.array(df.loc[[ID], ['债权融资额度_2015']])[0][0]*np.array(df.loc[[ID], ['债权融资成本_2015']])[0][0]+np.array(df.loc[[ID], ['股权融资额度_2015']])[0][0]*np.array(df.loc[[ID], ['股权融资成本_2015']])[0][0] +
+                   np.array(df.loc[[ID], ['内部融资和贸易融资额度_2015']])[0][0] * np.array(df.loc[[ID], ['内部融资和贸易融资成本_2015']])[0][0] + np.array(df.loc[[ID], ['项目融资和政策融资额度_2015']])[0][0] * np.array(df.loc[[ID], ['项目融资和政策融资成本_2015']])[0][0]) / (rongzi_2015 + 1)
+    zonghe_2016 = (np.array(df.loc[[ID], ['债权融资额度_2016']])[0][0]*np.array(df.loc[[ID], ['债权融资成本_2016']])[0][0]+np.array(df.loc[[ID], ['股权融资额度_2016']])[0][0]*np.array(df.loc[[ID], ['股权融资成本_2016']])[0][0] +
+                   np.array(df.loc[[ID], ['内部融资和贸易融资额度_2016']])[0][0] * np.array(df.loc[[ID], ['内部融资和贸易融资成本_2016']])[0][0] + np.array(df.loc[[ID], ['项目融资和政策融资额度_2016']])[0][0] * np.array(df.loc[[ID], ['项目融资和政策融资成本_2016']])[0][0]) / (rongzi_2016 + 1)
+    zonghe_2017 = (np.array(df.loc[[ID], ['债权融资额度_2017']])[0][0]*np.array(df.loc[[ID], ['债权融资成本_2017']])[0][0]+np.array(df.loc[[ID], ['股权融资额度_2017']])[0][0]*np.array(df.loc[[ID], ['股权融资成本_2017']])[0][0] +
+                   np.array(df.loc[[ID], ['内部融资和贸易融资额度_2017']])[0][0]*np.array(df.loc[[ID], ['内部融资和贸易融资成本_2017']])[0][0]+np.array(df.loc[[ID], ['项目融资和政策融资额度_2017']])[0][0]*np.array(df.loc[[ID], ['项目融资和政策融资成本_2017']])[0][0])/(rongzi_2017+1)
+
+    zichan_2015 = np.array(df.loc[[ID], ['资产总额_2015']])[0][0]
+    zichan_2016 = np.array(df.loc[[ID], ['资产总额_2016']])[0][0]
+    zichan_2017 = np.array(df.loc[[ID], ['资产总额_2017']])[0][0]
+
+    fuzhai_2015 = np.array(df.loc[[ID], ['负债总额_2015']])[0][0]
+    fuzhai_2016 = np.array(df.loc[[ID], ['负债总额_2016']])[0][0]
+    fuzhai_2017 = np.array(df.loc[[ID], ['负债总额_2017']])[0][0]
 
     dict = {}
     di = []
@@ -49,18 +87,39 @@ def fenxi(id):
     dictt = {}
 
     dictt['id'] = ID
-    dictt['industry'] = industry
-    dictt['comType'] = comType
-    dictt['personType'] = personType
+    dictt['industry'] = industry  # 行业
+    dictt['comType'] = comType  # 企业类型
+    dictt['personType'] = personType  # 控制人类型
 
-    dictt['regTime'] = regTime
-    dictt['regMoney'] = regMoney
-    dictt['rate'] = rate
+    dictt['regTime'] = regTime  # 注册时间
+    dictt['regMoney'] = regMoney  # 注册资金
+    dictt['rate'] = rate  # 控制人控股比例
 
-    dictt['fengxian'] = fengxian
-    dictt['yilai'] = yilai
-    dictt['zhouzhuan'] = zhouzhuan
-    dictt['fuzhai'] = fuzhai
+    dictt['fengxian'] = fengxian  # 经营风险
+    dictt['yilai'] = yilai  # 政府依赖
+    dictt['zhouzhuan'] = zhouzhuan  # 资金周转
+    dictt['fuzhai'] = fuzhai  # 资产负债率
+    dictt['flag'] = flag  # 是否为僵尸企业
+
+    dictt['rongzi_2015'] = rongzi_2015  # 融资额度
+    dictt['rongzi_2016'] = rongzi_2016
+    dictt['rongzi_2017'] = rongzi_2017
+
+    dictt['rongzicb_2015'] = rongzicb_2015  # 融资成本
+    dictt['rongzicb_2016'] = rongzicb_2016
+    dictt['rongzicb_2017'] = rongzicb_2017
+
+    dictt['zonghe_2015'] = zonghe_2015  # 综合资金成本
+    dictt['zonghe_2016'] = zonghe_2016
+    dictt['zonghe_2017'] = zonghe_2017
+
+    dictt['zichan_2015'] = zichan_2015  # 资产总额
+    dictt['zichan_2016'] = zichan_2016
+    dictt['zichan_2017'] = zichan_2017
+
+    dictt['fuzhai_2015'] = fuzhai_2015  # 负债总额
+    dictt['fuzhai_2016'] = fuzhai_2016
+    dictt['fuzhai_2017'] = fuzhai_2017
 
     di.append(dictt)
     dict["data"] = di
@@ -68,7 +127,7 @@ def fenxi(id):
 
 
 def multiple():
-    data = pd.read_csv("uploadfile/train.csv")
+    data = pd.read_csv("uploadfile/verify.csv")
     x = data.iloc[:, data.columns != "flag"]
     y = data.iloc[:, data.columns == "flag"]
 
@@ -86,7 +145,6 @@ def multiple():
         dictt = {}
 
         id = int(Xtest.iloc[i]['ID'])
-
 
         dictt['id'] = id
         if flag[i] == 1:
