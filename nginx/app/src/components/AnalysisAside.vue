@@ -4,6 +4,7 @@
     再通过索引去router中查找-->
     <el-menu
       class="sidebar-e1-menu"
+      :default-active="onRoutes"
       :collapse="collapse"
       background-color="#334256"
       text-color="#fff"
@@ -28,32 +29,37 @@
     data(){
       return{
         collapse: false,
-
         items: [
           {
             icon: 'el-icon-document',
+            index: 'analysis',
+            title: '企业基本信息'
+          },
+          {
+            icon: 'el-icon-document',
             index: 'main',
-            title: '系统首页'
+              title: '企业融资数据'
           },
           {
             icon: 'el-icon-document',
-            index: 'single',
-            title: '单个企业分类'
-          },
-          {
-            icon: 'el-icon-document',
-            index: 'multiple',
-            title: '批量企业分类'
+            index: 'main',
+            title: '企业年报数据'
           },
         ]
       }
     },
     computed: {
-
+      //登陆后使得首页处于active状态
+      onRoutes(){
+        //获取当前路由地址
+        return this.$route.path.replace('/','');
+      }
     },
-    created() {
-
-    }
+    methods: {
+      handleSelect(index){
+        this.activeIndex = index;
+      }
+    },
   }
 </script>
 
@@ -62,7 +68,7 @@
     display: block;
     position: absolute;
     left: 0;
-    top: 70px;
+    top: 100px;
     bottom: 0;
     background-color: #334256;
     overflow-y: scroll;

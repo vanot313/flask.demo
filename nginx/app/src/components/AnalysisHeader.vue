@@ -2,9 +2,9 @@
   <div class="header">
     <!--折叠-->
     <div class="collapse-btn" @click="collapseChange">
-      <i class="el-icon-menu"></i>
+      <i class="el-icon-edit"></i>
     </div>
-    <div class="logo">僵尸企业分析系统</div>
+    <div class="logo" align="center">可视化分析</div>
     <div class="header-right">
 
     </div>
@@ -72,26 +72,35 @@
     left: 0;
     background-color: #253041;
     width: 100%;
-    height: 70px;
+    height: 100px;
     font-size: 22px;
     color: #fff;
   }
 
   .collapse-btn {
-    float: left;
+    position: absolute;
+    left: 580px;
+    top: 16px;
     padding: 0 21px;
     cursor: pointer;
     line-height: 70px;
+    font-size: 30px;
   }
 
   /*float属性很重要！！*/
   .header .logo{
-    float: left;
+    position: absolute;
+    left: 640px;
+    top: 16px;
     line-height: 70px;
+    font-size: 30px;
   }
 
   .header-right {
     float: right;
+    position: absolute;
+    top: 0px;
+    right: 10px;
     padding-right: 20px;
     display: flex;
     height: 70px;

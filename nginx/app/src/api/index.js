@@ -1,7 +1,9 @@
 import {get,post} from "./http";
 
-export const selectSingle = () => get(`/upload`);
+export const upload = (files) => post(`/uploader/uploadmultiple`,files);
 
-export const test = () => get(`/data/temp`);
+export const multipleClassify = () => get(`/data/multiple`);
 
-export const tests = () => get(`/data/single`);
+export const singleClassify = () => get(`/data/single`);
+
+export const analysis = (id) => get(`/data/getDataById?id=${id}`)

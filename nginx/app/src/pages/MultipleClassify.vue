@@ -7,7 +7,7 @@
         <h3 class="mgb20">僵尸企业比例</h3>
         <div style="background-color: white">
           <!--ve-pie：饼图-->
-          <ve-pie :data="companyType" :theme="options1"></ve-pie>
+          <ve-pie :data="companyType" :theme="options1" ></ve-pie>
         </div>
       </el-col>
 <!--      <el-col :span="12">-->
@@ -18,7 +18,9 @@
 <!--        </div>-->
 <!--      </el-col>-->
     </el-row>
-
+    <div align="center">
+      <el-button @click="gotoDetail" type="primary">查看详情</el-button>
+    </div>
 
   </div>
 </template>
@@ -44,12 +46,11 @@
       }
     },
     created() {
-
       this.res = this.$route.query.res;
-      console.log(this.res['data'][0][2]);
       this.getCompany();
     },
     methods: {
+      //统计数量
       getCompany(){
         this.companyCount = this.res.length;
         this.companyType.rows[0]['总数'] = this.setCompanyType(true,this.res['data']);
@@ -58,11 +59,16 @@
       setCompanyType(type,company){
         let count = 0;
         for(let item of company){
-          if(type == item[2]){
+          if(type == item.flag){
             count++;
           }
         }
         return count;
+      },
+      //跳转到详情页面
+      gotoDetail(){
+        let res = this.res;
+        this.$router.push({path: `/detail`,query:{res}});
       },
     }
   }

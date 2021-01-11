@@ -3,10 +3,9 @@
     <div class="home">
       <Swiper/>
     </div>
-    <br><br>
     <el-row :gutter="20" class="mgb20">
       <!--共24，故可分2列-->
-      <el-col :span="12">
+      <!--<el-col :span="12">
         <el-card>
           <div class="grid-content">
             <div class="grid-cont-center">
@@ -28,28 +27,34 @@
             </div>
           </div>
         </el-card>
-      </el-col>
+      </el-col>-->
 
-      <el-col :span="12">
+      <el-col :span="24" >
         <el-card>
           <div class="grid-content">
             <div class="grid-cont-center">
               <div><i class="el-icon-document-copy"></i></div>
               <br>
               <div style="font-size: 20px">批量企业分类</div>
-              <div style="text-align: left">
+              <div style="text-align: center">
                 通过手动输入或csv文件批量上传企业信息，其中包含每个企业的ID以及是否可能成为僵尸企业的结果
               </div>
               <br>
               <el-upload
-                action="http://49.235.73.129/uploader/upload"
+                action="http://49.235.73.129/uploader/uploadmultiple"
                 :before-upload="beforeDocumentUpload"
                 :on-success="handleDocumentsSuccess"
-                multiple>
-                <el-button size="mini" type="primary">
+                multiple
+                :auto-upload="false"
+                ref="uploadFiles"
+                :file-list="fileList"
+                accept=".csv"
+                :limit="5">
+                <el-button size="mini" type="primary" slot="trigger">
                   <i class="el-icon-upload" style="font-size: 14px"></i>
                   上传文件
                 </el-button>
+                <el-button size="mini" type="success" @click="submitUpload">确定</el-button>
               </el-upload>
             </div>
           </div>
@@ -65,8 +70,7 @@
   import bus from "../assets/js/bus";
   import Swiper from "../components/Swiper";
   import {mixin} from "../mixins";
-  import {selectSingle} from "../api";
-  import {test,tests} from "../api";
+  import {multipleClassify,singleClassify} from "../api";
 
   export default {
     mixins: [mixin],
@@ -80,21 +84,14 @@
         collapse: false,
         id: 1,
         res: [],
+        fileList: [],
+        fileNum: 0,
       }
     },
     created(){
-      /*bus进行组件间通信*/
-      bus.$on('collapse',msg => {
-        this.collapse = msg
-      })
+
     },
     methods: {
-      handleFile(id){
-        selectSingle()
-        .then(res => {
-          this.$router.push({path: `/singleClassify`,query:{id}});
-        })
-      },
       //上传前进行校验
       beforeDocumentUpload(file){
         console.log('before upload');
@@ -107,36 +104,28 @@
         return true;
       },
 
-      //上传成功后的操作
-      handleDocumentSuccess(res){
-        console.log('upload success');
-        console.log(res);
-        this.notify("上传成功","success");
-        this.tests();
-        this.notify("上传成功","success");
-      },
+
       handleDocumentsSuccess(res){
-        console.log('upload success');
-        console.log(res);
-        this.test();
-        this.notify("上传成功","success");
+          this.fileNum ++;
+          console.log(this.fileNum);
+           if(this.fileNum == 4){
+            console.log('upload success');
+            this.notify("上传成功","success");
+            this.test();
+         }
       },
 
       test(){
-        test()
+        multipleClassify()
         .then(res => {
           this.res = res;
           this.$router.push({path: `/multipleClassify`,query:{res}});
         })
       },
 
-      tests(){
-        tests()
-          .then(res => {
-            this.res = res;
-            this.$router.push({path: `/singleClassify`,query:{res}});
-          })
-      }
+      submitUpload() {
+        this.$refs.uploadFiles.submit();
+      },
     },
   }
 </script>
