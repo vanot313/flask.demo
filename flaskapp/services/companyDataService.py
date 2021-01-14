@@ -131,7 +131,7 @@ def multiple():
     x = data.iloc[:, data.columns != "flag"]
     y = data.iloc[:, data.columns == "flag"]
 
-    test = pd.read_csv('uploadfile/verify.csv')
+    test = pd.read_csv('uploadfile/test.csv')
     Xtest = test.iloc[:, test.columns != "flag"]
     Ytest = test.iloc[:, test.columns == "flag"]
 
