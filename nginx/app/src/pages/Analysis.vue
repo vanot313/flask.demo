@@ -19,7 +19,7 @@
         <el-row>
           <el-col :span="12">
             <i class="el-icon-postcard"></i>
-            <span style="font-size: 20px"> 分类结果：{{data.id}}</span>
+            <span style="font-size: 20px"> 分类结果：{{data.flag}}</span>
           </el-col>
           <el-col :span="12">
             <i class="el-icon-menu"></i>
