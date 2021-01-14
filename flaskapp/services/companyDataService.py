@@ -7,7 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 def fenxi(id):
     ID = id
-
+    
     data = pd.read_csv("uploadfile/verify.csv")
     x = data.iloc[:, data.columns != "flag"]
     y = data.iloc[:, data.columns == "flag"]

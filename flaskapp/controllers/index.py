@@ -56,7 +56,7 @@ def singleJudge():
 
 @data.route("/multiple", methods=['GET'])
 def multipleJudge():
-    csvHandler.buildVertifyFile()
+    csvHandler.buildTestFile()
     dict = companyDataService.multiple()
 
     return dict
