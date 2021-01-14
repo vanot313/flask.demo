@@ -131,7 +131,7 @@ def fenxi(id):
 
     dictt['fuzhai_2015'] = str(fuzhai_2015) # 负债总额
     dictt['fuzhai_2016'] = str(fuzhai_2016)
-    dictt['fuzhai_2017'] = s    tr(fuzhai_2017)
+    dictt['fuzhai_2017'] = str(fuzhai_2017)
 
     di.append(dictt)
     dict["data"] = di
