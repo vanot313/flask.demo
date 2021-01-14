@@ -26,8 +26,14 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex';
 
   export default {
+    computed: {
+      ...mapGetters([
+        'result',
+      ])
+    },
     data(){
       return{
         companyCount: 0,
@@ -46,7 +52,7 @@
       }
     },
     created() {
-      this.res = this.$route.query.res;
+      this.res = this.result;
       this.getCompany();
     },
     methods: {

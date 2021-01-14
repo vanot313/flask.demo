@@ -46,6 +46,7 @@
   import Aside from "../components/Aside";
   import Header from "../components/Header";
   import {analysis} from "../api";
+  import {mapGetters} from 'vuex';
 
   export default {
     name: "Deatail",
@@ -57,33 +58,36 @@
       return{
         res: [
           {"id": 1500001, "flag":true},
-          {"id": 2, "flag":false},
-          {"id": 2, "flag":false},
-          {"id": 2, "flag":false},
-          {"id": 2, "flag":true},
-          {"id": 2, "flag":true},
-          {"id": 2, "flag":false},
-          {"id": 2, "flag":false},
-          {"id": 2, "flag":false},
-          {"id": 2, "flag":false},
-          {"id": 2, "flag":false},
-          {"id": 2, "flag":false},
-          {"id": 2, "flag":false},
-          {"id": 2, "flag":false},
-          {"id": 2, "flag":false},
+          {"id": 1500002, "flag":false},
+          {"id": 1500003, "flag":false},
+          {"id": 1500004, "flag":false},
+          {"id": 1500005, "flag":true},
+          {"id": 1500006, "flag":true},
+          {"id": 1500007, "flag":false},
+          {"id": 1500008, "flag":false},
+          {"id": 1500009, "flag":false},
+          {"id": 1500010, "flag":false},
+          {"id": 1500011, "flag":false},
+          {"id": 1500012, "flag":false},
+          {"id": 1500013, "flag":false},
+          {"id": 1500014, "flag":false},
+          {"id": 1500015, "flag":false},
         ],
         pageSize: 9,  //每页大小
         currentPage: 1,  //当前页
       }
     },
     created() {
-      this.res = this.$route.query.res['data'];
+      this.res = this.result['data'];
     },
     computed: {
       //计算当前搜索结果数据
       data(){
         return this.res.slice((this.currentPage - 1)* this.pageSize,this.currentPage * this.pageSize);
-      }
+      },
+      ...mapGetters([
+        'result',
+      ])
     },
     methods: {
       //获取当前页

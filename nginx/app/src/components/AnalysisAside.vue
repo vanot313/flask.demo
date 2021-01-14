@@ -38,12 +38,7 @@
           {
             icon: 'el-icon-document',
             index: 'main',
-              title: '企业融资数据'
-          },
-          {
-            icon: 'el-icon-document',
-            index: 'main',
-            title: '企业年报数据'
+              title: '回到首页'
           },
         ]
       }

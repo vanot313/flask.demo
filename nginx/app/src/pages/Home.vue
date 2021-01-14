@@ -67,17 +67,22 @@
 <script>
   import Header from "../components/Header";
   import Aside from "../components/Aside";
-  import bus from "../assets/js/bus";
   import Swiper from "../components/Swiper";
   import {mixin} from "../mixins";
   import {multipleClassify,singleClassify} from "../api";
+  import {mapGetters} from 'vuex';
 
   export default {
     mixins: [mixin],
     components: {
       Aside,
       Header,
-      Swiper
+      Swiper,
+    },
+    computed: {
+      ...mapGetters([
+        'result',
+      ])
     },
     data(){
       return {
@@ -119,6 +124,8 @@
         multipleClassify()
         .then(res => {
           this.res = res;
+          console.log(res);
+          this.$store.commit('setResult',this.res);
           this.$router.push({path: `/multipleClassify`,query:{res}});
         })
       },

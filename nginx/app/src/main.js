@@ -7,6 +7,7 @@ import axios from 'axios'
 import VueAxios from'vue-axios'
 import router from './router'
 import VCharts from 'v-charts'
+import store from './store/index.js'
 
 Vue.use(VueAxios,axios);
 Vue.use(router);
@@ -17,5 +18,6 @@ Vue.use(VCharts);
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 })
