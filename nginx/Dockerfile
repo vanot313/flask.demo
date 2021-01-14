@@ -5,4 +5,4 @@ COPY nginx.conf /etc/nginx/conf.d/
 
 COPY app/dist /usr/share/nginx/html
 
-/etc/init.d/nginx start
+RUN nginx
