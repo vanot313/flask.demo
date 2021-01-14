@@ -23,7 +23,7 @@ manager.add_command("create_all", create_all)
 # 被调用的实际主函数
 def main():
     # 初始化训练集
-    csvHandler.buildTrainFile()
+    csvHandler.buildVertifyFile()
     # 启动manager的shell命令控制
     manager.run()
 
