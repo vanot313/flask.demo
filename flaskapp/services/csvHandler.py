@@ -8,10 +8,10 @@ def buildTestFile():
     mapstrategy2 = {'有限责任公司': 10, '合伙企业': 20, '股份有限公司': 30, '农民专业合作社': 40, '集体所有制企业': 50}
     mapstrategy3 = {'自然人': 10, '企业法人': 20}
 
-    base_test = pd.read_csv('datasets/base_test_sum.csv', engine='python', encoding="utf8")
-    knowledge_test = pd.read_csv('datasets/knowledge_test_sum.csv', engine='python', encoding="utf8")
-    money_test = pd.read_csv('datasets/money_report_test_sum.csv', engine='python', encoding="utf8")
-    year_test = pd.read_csv('datasets/year_report_test_sum.csv', engine='python', encoding="utf8")
+    base_test = pd.read_csv('uploadfile/uploadfile.base_test_sum.csv', engine='python', encoding="utf8")
+    knowledge_test = pd.read_csv('uploadfile/uploadfile.knowledge_test_sum.csv', engine='python', encoding="utf8")
+    money_test = pd.read_csv('uploadfile/uploadfile.money_report_test_sum.csv', engine='python', encoding="utf8")
+    year_test = pd.read_csv('uploadfile/uploadfile.year_report_test_sum.csv', engine='python', encoding="utf8")
 
     base_test['行业'] = base_test['行业'].map(mapstrategy1)
     base_test['企业类型'] = base_test['企业类型'].map(mapstrategy2)
