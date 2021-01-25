@@ -4,19 +4,13 @@
     <el-row :gutter="20" class="mgb20">
       <!--共24，故可分2列-->
       <el-col :span="24">
-        <h3 class="mgb20">僵尸企业比例</h3>
+        <h3 class="mgb20">分析结果：</h3>
         <div style="background-color: white">
           <!--ve-pie：饼图-->
           <ve-pie :data="companyType" :theme="options1" ></ve-pie>
         </div>
       </el-col>
-<!--      <el-col :span="12">-->
-<!--        <h3 class="mgb20">企业类型分布</h3>-->
-<!--        <div style="background-color: white">-->
-<!--          &lt;!&ndash;ve-histogram：饼图&ndash;&gt;-->
-<!--          <ve-histogram :data="songStyle" ></ve-histogram>-->
-<!--        </div>-->
-<!--      </el-col>-->
+
     </el-row>
     <div align="center">
       <el-button @click="gotoDetail" type="primary">查看详情</el-button>
@@ -27,8 +21,15 @@
 
 <script>
   import {mapGetters} from 'vuex';
+  import Loading from "../components/Loading";
 
   export default {
+    components:{
+      Loading
+    },
+    mounted() {
+      this.loadPageData();
+    },
     computed: {
       ...mapGetters([
         'result',
@@ -49,6 +50,7 @@
         options1: {
           color: ['#ffc0cb','#87cefa']
         },
+        isLoading: true,
       }
     },
     created() {
@@ -75,6 +77,11 @@
       gotoDetail(){
         let res = this.res;
         this.$router.push({path: `/detail`,query:{res}});
+      },
+
+      loadPageData: function() {
+        // axios 请求页面数据 .then 中将状态值修改
+        this.isLoading = false
       },
     }
   }

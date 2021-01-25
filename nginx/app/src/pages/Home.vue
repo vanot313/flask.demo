@@ -1,35 +1,13 @@
 <template>
   <div>
+    <transition name="fade">
+      <loading v-if="isLoading"></loading>
+    </transition>
     <div class="home">
       <Swiper/>
     </div>
     <el-row :gutter="20" class="mgb20">
-      <!--共24，故可分2列-->
-      <!--<el-col :span="12">
-        <el-card>
-          <div class="grid-content">
-            <div class="grid-cont-center">
-              <div><i class="el-icon-document"></i></div>
-              <br>
-              <div style="font-size: 20px">单个企业分类</div>
-              <div style="text-align: left">
-                通过手动输入或csv文件上传单个企业信息，我们将给出企业是否可能成为僵尸企业的结果，并给出可视化分析报告
-              </div>
-              <el-upload
-                action="http://49.235.73.129/uploader/upload"
-                :before-upload="beforeDocumentUpload"
-                :on-success="handleDocumentSuccess">
-                <el-button size="mini" type="primary">
-                  <i class="el-icon-upload" style="font-size: 14px"></i>
-                  上传文件
-                </el-button>
-              </el-upload>
-            </div>
-          </div>
-        </el-card>
-      </el-col>-->
-
-      <el-col :span="24" >
+      <el-col :span="18" >
         <el-card>
           <div class="grid-content">
             <div class="grid-cont-center">
@@ -37,9 +15,10 @@
               <br>
               <div style="font-size: 20px">批量企业分类</div>
               <div style="text-align: center">
-                通过手动输入或csv文件批量上传企业信息，其中包含每个企业的ID以及是否可能成为僵尸企业的结果
+                批量上传企业信息，其中包含每个企业的ID以及是否可能成为僵尸企业的结果
               </div>
               <br>
+
               <el-upload
                 action="http://49.235.73.129/uploader/uploadmultiple"
                 :before-upload="beforeDocumentUpload"
@@ -60,6 +39,30 @@
           </div>
         </el-card>
       </el-col>
+
+      <el-col :span="6">
+        <el-card>
+<!--        <a href="./../static/1.jpg" download>xiazai</a>-->
+          <el-button  @click="download1"  type="primary"size="mini" plain>
+            下载企业年度信息总结表导入模板
+          </el-button>
+        </el-card>
+        <el-card>
+          <el-button  @click="download2"  type="primary" size="mini" plain>
+            下载企业财务情况表导入模板
+          </el-button>
+        </el-card>
+        <el-card>
+          <el-button  @click="download3"  type="primary"size="mini" plain>
+            下载企业知识产权信息表导入模板
+          </el-button>
+        </el-card>
+        <el-card>
+          <el-button  @click="download4"  type="primary"size="mini" plain>
+            下载企业基本信息表导入模板
+          </el-button>
+        </el-card>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -69,8 +72,9 @@
   import Aside from "../components/Aside";
   import Swiper from "../components/Swiper";
   import {mixin} from "../mixins";
-  import {multipleClassify,singleClassify} from "../api";
+  import {multipleClassify,download} from "../api";
   import {mapGetters} from 'vuex';
+  import Loading from "../components/Loading";
 
   export default {
     mixins: [mixin],
@@ -78,6 +82,7 @@
       Aside,
       Header,
       Swiper,
+      Loading
     },
     computed: {
       ...mapGetters([
@@ -91,12 +96,29 @@
         res: [],
         fileList: [],
         fileNum: 0,
+        isLoading:false,
       }
     },
     created(){
 
     },
     methods: {
+      download1() {
+        window.location.href="/static/year_report_verify.csv"
+      },
+
+      download2() {
+        window.location.href="/static/money_information_verify.csv"
+      },
+
+      download3() {
+        window.location.href="/static/paient_information_verify.csv"
+      },
+
+      download4() {
+        window.location.href="/static/base_verify.csv"
+      },
+
       //上传前进行校验
       beforeDocumentUpload(file){
         console.log('before upload');
@@ -121,6 +143,7 @@
       },
 
       test(){
+        this.isLoading = true ;
         multipleClassify()
         .then(res => {
           this.res = res;
