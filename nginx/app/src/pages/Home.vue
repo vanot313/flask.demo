@@ -38,6 +38,11 @@
             </div>
           </div>
         </el-card>
+        <el-card>
+          <el-button  @click="goToDetail"  type="info" size="mini" >
+              查看分析结果
+          </el-button>
+        </el-card>
       </el-col>
 
       <el-col :span="6">
@@ -62,6 +67,7 @@
             下载企业基本信息表导入模板
           </el-button>
         </el-card>
+
       </el-col>
     </el-row>
   </div>
@@ -149,8 +155,17 @@
           this.res = res;
           console.log(res);
           this.$store.commit('setResult',this.res);
-          this.$router.push({path: `/multipleClassify`,query:{res}});
+          this.$router.push({path: `/multipleClassify`});
         })
+      },
+
+      goToDetail() {
+        console.log(this.result);
+        if(this.result.length == 0) {
+          this.notify("您还没有上传文件","warning");
+          console.log(1);
+        }
+        else this.$router.push({path: `/detail`});
       },
 
       submitUpload() {

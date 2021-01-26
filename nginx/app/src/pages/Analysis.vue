@@ -45,7 +45,7 @@
           </el-col>
           <el-col :span="12">
             <i class="el-icon-s-marketing"></i>
-            <span style="font-size: 20px"> 企业经营状况：</span>
+            <span style="font-size: 20px"> 企业经营状况（单位：%）：</span>
           </el-col>
         </el-row>
 
@@ -102,8 +102,7 @@
               columns: ['title','经营风险','政府依赖','资金周转','资产负债率'],
               rows: [
                 {title:'经营状况','经营风险':-0.5,'政府依赖': -0.25,'资金周转': 3.7,'资产负债率': 1.7},
-
-              ]
+              ],
             },
 
             chartExtends: {

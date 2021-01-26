@@ -76,7 +76,7 @@
       //跳转到详情页面
       gotoDetail(){
         let res = this.res;
-        this.$router.push({path: `/detail`,query:{res}});
+        this.$router.push({path: `/detail`});
       },
 
       loadPageData: function() {
