@@ -110,19 +110,19 @@
     },
     methods: {
       download1() {
-        window.location.href="/static/year_report_verify.csv"
+        window.location.href="/static/year_report_test_sum.csv"
       },
 
       download2() {
-        window.location.href="/static/money_information_verify.csv"
+        window.location.href="/static/money_report_test_sum.csv"
       },
 
       download3() {
-        window.location.href="/static/paient_information_verify.csv"
+        window.location.href="/static/knowledge_test_sum.csv"
       },
 
       download4() {
-        window.location.href="/static/base_verify.csv"
+        window.location.href="/static/base_test_sum.csv"
       },
 
       //上传前进行校验
