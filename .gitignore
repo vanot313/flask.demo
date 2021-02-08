@@ -137,3 +137,5 @@ yarn-error.log*
 
 # diy
 flaskapp/uploadfile/*.csv
+
+/venv/
