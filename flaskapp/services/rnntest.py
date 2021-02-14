@@ -3,6 +3,8 @@ import tensorflow_datasets as tfds
 import tensorflow as tf
 from tensorflow.keras import Sequential, layers
 
+
+
 # 利用 matplotlib 可视化训练过程
 # 解决中文乱码问题
 # 字体
@@ -14,13 +16,13 @@ plt.rcParams['font.size'] = 20
 def plot_graphs(history, name):
     # 描点
     plt.plot(history.history[name])
-    plt.plot(history.history['验证集 - '+ name])
+    plt.plot(history.history['val_' + name])
     # 横坐标为迭代次数
     plt.xlabel("Epochs")
     # 纵坐标为设置的参数（如准确率 accuracy）
     plt.ylabel(name)
     # 备注版
-    plt.legend([name, '验证集 - ' + name])
+    plt.legend([name, 'val_' + name])
     # 呈现
     plt.show()
 
@@ -59,7 +61,7 @@ for ts in tokenized_str:
 model = Sequential([
     # TODO 输入层。必须位于第一层，将正整数（下标）转换为具有固定大小的向量，如[[4],[20]]->[[0.25,0.1],[0.6,-0.2]]（这个例子什么意思，为什么要这么做）
     layers.Embedding(tokenizer.vocab_size, 64),
-    # TODO 用双向 RNN 包装器包装 LSTM 层。（这里需要去补双向 RNN 的知识）
+    # 用双向 RNN 包装器包装 LSTM 层。
     # 这里还可以添加更多的 LSTM 层来增加性能。
     layers.Bidirectional(layers.LSTM(64)),
     # Dense：全连接层。
@@ -73,18 +75,32 @@ model = Sequential([
 ])
 # TODO 这里模型的设计原来不一定全是 LSTM 层吗？ 全连接层与简单的 RNN 结构一样吗？
 
+# model.compile 编译创建好的模型，网络模型搭建完后，需要对网络的学习过程进行配置，否则在调用 fit 或 evaluate 时会抛出异常。
 model.compile(loss='binary_crossentropy', optimizer='adam',
               metrics=['accuracy'])
-# 训练，迭代三次。不过这里相较于之前自己写的 demo 训练的参数只设置了迭代次数。
-history1 = model.fit(train_ds, epochs=3, validation_data=test_ds)
+
+USE_WEIGHT = False
+
+if not USE_WEIGHT:
+    # 训练，迭代三次。不过这里相较于之前自己写的 demo 训练的参数只设置了迭代次数。
+    history1 = model.fit(train_ds, epochs=10, validation_data=test_ds)
+    # 保存模型
+    model.save("testmodle")
+    model.save_weights("testmodle_weight")
+    # 绘制迭代图像
+    plot_graphs(history1, 'accuracy')
+    plot_graphs(history1, 'loss')
+else:
+    # 加载已有模型
+    model.load_weights("testmodle_weight")
+
 # 和之前自己写的简单 demo 一样。evaluate 函数代表估值函数，即输入测试集，进行完整的测试。
 loss, acc = model.evaluate(test_ds)
+
 
 print('准确率:', acc)
 print('损失函数值：', loss)
 
-plot_graphs(history1, 'accuracy')
-plot_graphs(history1, 'loss')
 
-# 保存模型
-model.save("testmodle")
+
+

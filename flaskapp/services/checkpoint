@@ -1,0 +1,2 @@
+model_checkpoint_path: "testmodle_weight"
+all_model_checkpoint_paths: "testmodle_weight"
