@@ -1,15 +1,11 @@
 # coding:utf-8
 from flask import Blueprint, render_template, jsonify, request
-from common.models.user import User
-from common.models.account import Account
 from werkzeug.utils import secure_filename
-from services import csvHandler
 
 import os
 
 # 创建一个蓝图对象
 uploader = Blueprint("uploader", __name__)
-
 
 # 在生产环境中弃用
 @uploader.route("/upload", methods=['POST', 'GET'])
