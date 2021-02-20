@@ -15,12 +15,13 @@ def test():
 
         result = Account.query.filter(Account.name == name).first()
 
+        if(result == None):
+            dict = {}
+            dict["code"] = 2
+            dict["msg"] = "登陆失败"
+            return dict
 
-
-        print("********************************")
-        print(result.check_password(password))
-
-        if(result != None and result.check_password(password)):
+        if(result.check_password(password)):
             session['user_login'] = 1
             dict = {}
             dict["code"] = 1
