@@ -10,7 +10,6 @@ def test():
     if request.method == 'GET':
         return render_template("test.html")
     else:
-
         name = request.form.get('name')
         password = request.form.get('password')
 
@@ -21,6 +20,12 @@ def test():
 
         if(result.check_password(password)):
             session['user_login'] = 1
-            return "login success"
+            dict = {}
+            dict["code"] = 1
+            dict["msg"]= "登陆成功"
+            return dict
         else:
-            return "login failed"
+            dict = {}
+            dict["code"] = 0
+            dict["msg"] = "登陆失败"
+            return dict
