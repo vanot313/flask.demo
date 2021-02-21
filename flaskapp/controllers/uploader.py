@@ -31,3 +31,16 @@ def uploadMultiple():
 @uploader.route("/")
 def uploadPage():
     return render_template("upload.html")
+
+# 目前采取单份传输的办法
+@uploader.route("/uploadCV", methods=['POST'])
+def uploadCV():
+    if request.method == 'POST':
+
+        f = request.files['file']
+        f.save(os.path.join(os.path.abspath(os.path.join(os.getcwd(), "./uploadfile")),
+                            "uploadfile." + secure_filename(f.filename)))
+
+
+
+        return 'single uploaded successfully'

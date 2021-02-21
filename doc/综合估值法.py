@@ -1,7 +1,7 @@
 import pandas as pd
 
 # 读取数据
-data = pd.read_csv('data_JDWX.csv')
+data = pd.read_csv('uploadfile.data_JDWX.csv')
 all = data.shape[0]
 
 # 完整性

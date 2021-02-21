@@ -6,7 +6,7 @@ from common.models.account import Account
 main = Blueprint("main", __name__)
 
 @main.route("/login", methods=['GET', 'POST'])
-def test():
+def login():
     if request.method == 'GET':
         return render_template("test.html")
     else:
