@@ -38,12 +38,16 @@ def singleJudge():
     return dict
 
 
-@data.route("/multiple", methods=['GET'])
-def multipleJudge():
-    dict = {}
-
-    return dict
+@data.route("/comprehensive", methods=['POST'])
+def comprehensive():
+    pass
 
 
+@data.route("/cost", methods=['POST'])
+def cost():
+    pass
 
 
+@data.route("/earning", methods=['POST'])
+def earning():
+    pass
