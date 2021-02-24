@@ -3,8 +3,12 @@ import numpy as np
 
 
 class comprehensive_valuation:
+    ## 用户输入参数（在这里指文件本身）
     # 判断的文件路径
     address = ""
+    ## ----------
+
+
     # 完整性
     full = 0.0
     # 正确性
@@ -14,6 +18,7 @@ class comprehensive_valuation:
     # 重复性
     repeat = 0.0
 
+    ## 专家输入参数
     # 稀缺性
     rareness = 0.0
     # 时效性
@@ -27,13 +32,13 @@ class comprehensive_valuation:
     quality_weight = []
     # 应用矩阵权重
     applied_weight = []
+    ## ----------
 
     # RI 参数
     RI = [0, 0, 0.58, 0.90, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49, 1.51]
 
     # 质量价值得分
     Sq = 0
-
     # 应用价值得分
     Sa = 0
 
