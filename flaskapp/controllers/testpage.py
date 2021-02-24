@@ -5,7 +5,7 @@ from application import db
 from common.models import *
 import random
 import common.models
-from common.models.admin import admin
+from common.models.admin import Admin
 from util import strTools
 
 testpage = Blueprint("testpage", __name__)
@@ -14,7 +14,7 @@ testpage = Blueprint("testpage", __name__)
 @testpage.route("/welcome", methods=['GET'])
 def index():
     context = {}
-    result = admin.query.all()
+    result = Admin.query.all()
     # context['result'] = result
     title = 'WELCOME'
     context['title'] = title
@@ -39,7 +39,7 @@ def test():
         email = request.form.get('email')
         mobile = request.form.get('mobile')
 
-        new = admin(username=name, password=password, email=email, mobile=mobile)
+        new = Admin(username=name, password=password, email=email, mobile=mobile)
 
         db.session.add(new)
         db.session.commit()

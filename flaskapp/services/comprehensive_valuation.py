@@ -31,6 +31,16 @@ class comprehensive_valuation:
     # RI 参数
     RI = [0, 0, 0.58, 0.90, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49, 1.51]
 
+    # 质量价值得分
+    Sq = 0
+
+    # 应用价值得分
+    Sa = 0
+
+    # 总价值得分
+    S = 0
+
+
     def __init__(self):
         pass
 
@@ -127,6 +137,11 @@ class comprehensive_valuation:
         S = (Sa * Sq) / 100
 
         print("资产价值估分 {:.3f}".format(S))
+
+        self.Sq = Sq
+        self.Sa = Sa
+        self.S = S
+
 
     # 根据特征法计算矩阵权重
     def get_weight(self, mat):

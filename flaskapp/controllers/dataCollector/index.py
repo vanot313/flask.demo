@@ -2,7 +2,6 @@
 from flask import *
 from application import db
 from common.models.user import User
-from common.models.account import Account
 import random
 from util import strTools, response
 import subprocess

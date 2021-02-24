@@ -3,7 +3,11 @@ from application import app
 from controllers.data import data
 from controllers.uploader import uploader
 from controllers.testpage import testpage
-from controllers.main import main
+
+
+from controllers.admin.main import admin
+from controllers.expert.main import expert
+
 #admin
 from controllers.dataCollector.index import dataCollector
 
@@ -18,14 +22,20 @@ toolbar = DebugToolbarExtension(app)
 from interceptors.errorHandler import *
 
 # 注册蓝图 blueprint 对象
+
+
 app.register_blueprint(data, url_prefix="/data")
 app.register_blueprint(uploader, url_prefix="/uploader")
 app.register_blueprint(testpage, url_prefix="/test")
-app.register_blueprint(main, url_prefix="/main")
 
-#用户管理接口
+# 管理员接口
+app.register_blueprint(admin, url_prefix="/admin")
+
+# 专家接口
+app.register_blueprint(expert, url_prefix="/expert")
+
+# 用户管理接口
 app.register_blueprint(user_login, url_prefix="/user/login")
 
-
-#管理员接口
+# 数据爬取器接口
 app.register_blueprint(dataCollector, url_prefix="/collector")

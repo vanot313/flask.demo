@@ -1,7 +1,6 @@
 # coding:utf-8
 from flask import Blueprint, render_template, jsonify, request
 from common.models.user import User
-from common.models.account import Account
 from util import strTools
 
 import random
@@ -40,14 +39,17 @@ def singleJudge():
 
 @data.route("/comprehensive", methods=['POST'])
 def comprehensive():
+
     pass
 
 
 @data.route("/cost", methods=['POST'])
 def cost():
+
     pass
 
 
 @data.route("/earning", methods=['POST'])
 def earning():
+
     pass

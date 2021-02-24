@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from application import db
 
 
-class admin(db.Model):
+class Admin(db.Model):
     __tablename__ = 't_admin'
 
     id = db.Column(db.BIGINT, primary_key=True)
