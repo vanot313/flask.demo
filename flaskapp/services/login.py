@@ -1,5 +1,5 @@
 from flask import *
-from application import db,app
+from application import db, app
 from common.models.admin import Admin
 from common.models.user import User
 from util.response import response

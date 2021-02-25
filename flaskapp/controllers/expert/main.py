@@ -3,8 +3,12 @@ from flask import *
 from services.register import Register
 from services.login import Login
 import json
+from services.process.expert_handler import *
+from application import db, app
 
 # 创建一个蓝图对象
+from util.response import response
+
 expert = Blueprint("expert", __name__)
 
 
@@ -39,6 +43,8 @@ def register_expert():
 @expert.route("/comprehensive", methods=['GET', 'POST'])
 def comprehensive():
     if request.method == 'GET':
+        # TODO 返回给专家用户上传的数据集
+
         pass
     else:
         work_order_id = request.form.get("work_order_id")
@@ -51,4 +57,57 @@ def comprehensive():
         quality_weight = json.loads(request.form.get("quality_weight"))
         applied_weight = json.loads(request.form.get("applied_weight"))
 
+        try:
+            comprehensive_handler(work_order_id, rareness, timeliness, dimensional, economy, quality_weight,
+                                  applied_weight)
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("失败", 1001, {})
 
+        return response("成功", 200, {})
+
+
+@expert.route("/cost", methods=['GET', 'POST'])
+def cost():
+    if request.method == 'GET':
+        # TODO 返回给专家用户指定的公司名称/数据集名称
+
+        pass
+    else:
+        work_order_id = request.form.get("work_order_id")
+
+        R = request.form.get("R")
+        C = request.form.get("C")
+        II = request.form.get("II")
+        M = request.form.get("M")
+        E = request.form.get("E")
+
+        try:
+            cost_handler(work_order_id, R, C, II, M, E)
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("失败", 1001, {})
+
+        return response("成功", 200, {})
+
+
+@expert.route("/earning", methods=['GET', 'POST'])
+def earning():
+    if request.method == 'GET':
+        # TODO 返回给专家用户指定的公司名称/数据集名称
+
+        pass
+    else:
+        work_order_id = request.form.get("work_order_id")
+
+        n = request.form.get("n")
+        r = request.form.get("r")
+        R = json.loads(request.form.get("R"))
+
+        try:
+            earning_handler(work_order_id, n, r, R)
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("失败", 1001, {})
+
+        return response("成功", 200, {})

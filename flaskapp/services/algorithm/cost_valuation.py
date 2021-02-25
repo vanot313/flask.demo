@@ -1,6 +1,8 @@
 class cost_valuation:
     # 待评估数据资产的价值，最终结果
     P = 0
+
+    ## 专家输入数据
     # 数据集成本投资收益率
     R = 0.1
     # 数据集重置成本
@@ -11,6 +13,7 @@ class cost_valuation:
     M = 1
     # 数据集的环境约束因素修正系数
     E = 1
+    ##..........
 
     def __init__(self):
         pass
