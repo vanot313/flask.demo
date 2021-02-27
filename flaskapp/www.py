@@ -12,7 +12,7 @@ from controllers.expert.main import expert
 from controllers.dataCollector.index import dataCollector
 
 #user
-from controllers.user.login.index import user_login
+from controllers.user.base.index import user
 
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -35,7 +35,7 @@ app.register_blueprint(admin, url_prefix="/admin")
 app.register_blueprint(expert, url_prefix="/expert")
 
 # 用户管理接口
-app.register_blueprint(user_login, url_prefix="/user/login")
+app.register_blueprint(user, url_prefix="/user")
 
 # 数据爬取器接口
 app.register_blueprint(dataCollector, url_prefix="/collector")

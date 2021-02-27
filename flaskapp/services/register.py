@@ -32,3 +32,4 @@ class Register:
             return response("失败", 1001, {})
 
         return response("登陆成功", 200, new)
+

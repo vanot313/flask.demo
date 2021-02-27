@@ -3,7 +3,10 @@ from flask import jsonify
 
 # 返回到前端json数据格式
 def response(msg, code, data):
-    result = {'msg': msg, 'code': code, 'data': serialize(data), 'success': (code == 200)}
+    if not data :
+        result = {'msg': msg, 'code': code, 'success': (code == 200)}
+    else:
+        result = {'msg': msg, 'code': code, 'data': serialize(data), 'success': (code == 200)}
     return jsonify(result)
 
 
