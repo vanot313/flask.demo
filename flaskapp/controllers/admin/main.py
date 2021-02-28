@@ -1,7 +1,7 @@
 # coding:utf-8
 from flask import *
 from services.register import Register
-from services.login import Login
+from services.login import LoginHandler
 
 # 创建一个蓝图对象
 admin = Blueprint("admin", __name__)
@@ -15,7 +15,7 @@ def login_admin():
         username = request.form.get('name')
         password = request.form.get('password')
 
-        l = Login()
+        l = LoginHandler()
         msg = l.login_admin(username, password)
         return msg
 

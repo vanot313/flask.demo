@@ -4,9 +4,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from application import db
 
 
-class work_order(db.Model):
+class WorkOrder(db.Model):
     """
-    用户表
+    工单表
     """
     __tablename__ = "t_work_order"
     order_id = db.Column(db.BIGINT, primary_key=True)
@@ -19,6 +19,9 @@ class work_order(db.Model):
     create_time = db.Column(db.DATETIME)
     modify_time = db.Column(db.DATETIME)
     status = db.Column(db.CHAR(1))
+    u_remarks = db.Column(db.String(500))
+    e_remarks = db.Column(db.String(500))
+    result = db.Column(db.FLOAT)
 
     # location = db.Column(db.String(128))
     # birth = db.Column(db.DATETIME)

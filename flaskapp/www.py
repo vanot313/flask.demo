@@ -1,8 +1,8 @@
 # coding:utf-8
 from application import app
-from controllers.data import data
-from controllers.uploader import uploader
-from controllers.testpage import testpage
+from controllers.old.data import data
+from controllers.old.uploader import uploader
+from controllers.old.testpage import testpage
 
 
 from controllers.admin.main import admin
@@ -12,7 +12,7 @@ from controllers.expert.main import expert
 from controllers.dataCollector.index import dataCollector
 
 #user
-from controllers.user.base.index import user
+from controllers.user.main import user
 
 from flask_debugtoolbar import DebugToolbarExtension
 

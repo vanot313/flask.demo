@@ -1,7 +1,7 @@
 # coding:utf-8
 from flask import *
 from services.register import Register
-from services.login import Login
+from services.login import LoginHandler
 import json
 from services.process.expert_handler import *
 from application import db, app
@@ -20,7 +20,7 @@ def login_expert():
         username = request.form.get('name')
         password = request.form.get('password')
 
-        l = Login()
+        l = LoginHandler()
         msg = l.login_expert(username, password)
         return msg
 
@@ -58,7 +58,7 @@ def comprehensive():
         applied_weight = json.loads(request.form.get("applied_weight"))
 
         try:
-            comprehensive_handler(work_order_id, rareness, timeliness, dimensional, economy, quality_weight,
+            ComprehensiveHandler(work_order_id, rareness, timeliness, dimensional, economy, quality_weight,
                                   applied_weight)
         except Exception as e:
             app.logger.info('Exception: %s', e)
@@ -83,7 +83,7 @@ def cost():
         E = request.form.get("E")
 
         try:
-            cost_handler(work_order_id, R, C, II, M, E)
+            CostHandler(work_order_id, R, C, II, M, E)
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})
@@ -105,7 +105,7 @@ def earning():
         R = json.loads(request.form.get("R"))
 
         try:
-            earning_handler(work_order_id, n, r, R)
+            EarningHandler(work_order_id, n, r, R)
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})

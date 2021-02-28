@@ -2,11 +2,7 @@
 from flask import *
 
 from application import db
-from common.models import *
-import random
-import common.models
-from common.models.admin import Admin
-from util import strTools
+from common.models.old.admin import Admin
 
 testpage = Blueprint("testpage", __name__)
 

@@ -1,6 +1,6 @@
 from flask import *
-from application import db
-from common.models.admin import Admin
+from common.models.admin_info import AdminInfo
+from common.models.expert_info import ExpertInfo
 from util.response import response
 from application import db,app
 
@@ -10,7 +10,7 @@ class Register:
         pass
 
     def register_admin(self, username, password, email, mobile):
-        new = Admin(username=username, password=password, email=email, mobile=mobile)
+        new = AdminInfo(username=username, password=password, email=email, mobile=mobile)
 
         try:
             db.session.add(new)
@@ -19,10 +19,10 @@ class Register:
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})
 
-        return response("登陆成功", 200, new)
+        return response("注册成功", 200, new)
 
     def register_expert(self, username, password, email, mobile):
-        new = Admin(username=username, password=password, email=email, mobile=mobile)
+        new = ExpertInfo(username=username, password=password, email=email, mobile=mobile)
 
         try:
             db.session.add(new)
@@ -31,5 +31,5 @@ class Register:
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})
 
-        return response("登陆成功", 200, new)
+        return response("注册成功", 200, new)
 

@@ -173,8 +173,8 @@ class comprehensive_valuation:
             return []
 
 
-c = comprehensive_valuation()
-c.quality_value('../uploadfile/uploadfile.data_JDWX.csv')
-c.applied_value(0.8, 0.2, 0.5, 0.5)
-c.matrix_value(1, 3, 5, 3, 5, 3, 1 / 3, 1 / 5, 1 / 9, 1 / 3, 1 / 3, 1 / 3)
-c.calculate()
+# c = comprehensive_valuation()
+# c.quality_value('../uploadfile/uploadfile.data_JDWX.csv')
+# c.applied_value(0.8, 0.2, 0.5, 0.5)
+# c.matrix_value(1, 3, 5, 3, 5, 3, 1 / 3, 1 / 5, 1 / 9, 1 / 3, 1 / 3, 1 / 3)
+# c.calculate()

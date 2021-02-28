@@ -1,7 +1,13 @@
 from services.algorithm.comprehensive_valuation import *
 from services.algorithm.cost_valuation import *
 from services.algorithm.earning_valuation import *
-def comprehensive_handler(work_order_id, rareness, timeness, dimensional, economy, quality_weight, applied_weight):
+from common.models.work_order import WorkOrder
+from common.models.comprehensive_valuation import ComprehensiveValuation
+from common.models.cost_valuation import CostValuation
+from common.models.earning_valuation import EarningValuation
+
+
+def ExpertComprehensiveHandler(work_order_id, rareness, timeness, dimensional, economy, quality_weight, applied_weight):
     handler = comprehensive_valuation()
 
     # TODO 得到数据集文件安置的解决方案
@@ -21,11 +27,16 @@ def comprehensive_handler(work_order_id, rareness, timeness, dimensional, econom
     handler.calculate()
 
     # TODO 将估值数据存入数据库
+
+
+
     # TODO 并返回结果
+
+
     return 1
 
 
-def cost_handler(work_order_id, R, C, II, M, E):
+def ExpertCostHandler(work_order_id, R, C, II, M, E):
     handler = cost_valuation()
     handler.getpar(R, C, II, M, E)
     handler.calculate()
@@ -35,10 +46,11 @@ def cost_handler(work_order_id, R, C, II, M, E):
     return 1
 
 
-def earning_handler(work_order_id, n, r, R):
-    handler = cost_valuation()
+def ExpertEarningHandler(work_order_id, n, r, R):
+    handler = earning_valuation()
     handler.getpar(n, r, R)
     handler.calculate()
+
 
     # TODO 将估值数据存入数据库
     # TODO 并返回结果

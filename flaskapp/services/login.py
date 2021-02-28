@@ -1,32 +1,20 @@
 from flask import *
-from application import db, app
-from common.models.admin import Admin
+from application import app
+from common.models.login import Login
 from common.models.user import User
 from util.response import response
 
 
-def login_user(username, password):
-    try:
-        result = User.query.filter(User.username == username).first()
-    except Exception as e:
-        app.logger.info('Exception: %s', e)
-        return response("失败", 1001, {})
-
-    if result is None:
-        return response("登陆失败", 200, {})
-    elif result.check_password(password):
-        return response("登陆成功", 200, result)
-    else:
-        return response("登陆失败", 200, {})
 
 
-class Login:
+
+class LoginHandler:
     def __init__(self):
         pass
 
-    def login_admin(self, username, password):
+    def login_user(self, username, password):
         try:
-            result = Admin.query.filter(Admin.username == username).first()
+            result = Login.query.filter(Login.username == username and Login.rolename == "admin").first()
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})
@@ -34,13 +22,39 @@ class Login:
         if result is None:
             return response("登陆失败", 200, {})
         elif result.check_password(password):
+
+            session['id'] = result.id
+
             return response("登陆成功", 200, result)
         else:
             return response("登陆失败", 200, {})
+
+
+
+    def login_admin(self, username, password):
+        try:
+            result = Login.query.filter(Login.username == username and Login.rolename == "admin").first()
+        except Exception as e:
+
+
+
+            app.logger.info('Exception: %s', e)
+            return response("失败", 1001, {})
+
+        if result is None:
+            return response("登陆失败", 200, {})
+        elif result.check_password(password):
+
+            session['user'] = result
+
+            return response("登陆成功", 200, result)
+        else:
+            return response("登陆失败", 200, {})
+
 
     def login_expert(self, username, password):
         try:
-            result = Admin.query.filter(Admin.username == username).first()
+            result = Login.query.filter(Login.username == username and Login.rolename == "expert").first()
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})
@@ -48,6 +62,21 @@ class Login:
         if result is None:
             return response("登陆失败", 200, {})
         elif result.check_password(password):
+
+            session['user'] = result
+
             return response("登陆成功", 200, result)
         else:
             return response("登陆失败", 200, {})
+
+
+    def is_login(self):
+        if session.get('id') != None:
+            return True
+        return False
+
+
+    def logout(self):
+        session.clear()
+
+        return response("登出成功", 200, {})
