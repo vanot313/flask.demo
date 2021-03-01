@@ -1,7 +1,8 @@
 # coding:utf-8
 from flask import Blueprint, render_template, jsonify, request
-from common.models.user import User
-from util import strTools
+from dao import dao_service
+from util import str_tools
+from util import response
 
 import random
 
@@ -23,7 +24,7 @@ def singleJudge():
 
         randint = random.randint(0, 3)
         flag = (randint == 0)
-        name = strTools.ranstr(6)
+        name = str_tools.ranstr(6)
 
         d['id'] = count
         d['flag'] = flag
@@ -37,9 +38,8 @@ def singleJudge():
     return dict
 
 
-@data.route("/comprehensive", methods=['POST'])
+@data.route("/comprehensive", methods=['POST', 'GET'])
 def comprehensive():
-
     pass
 
 

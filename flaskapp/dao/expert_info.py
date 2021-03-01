@@ -1,18 +1,18 @@
-from common.models.user_info import UserInfo
+from common.models.expert_info import ExpertInfo
 from application import db
 
 
-class UserInfoDao:
+class ExpertInfoDao:
     def getById(self, id):
-        result = UserInfo.query.filter(UserInfo.id == int(id)).first()
+        result = ExpertInfo.query.filter(ExpertInfo.id == int(id)).first()
         return result
 
     def getByName(self, name):
-        result = UserInfo.query.filter(UserInfo.username == name).first()
+        result = ExpertInfo.query.filter(ExpertInfo.username == name).first()
         return result
 
     def update(self, entity):
-        result = UserInfo.query.filter(UserInfo.id == entity.id).first()
+        result = ExpertInfo.query.filter(ExpertInfo.id == entity.id).first()
         result = entity
         db.session.commit()
         return result

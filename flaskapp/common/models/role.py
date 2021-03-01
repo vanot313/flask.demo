@@ -4,11 +4,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from application import db
 
 
-class role(db.Model):
+class Role(db.Model):
     """
     用户表
     """
-    __tablename__ = "t_user"
+    __tablename__ = "t_role"
     id = db.Column(db.BIGINT, primary_key=True)
     rolename = db.Column(db.String(100))
     remark = db.Column(db.String(100))

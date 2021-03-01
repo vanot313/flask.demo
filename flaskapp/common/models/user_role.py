@@ -2,13 +2,13 @@
 from application import db
 
 
-class User_role(db.Model):
+class UserRole(db.Model):
     """
     用户表
     """
     __tablename__ = "t_user_role"
-    user_id = db.Column(db.BIGINT)
-    role_id = db.Column(db.BIGINT)
+    user_id = db.Column(db.BIGINT, primary_key=True)
+    role_id = db.Column(db.BIGINT, primary_key=True)
 
     '''
         def __init__(self, name, email, password):

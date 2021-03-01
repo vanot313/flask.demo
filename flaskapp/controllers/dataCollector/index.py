@@ -3,7 +3,7 @@ from flask import *
 from application import db
 from common.models.user import User
 import random
-from util import strTools, response
+from util import str_tools, response
 import subprocess
 import os
 

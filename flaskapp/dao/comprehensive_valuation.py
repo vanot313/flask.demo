@@ -1,26 +1,25 @@
-from datetime import datetime
-from common.models.work_order import WorkOrder
+from common.models.comprehensive_valuation import ComprehensiveValuation
 from application import db
 
 
-class WorkOrderDao:
+class ComprehensiveValuationDao:
     # 根据user_id搜索 work_order
     def getByUserId(self, id):
-        result = WorkOrder.query.filter(WorkOrder.user_id == int(id)).filter(WorkOrder.status == 0)
+        result = ComprehensiveValuation.query.filter(ComprehensiveValuation.user_id == int(id)).filter(ComprehensiveValuation.status == 0)
         return result
 
     # 根据order_id搜索 work_order
     def getByOrderId(self, id):
-        result = WorkOrder.query.filter(WorkOrder.order_id == int(id)).filter(WorkOrder.status == 0).first()
+        result = ComprehensiveValuation.query.filter(ComprehensiveValuation.order_id == int(id)).filter(ComprehensiveValuation.status == 0).first()
         return result
 
     def getAll(self):
-        result = WorkOrder.query.all()
+        result = ComprehensiveValuation.query.all()
         return result
 
     # 更新 work_order 信息
     def update(self, entity):
-        result = WorkOrder.query.filter(WorkOrder.order_id == entity.order_id).first()
+        result = ComprehensiveValuation.query.filter(ComprehensiveValuation.order_id == entity.order_id).first()
         result = entity
         db.session.commit()
         return result
@@ -33,7 +32,7 @@ class WorkOrderDao:
 
     # 删除 work_order 信息
     def delete(self, id):
-        result = WorkOrder.query.filter(WorkOrder.order_id == int(id)).first()
+        result = ComprehensiveValuation.query.filter(ComprehensiveValuation.order_id == int(id)).first()
         result.status = '1'
         db.session.commit()
         return result

@@ -1,5 +1,5 @@
 import os
-from util import strTools
+from util import str_tools
 
 
 class Uploader:
@@ -7,7 +7,7 @@ class Uploader:
         pass
 
     def upload_single(self, file):
-        filename = strTools.ranstr(20) + ".csv"
+        filename = str_tools.ranstr(20) + ".csv"
 
         file.save(os.path.join(os.path.abspath(os.path.join(os.getcwd(), "./uploadfile")),
                                filename))

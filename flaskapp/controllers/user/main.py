@@ -1,8 +1,9 @@
 from flask import *
 from services.login import Login
 from services.upload import Uploader
-from util.response import response
-from dao.user import add, update, getById
+from services.register import Register
+from util.response import *
+from dao import dao_service
 from application import app
 from common.models.user import User
 from config.method_setting import *
@@ -37,7 +38,7 @@ def login():
 def getUser():
     try:
         id = request.args.get('id')
-        return response("success", 200, getById(id))
+        return response("success", 200, dao_service.user_dao.getById(id))
     except Exception as e:
         app.logger.info("Exception: %s", e)
         return response('失败', 1001, {})
@@ -50,30 +51,30 @@ def updateUser():
         # 注册用户
         user = User.from_json(json_data)
         try:
-            return response("添加成功", 200, update(user))
+            return response("添加成功", 200, dao_service.user_dao.update(user))
         except Exception as e:
             app.logger.info("Exception: %s", e)
             return response('失败', 1001, {})
 
 
-@user.route('/register', methods=['POST'])
+@user.route('/register', methods=['POST', 'GET'])
 def register():
-    id = request.form.get('user_id')
-    name = request.form.get('username')
-    password = request.form.get('password')
-    email = request.form.get('email')
-    mobile = request.form.get('mobile')
-    # avatar = request.form.get('avatar')
-    # description = request.form.get('description')
-    # location = request.form.get()
-    # birth = request.form.get()
-    # 注册用户
-    user = User(user_id=id, username=name, password=password, email=email, mobile=mobile)
-    try:
-        return response("添加成功", 200, add(user))
-    except Exception as e:
-        app.logger.info("Exception: %s", e)
-        return response('失败', 1001, {})
+    if request.method == 'GET':
+        return render_template("register.html")
+    elif request.method == 'POST':
+        # id = request.form.get('user_id')
+        name = request.form.get('username')
+        password = request.form.get('password')
+        email = request.form.get('email')
+        mobile = request.form.get('mobile')
+        # avatar = request.form.get('avatar')
+        # description = request.form.get('description')
+        location = request.form.get('location')
+        birth = request.form.get('birth')
+
+        r = Register()
+        return r.register_user(name, password, email, mobile, location, birth)
+
 
 
 @user.route('/getinfo', methods=['GET'])
@@ -136,3 +137,8 @@ def comprehensive_upload():
             return UserComprehensiveHandler(user_id, remarks, method, filename)
         else:
             return response('上传失败', 1001, {})
+
+
+@user.route('/s', methods=['POST', 'GET'])
+def s():
+    return response_multiple('test', 0, dao_service.user_dao.getById(3))
