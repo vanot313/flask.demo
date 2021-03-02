@@ -14,6 +14,10 @@ class RoleDao:
         result = Role.query.filter(Role.rolename == name).first()
         return result
 
+    def getAll(self):
+        result = Role.query.all()
+        return result
+
     # 更新 role 信息
     def update(self, entity):
         result = Role.query.filter(Role.id == entity.id).first()

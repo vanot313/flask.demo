@@ -12,6 +12,10 @@ class LogDao:
         result = Log.query.filter(Log.username == name)
         return result
 
+    def getAll(self):
+        result = Log.query.all()
+        return result
+
     def update(self, entity):
         result = Log.query.filter(Log.id == entity.id).first()
         result = entity
@@ -25,6 +29,6 @@ class LogDao:
         return entity
 
     def delete(self, id):
-        result = Log.query.filter(Log.id == int(id)).delete()
+        Log.query.filter(Log.id == int(id)).delete()
         db.session.commit()
-        return result
+        return []

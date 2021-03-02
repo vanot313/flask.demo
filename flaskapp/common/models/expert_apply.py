@@ -20,4 +20,4 @@ class ExpertApply(db.Model):
 
     create_time = db.Column(db.DATETIME)
     finish_time = db.Column(db.DATETIME)
-    status = db.Column(db.CHAR)
+    status = db.Column(db.CHAR, default=0)

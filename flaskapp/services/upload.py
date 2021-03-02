@@ -2,7 +2,7 @@ import os
 from util import str_tools
 
 
-class Uploader:
+class UploadHandler:
     def __init__(self):
         pass
 

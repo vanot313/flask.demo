@@ -7,7 +7,7 @@ from util.response import response
 from application import db,app
 
 
-class Register:
+class RegisterHandler:
     def __init__(self):
         pass
 

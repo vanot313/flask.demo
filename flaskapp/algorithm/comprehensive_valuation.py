@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 
-class comprehensive_valuation:
+class ComprehensiveValuation:
     ## 用户输入参数（在这里指文件本身）
     # 判断的文件路径
     address = ""

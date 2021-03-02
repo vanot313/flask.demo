@@ -5,9 +5,6 @@ from common.models.user import User
 from util.response import response
 
 
-
-
-
 class LoginHandler:
     def __init__(self):
         pass
@@ -29,14 +26,10 @@ class LoginHandler:
         else:
             return response("登陆失败", 200, {})
 
-
-
     def login_admin(self, username, password):
         try:
             result = Login.query.filter(Login.username == username and Login.rolename == "admin").first()
         except Exception as e:
-
-
 
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})
@@ -50,7 +43,6 @@ class LoginHandler:
             return response("登陆成功", 200, result)
         else:
             return response("登陆失败", 200, {})
-
 
     def login_expert(self, username, password):
         try:
@@ -69,12 +61,10 @@ class LoginHandler:
         else:
             return response("登陆失败", 200, {})
 
-
     def is_login(self):
         if session.get('id') != None:
             return True
         return False
-
 
     def logout(self):
         session.clear()

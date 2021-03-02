@@ -33,9 +33,15 @@ class UserDao:
         db.session.commit()
         return entity
 
-    # 删除 user 信息
-    def delete(self, id):
+    # 冻结 user 信息
+    def freeze(self, id):
         result = User.query.filter(User.id == int(id)).first()
         result.status = '1'
         db.session.commit()
         return result
+
+    # 删除 user 信息
+    def delete(self, id):
+        User.query.filter(User.id == int(id)).delete()
+        db.session.commit()
+        return []

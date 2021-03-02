@@ -18,7 +18,7 @@ class WorkOrder(db.Model):
     expert_name = db.Column(db.String(50))
     create_time = db.Column(db.DATETIME)
     modify_time = db.Column(db.DATETIME)
-    status = db.Column(db.CHAR(1))
+    status = db.Column(db.CHAR(1), default=0)
     u_remarks = db.Column(db.String(500))
     e_remarks = db.Column(db.String(500))
     result = db.Column(db.FLOAT)

@@ -1,14 +1,10 @@
 from flask import *
-from services.login import Login
-from services.upload import Uploader
-from services.register import Register
+from services import *
 from util.response import *
 from dao import dao_service
 from application import app
-from common.models.user import User
+from common.models import *
 from config.method_setting import *
-from services.login import LoginHandler
-from services.process.user_handler import *
 
 user = Blueprint("user", __name__)
 
@@ -27,8 +23,7 @@ def login():
         name = request.form.get('username')
         password = request.form.get('password')
 
-        l = LoginHandler()
-        l.login_user(name, password)
+        services_container.login_handler.login_user(name, password)
 
         return redirect(request.args.get('next') or url_for('user.comprehensive_upload'))
         # return l.login_user(name, password)
@@ -72,9 +67,7 @@ def register():
         location = request.form.get('location')
         birth = request.form.get('birth')
 
-        r = Register()
-        return r.register_user(name, password, email, mobile, location, birth)
-
+        return services_container.register_handler.register_user(name, password, email, mobile, location, birth)
 
 
 @user.route('/getinfo', methods=['GET'])
@@ -104,7 +97,7 @@ def cost_upload():
         method = COST
         user_id = session.get("id")
 
-        return UserCostHandler(user_id, remarks, method)
+        return services_container.user_handler.UserCostHandler(user_id, remarks, method)
 
 
 @user.route('/earningupload', methods=['POST', 'GET'])
@@ -117,7 +110,7 @@ def earning_upload():
         method = EARNING
         user_id = session.get("id")
 
-        return UserEarningHandler(user_id, remarks, method)
+        return services_container.user_handler.UserEarningHandler(user_id, remarks, method)
 
 
 @user.route('/comprehensiveupload', methods=['POST', 'GET'])
@@ -126,7 +119,7 @@ def comprehensive_upload():
         return render_template("test.html")
 
     if request.method == 'POST':
-        u = Uploader()
+        u = services_container.upload_handler.Uploader()
         remarks = request.form.get('remarks')
         file = request.files['file']
         filename = u.upload_single(file)
@@ -134,11 +127,24 @@ def comprehensive_upload():
         user_id = session.get("id")
 
         if file is not None:
-            return UserComprehensiveHandler(user_id, remarks, method, filename)
+            return services_container.user_handler.UserComprehensiveHandler(user_id, remarks, method, filename)
         else:
             return response('上传失败', 1001, {})
 
 
-@user.route('/s', methods=['POST', 'GET'])
-def s():
-    return response_multiple('test', 0, dao_service.user_dao.getById(3))
+@user.route('/update_userinfo', methods=['POST', 'GET'])
+def update_userinfo():
+    if request.method == 'GET':
+        return render_template("test.html")
+
+    if request.method == 'POST':
+        data = request.form.get('username')
+
+        user = dao_service.user_info_dao.getById(session.get('id')).first()
+
+        user.username = data
+        try:
+            return response("添加成功", 200, dao_service.user_info_dao.update(user))
+        except Exception as e:
+            app.logger.info("Exception: %s", e)
+            return response('失败', 1001, {})

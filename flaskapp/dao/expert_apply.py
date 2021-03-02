@@ -15,6 +15,10 @@ class ExpertApplyDao:
         result = ExpertApply.query.filter(ExpertApply.username == name).first()
         return result
 
+    def getAll(self):
+        result = ExpertApply.query.all()
+        return result
+
     def update(self, entity):
         result = ExpertApply.query.filter(ExpertApply.id == entity.id).first()
         result = entity

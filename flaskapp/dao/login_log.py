@@ -12,6 +12,10 @@ class LoginLogDao:
         result = LoginLog.query.filter(LoginLog.username == name)
         return result
 
+    def getAll(self):
+        result = LoginLog.query.all()
+        return result
+
     def update(self, entity):
         result = LoginLog.query.filter(LoginLog.id == entity.id).first()
         result = entity

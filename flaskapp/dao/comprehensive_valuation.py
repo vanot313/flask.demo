@@ -5,12 +5,14 @@ from application import db
 class ComprehensiveValuationDao:
     # 根据user_id搜索 work_order
     def getByUserId(self, id):
-        result = ComprehensiveValuation.query.filter(ComprehensiveValuation.user_id == int(id)).filter(ComprehensiveValuation.status == 0)
+        result = ComprehensiveValuation.query.filter(ComprehensiveValuation.user_id == int(id))\
+            .filter(ComprehensiveValuation.status == 0)
         return result
 
     # 根据order_id搜索 work_order
     def getByOrderId(self, id):
-        result = ComprehensiveValuation.query.filter(ComprehensiveValuation.order_id == int(id)).filter(ComprehensiveValuation.status == 0).first()
+        result = ComprehensiveValuation.query.filter(ComprehensiveValuation.order_id == int(id))\
+            .filter(ComprehensiveValuation.status == 0)
         return result
 
     def getAll(self):
@@ -30,9 +32,3 @@ class ComprehensiveValuationDao:
         db.session.commit()
         return entity
 
-    # 删除 work_order 信息
-    def delete(self, id):
-        result = ComprehensiveValuation.query.filter(ComprehensiveValuation.order_id == int(id)).first()
-        result.status = '1'
-        db.session.commit()
-        return result

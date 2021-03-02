@@ -11,6 +11,10 @@ class ExpertInfoDao:
         result = ExpertInfo.query.filter(ExpertInfo.username == name).first()
         return result
 
+    def getAll(self):
+        result = ExpertInfo.query.all()
+        return result
+
     def update(self, entity):
         result = ExpertInfo.query.filter(ExpertInfo.id == entity.id).first()
         result = entity
@@ -21,3 +25,9 @@ class ExpertInfoDao:
         db.session.add(entity)
         db.session.commit()
         return entity
+
+    # 保留
+    def delete(self, id):
+        ExpertInfo.query.filter(ExpertInfo.id == int(id)).delete()
+        db.session.commit()
+        return []

@@ -1,6 +1,5 @@
 # coding:utf-8
 from flask import *
-from services.register import Register
 from services.login import LoginHandler
 
 # 创建一个蓝图对象
@@ -24,12 +23,5 @@ def login_admin():
 def register_admin():
     if request.method == 'GET':
         return render_template("test.html")
-    else:
-        username = request.form.get('name')
-        password = request.form.get('password')
-        email = request.form.get('email')
-        mobile = request.form.get('mobile')
 
-        r = Register()
-        msg = r.register_admin(username, password, email, mobile)
-        return msg
+

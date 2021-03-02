@@ -4,11 +4,15 @@ from application import db
 
 class AdminInfoDao:
     def getById(self, id):
-        result = AdminInfo.query.filter(AdminInfo.id == int(id)).first()
+        result = AdminInfo.query.filter(AdminInfo.id == int(id))
         return result
 
     def getByName(self, name):
-        result = AdminInfo.query.filter(AdminInfo.username == name).first()
+        result = AdminInfo.query.filter(AdminInfo.username == name)
+        return result
+
+    def getAll(self):
+        result = AdminInfo.query.all()
         return result
 
     def update(self, entity):
@@ -21,3 +25,9 @@ class AdminInfoDao:
         db.session.add(entity)
         db.session.commit()
         return entity
+
+    # 保留
+    def delete(self, id):
+        AdminInfo.query.filter(AdminInfo.id == int(id)).delete()
+        db.session.commit()
+        return []

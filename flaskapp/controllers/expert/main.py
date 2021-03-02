@@ -1,9 +1,7 @@
 # coding:utf-8
 from flask import *
-from services.register import Register
-from services.login import LoginHandler
+from services import *
 import json
-from services.process.expert_handler import *
 from application import db, app
 
 # 创建一个蓝图对象
@@ -20,8 +18,7 @@ def login_expert():
         username = request.form.get('name')
         password = request.form.get('password')
 
-        l = LoginHandler()
-        msg = l.login_expert(username, password)
+        msg = services_container.login_handler.login_expert(username, password)
         return msg
 
 
@@ -29,15 +26,6 @@ def login_expert():
 def register_expert():
     if request.method == 'GET':
         return render_template("test.html")
-    else:
-        username = request.form.get('name')
-        password = request.form.get('password')
-        email = request.form.get('email')
-        mobile = request.form.get('mobile')
-
-        r = Register()
-        msg = r.register_expert(username, password, email, mobile)
-        return msg
 
 
 @expert.route("/comprehensive", methods=['GET', 'POST'])
@@ -58,8 +46,7 @@ def comprehensive():
         applied_weight = json.loads(request.form.get("applied_weight"))
 
         try:
-            ComprehensiveHandler(work_order_id, rareness, timeliness, dimensional, economy, quality_weight,
-                                  applied_weight)
+            services_container.expert_handler.ComprehensiveHandler(work_order_id, rareness, timeliness, dimensional, economy, quality_weight, applied_weight)
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})
@@ -83,7 +70,7 @@ def cost():
         E = request.form.get("E")
 
         try:
-            CostHandler(work_order_id, R, C, II, M, E)
+            services_container.expert_handler.CostHandler(work_order_id, R, C, II, M, E)
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})
@@ -105,7 +92,7 @@ def earning():
         R = json.loads(request.form.get("R"))
 
         try:
-            EarningHandler(work_order_id, n, r, R)
+            services_container.expert_handler.EarningHandler(work_order_id, n, r, R)
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})

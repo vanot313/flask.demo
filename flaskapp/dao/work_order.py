@@ -6,12 +6,14 @@ from application import db
 class WorkOrderDao:
     # 根据user_id搜索 work_order
     def getByUserId(self, id):
-        result = WorkOrder.query.filter(WorkOrder.user_id == int(id)).filter(WorkOrder.status == 0)
+        result = WorkOrder.query.filter(WorkOrder.user_id == int(id))\
+            .filter(WorkOrder.status == 0)
         return result
 
     # 根据order_id搜索 work_order
     def getByOrderId(self, id):
-        result = WorkOrder.query.filter(WorkOrder.order_id == int(id)).filter(WorkOrder.status == 0).first()
+        result = WorkOrder.query.filter(WorkOrder.order_id == int(id))\
+            .filter(WorkOrder.status == 0)
         return result
 
     def getAll(self):
@@ -31,9 +33,15 @@ class WorkOrderDao:
         db.session.commit()
         return entity
 
-    # 删除 work_order 信息
-    def delete(self, id):
+    # 冻结 work_order 信息
+    def freeze(self, id):
         result = WorkOrder.query.filter(WorkOrder.order_id == int(id)).first()
         result.status = '1'
         db.session.commit()
         return result
+
+    # 删除 work_order 信息
+    def delete(self, id):
+        WorkOrder.query.filter(WorkOrder.order_id == int(id)).delete()
+        db.session.commit()
+        return []
