@@ -1,0 +1,12 @@
+{% extends "common/layout.html" %}
+{% block content %}
+<p>
+    {{ title }}
+</p>
+<form method="post" enctype="multipart/form-data">
+{#        <input type="text" name="email" placeholder="邮箱" />#}
+        <input type="text" name="mobile" placeholder="联系方式" />
+        <input type="text" name="location" placeholder="所在地区">
+        <input  type="submit"/>
+</form>
+{% endblock %}

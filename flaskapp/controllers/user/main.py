@@ -9,14 +9,20 @@ from config.method_setting import *
 user = Blueprint("user", __name__)
 
 
+@user.route("/index", methods=['GET', 'POST'])
+def index():
+    if request.method == 'GET':
+        return render_template("index.html",
+                               resp=dao_service.user_info_dao.getById(session.get('id')).first())
+
+
+# 登录
 @user.route("/login", methods=['POST', 'GET'])
 def login():
     if request.method == 'GET':
-        l = LoginHandler()
-
-        if l.is_login():
-            return render_template("index.html")
-
+        if services_container.login_handler.is_login():
+            return render_template("index.html",
+                                   resp=dao_service.user_info_dao.getById(session.get('id')).first())
         return render_template("login.html")
 
     if request.method == 'POST':
@@ -24,34 +30,9 @@ def login():
         password = request.form.get('password')
 
         services_container.login_handler.login_user(name, password)
+        return redirect(request.args.get('next') or url_for('user.index'))
 
-        return redirect(request.args.get('next') or url_for('user.comprehensive_upload'))
-        # return l.login_user(name, password)
-
-
-@user.route('/detail', methods=['GET'])
-def getUser():
-    try:
-        id = request.args.get('id')
-        return response("success", 200, dao_service.user_dao.getById(id))
-    except Exception as e:
-        app.logger.info("Exception: %s", e)
-        return response('失败', 1001, {})
-
-
-@user.route('/update', methods=['POST'])
-def updateUser():
-    json_data = request.get_json()
-    if json_data is not None:
-        # 注册用户
-        user = User.from_json(json_data)
-        try:
-            return response("添加成功", 200, dao_service.user_dao.update(user))
-        except Exception as e:
-            app.logger.info("Exception: %s", e)
-            return response('失败', 1001, {})
-
-
+# 注册
 @user.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'GET':
@@ -69,23 +50,47 @@ def register():
 
         return services_container.register_handler.register_user(name, password, email, mobile, location, birth)
 
+# 修改个人信息
+@user.route('/update_userinfo', methods=['POST', 'GET'])
+def update_userinfo():
+    if request.method == 'GET':
+        return render_template("update.html")
 
-@user.route('/getinfo', methods=['GET'])
-def get_info():
-    info = session.get('id')
-    dict = {}
-    dict["id"] = info
-    return dict
+    if request.method == 'POST':
+        target = dao_service.user_info_dao.getById(session.get('id')).first()
 
+        if request.form.get('email') is not None:
+            data = request.form.get('email')
+            target.email = data
 
+        if request.form.get('mobile') is not None:
+            data = request.form.get('mobile')
+            target.mobile = data
+
+        if request.form.get('location') is not None:
+            data = request.form.get('location')
+            target.location = data
+
+        if request.form.get('birth') is not None:
+            data = request.form.get('birth')
+            target.birth = data
+
+        if request.form.get('description') is not None:
+            data = request.form.get('description')
+            target.description = data
+
+        return response("修改成功", 200, dao_service.user_info_dao.update(target))
+
+# 获取个人信息(当前用户)
+@user.route('/detail', methods=['GET'])
+def getUser():
+    return response("success", 200, dao_service.user_info_dao.getById(session.get('id')).first())
+
+# 登出 注销 session
 @user.route('/logout', methods=['GET'])
 def logout():
     l = LoginHandler()
-
     return l.logout()
-
-    # return render_template("login.html")
-
 
 @user.route('/costupload', methods=['POST', 'GET'])
 def cost_upload():
@@ -131,20 +136,15 @@ def comprehensive_upload():
         else:
             return response('上传失败', 1001, {})
 
-
-@user.route('/update_userinfo', methods=['POST', 'GET'])
-def update_userinfo():
-    if request.method == 'GET':
-        return render_template("test.html")
-
-    if request.method == 'POST':
-        data = request.form.get('username')
-
-        user = dao_service.user_info_dao.getById(session.get('id')).first()
-
-        user.username = data
+# 智扬写的更新用户信息 保留
+@user.route('/update', methods=['POST'])
+def updateUser():
+    json_data = request.get_json()
+    if json_data is not None:
+        # 注册用户
+        user = User.from_json(json_data)
         try:
-            return response("添加成功", 200, dao_service.user_info_dao.update(user))
+            return response("添加成功", 200, dao_service.user_dao.update(user))
         except Exception as e:
             app.logger.info("Exception: %s", e)
             return response('失败', 1001, {})

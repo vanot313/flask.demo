@@ -1,10 +1,6 @@
 {% extends "common/layout.html" %}
 {% block content %}
 <p>
-    {{ title }}
+    welcome. {{ resp.username }}
 </p>
-<form method="post">
-        <input type="text" name="remarks" placeholder="内容" />
-        <input  type="submit"/>
-</form>
 {% endblock %}
