@@ -18,9 +18,7 @@ class LoginHandler:
         if result is None:
             return response("登陆失败", 200, {})
         elif result.check_password(password):
-
             session['id'] = result.id
-
             return response("登陆成功", 200, result)
         else:
             return response("登陆失败", 200, {})
@@ -36,9 +34,7 @@ class LoginHandler:
         if result is None:
             return response("登陆失败", 200, {})
         elif result.check_password(password):
-
-            session['user'] = result
-
+            session['id'] = result.id
             return response("登陆成功", 200, result)
         else:
             return response("登陆失败", 200, {})
@@ -53,15 +49,13 @@ class LoginHandler:
         if result is None:
             return response("登陆失败", 200, {})
         elif result.check_password(password):
-
-            session['user'] = result
-
+            session['id'] = result.id
             return response("登陆成功", 200, result)
         else:
             return response("登陆失败", 200, {})
 
     def is_login(self):
-        if session.get('id') != None:
+        if session.get('id') is not None:
             return True
         return False
 

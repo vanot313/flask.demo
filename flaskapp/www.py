@@ -1,8 +1,5 @@
 # coding:utf-8
 from application import app
-from controllers.old.data import data
-from controllers.old.uploader import uploader
-from controllers.old.testpage import testpage
 
 
 from controllers.admin.main import admin
@@ -22,11 +19,6 @@ toolbar = DebugToolbarExtension(app)
 from interceptors.errorHandler import *
 
 # 注册蓝图 blueprint 对象
-
-
-app.register_blueprint(data, url_prefix="/data")
-app.register_blueprint(uploader, url_prefix="/uploader")
-app.register_blueprint(testpage, url_prefix="/test")
 
 # 管理员接口
 app.register_blueprint(admin, url_prefix="/admin")

@@ -13,24 +13,29 @@ class DataHandler:
     def get_work_order_detail_by_id(self, order_id):
         tuple = []
 
-        base = dao_service.work_order_dao.getByOrderId(order_id).first()
+        try:
+            base = dao_service.work_order_dao.getByOrderId(order_id).first()
 
-        if base.user_id == session.get('id'):
-            tuple.append(base)
+            if base.user_id == session.get('id'):
+                tuple.append(base)
 
-            if int(base.method) == int(COST):
-                detail = dao_service.cost_valuation_dao.getByOrderId(order_id).first()
-                tuple.append(detail)
+                if int(base.method) == int(COST):
+                    detail = dao_service.cost_valuation_dao.getByOrderId(order_id).first()
+                    tuple.append(detail)
 
-            if int(base.method) == int(COMPREHENSIVE):
-                detail = dao_service.comprehensive_valuation_dao.getByOrderId(order_id).first()
-                tuple.append(detail)
+                if int(base.method) == int(COMPREHENSIVE):
+                    detail = dao_service.comprehensive_valuation_dao.getByOrderId(order_id).first()
+                    tuple.append(detail)
 
-            if int(base.method) == int(EARNING):
-                detail = dao_service.earning_valuation_dao.getByOrderId(order_id).first()
-                tuple.append(detail)
+                if int(base.method) == int(EARNING):
+                    detail = dao_service.earning_valuation_dao.getByOrderId(order_id).first()
+                    tuple.append(detail)
 
-            return response_multiple("查询成功", 200, tuple)
+                return response_multiple("查询成功", 200, tuple)
 
-        else:
-            return response("无访问权限", 302, {})
+            else:
+                return response("无访问权限", 302, {})
+
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("失败", 1001, {})
