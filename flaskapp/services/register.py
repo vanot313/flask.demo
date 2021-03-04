@@ -1,8 +1,6 @@
 from flask import *
-from common.models.admin_info import AdminInfo
-from common.models.expert_info import ExpertInfo
-from common.models.user import User
-from common.models.user_info import UserInfo
+from common.models import *
+from dao import dao_service
 from util.response import response
 from application import db,app
 
@@ -40,19 +38,18 @@ class RegisterHandler:
     def register_user(self, username, password, email, mobile, location, birth):
         new_user = User(username=username, password=password)
         try:
-            db.session.add(new_user)
-            db.session.commit()
+            if dao_service.user_dao.getByName(username) is None:
+                return response("用户名已存在", 301, {})
+            dao_service.user_dao.add(new_user)
         except Exception as e:
-            app.logger.info('Exception: %s', e)
-            return response("失败", 1001, {})
+            return response("数据库访问失败", 1001, {})
 
-        new_user_info = UserInfo(id=new_user.id, username=username, email=email,
-                                 mobile=mobile, birth=birth, location=location)
+
         try:
-            db.session.add(new_user_info)
-            db.session.commit()
+            new_user_info = UserInfo(id=new_user.id, username=username, email=email,
+                                     mobile=mobile, birth=birth, location=location)
+            dao_service.user_info_dao.add(new_user_info)
         except Exception as e:
-            app.logger.info('Exception: %s', e)
-            return response("失败", 1001, {})
+            return response("数据库访问失败", 1001, {})
 
         return response("注册成功", 200, new_user_info)
