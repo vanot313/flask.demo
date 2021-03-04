@@ -1,7 +1,6 @@
 from flask import *
 from application import app
-from common.models.login import Login
-from common.models.user import User
+from common.models import *
 from util.response import response
 
 

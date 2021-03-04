@@ -1,4 +1,4 @@
-from common.models.cost_valuation import CostValuation
+from common.models import *
 from application import db
 
 
@@ -11,8 +11,7 @@ class CostValuationDao:
 
     # 根据order_id搜索 work_order
     def getByOrderId(self, id):
-        result = CostValuation.query.filter(CostValuation.order_id == int(id))\
-            .filter(CostValuation.status == 0)
+        result = CostValuation.query.filter(CostValuation.order_id == int(id))
         return result
 
     def getAll(self):
@@ -31,4 +30,3 @@ class CostValuationDao:
         db.session.add(entity)
         db.session.commit()
         return entity
-

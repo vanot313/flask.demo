@@ -4,6 +4,7 @@ from services.process.user_handler import UserHandler
 from services.register import RegisterHandler
 from services.login import LoginHandler
 from services.upload import UploadHandler
+from services.data import DataHandler
 
 
 class ServicesContainer:
@@ -13,3 +14,5 @@ class ServicesContainer:
 
     expert_handler = ExpertHandler()
     user_handler = UserHandler()
+
+    data_handler = DataHandler()

@@ -5,14 +5,12 @@ from application import db
 class ComprehensiveValuationDao:
     # 根据user_id搜索 work_order
     def getByUserId(self, id):
-        result = ComprehensiveValuation.query.filter(ComprehensiveValuation.user_id == int(id))\
-            .filter(ComprehensiveValuation.status == 0)
+        result = ComprehensiveValuation.query.filter(ComprehensiveValuation.user_id == int(id))
         return result
 
     # 根据order_id搜索 work_order
     def getByOrderId(self, id):
-        result = ComprehensiveValuation.query.filter(ComprehensiveValuation.order_id == int(id))\
-            .filter(ComprehensiveValuation.status == 0)
+        result = ComprehensiveValuation.query.filter(ComprehensiveValuation.order_id == int(id))
         return result
 
     def getAll(self):

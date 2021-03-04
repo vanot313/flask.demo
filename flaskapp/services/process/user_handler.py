@@ -1,3 +1,5 @@
+from flask import session
+
 from common.models import *
 from dao import dao_service
 
@@ -6,7 +8,7 @@ from util.response import response
 
 
 class UserHandler:
-    def ComprehensiveHandler(self, user_id, remarks, method, filename):
+    def comprehensive_handler(self, user_id, remarks, method, filename):
         new_work_order = WorkOrder(user_id=user_id, u_remarks=remarks, method=method, file_name=filename)
         dao_service.work_order_dao.add(new_work_order)
 
@@ -16,7 +18,7 @@ class UserHandler:
 
         return response("工单申请成功", 200, new_work_order)
 
-    def CostHandler(self, user_id, remarks, method):
+    def cost_handler(self, user_id, remarks, method):
         new_work_order = WorkOrder(user_id=user_id, u_remarks=remarks, method=method)
         dao_service.work_order_dao.add(new_work_order)
 
@@ -26,7 +28,7 @@ class UserHandler:
 
         return response("工单申请成功", 200, new_work_order)
 
-    def EarningHandler(self, user_id, remarks, method):
+    def earning_handler(self, user_id, remarks, method):
         new_work_order = WorkOrder(user_id=user_id, u_remarks=remarks, method=method)
         dao_service.work_order_dao.add(new_work_order)
 
@@ -35,3 +37,23 @@ class UserHandler:
         dao_service.earning_valuation_dao.add(new_earning)
 
         return response("工单申请成功", 200, new_work_order)
+
+    def update_info(self, email, mobile, location, birth, description):
+        target = dao_service.user_info_dao.getById(session.get('id')).first()
+
+        if email is not None:
+            target.email = email
+
+        if mobile is not None:
+            target.mobile = mobile
+
+        if location is not None:
+            target.location = location
+
+        if birth is not None:
+            target.birth = birth
+
+        if description is not None:
+            target.description = description
+
+        return response("修改成功", 200, dao_service.user_info_dao.update(target))
