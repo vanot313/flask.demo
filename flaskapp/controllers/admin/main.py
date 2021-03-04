@@ -4,7 +4,6 @@ from services import services_container
 from dao import dao_service
 from util.response import *
 
-
 # 创建一个蓝图对象
 admin = Blueprint("admin", __name__)
 
@@ -57,8 +56,15 @@ def get_user_info():
         return services_container.data_handler.get_user_info(id, name, email, location)
 
 
-@admin.route('/update_user_info', methods=['POST', 'GET'])
-def update_user_info(self, id, email, mobile, location, birth, description):
+@admin.route('/update_user_info', methods=['POST'])
+def update_user_info():
+    id = request.form.get('id')
+    email = request.form.get('email')
+    mobile = request.form.get('mobile')
+    birth = request.form.get('birth')
+    description = request.form.get('description')
+    location = request.form.get('location')
+
     return services_container.admin_handler.get_user_info(id, email, mobile, location, birth, description)
 
 
@@ -73,11 +79,10 @@ def get_work_order_info():
 
 
 @admin.route('/get_login_log', methods=['POST', 'GET'])
-def get_work_order_info():
+def get_login_log():
     if request.method == 'GET':
         return response_multiple("查询成功", 200, dao_service.login_log_dao.getAll())
 
     if request.method == 'POST':
         username = request.form.get('username')
         return dao_service.login_log_dao.getFuzzy(username)
-

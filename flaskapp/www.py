@@ -1,15 +1,12 @@
 # coding:utf-8
 from application import app
 
-
 from controllers.admin.main import admin
 from controllers.expert.main import expert
-
-#admin
-from controllers.dataCollector.index import dataCollector
-
-#user
 from controllers.user.main import user
+
+# admin
+from controllers.dataCollector.index import dataCollector
 
 from flask_debugtoolbar import DebugToolbarExtension
 
