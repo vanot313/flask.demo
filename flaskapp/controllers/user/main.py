@@ -81,8 +81,8 @@ def logout():
 
 
 # 提交工单
-@user.route('/costupload', methods=['POST', 'GET'])
-def cost_upload():
+@user.route('/costd', methods=['POST', 'GET'])
+def cost():
     if request.method == 'GET':
         return render_template("test.html")
 
@@ -94,8 +94,8 @@ def cost_upload():
         return services_container.user_handler.cost_handler(user_id, remarks, method)
 
 
-@user.route('/earningupload', methods=['POST', 'GET'])
-def earning_upload():
+@user.route('/earning', methods=['POST', 'GET'])
+def earning():
     if request.method == 'GET':
         return render_template("test.html")
 
@@ -107,8 +107,8 @@ def earning_upload():
         return services_container.user_handler.earning_handler(user_id, remarks, method)
 
 
-@user.route('/comprehensiveupload', methods=['POST', 'GET'])
-def comprehensive_upload():
+@user.route('/comprehensive', methods=['POST', 'GET'])
+def comprehensive():
     if request.method == 'GET':
         return render_template("test.html")
 
@@ -141,6 +141,14 @@ def work_order_detail():
     if request.method == 'POST':
         order_id = request.form.get('order_id')
         return services_container.data_handler.get_work_order_detail_by_id(order_id)
+
+
+# TODO 完成该逻辑
+# 申请专家权限
+@user.route('/apply_expert', methods=['GET', 'POST'])
+def apply_expert():
+    pass
+
 
 # 智扬写的更新用户信息 保留
 @user.route('/update', methods=['POST'])

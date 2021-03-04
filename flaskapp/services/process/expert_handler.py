@@ -4,7 +4,7 @@ from common.models.earning_valuation import EarningValuation
 
 
 class ExpertHandler:
-    def ComprehensiveHandler(self, work_order_id, rareness, timeness, dimensional, economy, quality_weight,
+    def comprehensive_handler(self, work_order_id, rareness, timeness, dimensional, economy, quality_weight,
                                    applied_weight):
         handler = ComprehensiveValuation()
 
@@ -30,7 +30,7 @@ class ExpertHandler:
 
         return 1
 
-    def CostHandler(self, work_order_id, R, C, II, M, E):
+    def cost_handler(self, work_order_id, R, C, II, M, E):
         handler = CostValuation()
         handler.getpar(R, C, II, M, E)
         handler.calculate()
@@ -39,7 +39,7 @@ class ExpertHandler:
         # TODO 并返回结果
         return 1
 
-    def EarningHandler(self, work_order_id, n, r, R):
+    def earning_handler(self, work_order_id, n, r, R):
         handler = EarningValuation()
         handler.getpar(n, r, R)
         handler.calculate()
