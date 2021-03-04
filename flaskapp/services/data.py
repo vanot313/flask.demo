@@ -2,7 +2,7 @@ from flask import *
 from application import app
 from common.models import *
 from dao import dao_service
-from config.method_setting import *
+from config.macro_setting import *
 from util.response import *
 
 
@@ -36,6 +36,14 @@ class DataHandler:
             else:
                 return response("无访问权限", 302, {})
 
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("失败", 1001, {})
+
+    def get_user_info(self, id, name, email, location):
+        try:
+            ans = dao_service.user_info_dao.getFuzzy(id, name, email, location)
+            return response_multiple("查询成功", 200, ans)
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})

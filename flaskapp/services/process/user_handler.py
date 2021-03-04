@@ -3,7 +3,7 @@ from flask import session
 from common.models import *
 from dao import dao_service
 
-from application import db
+from application import db, app
 from util.response import response
 
 
@@ -39,7 +39,11 @@ class UserHandler:
         return response("工单申请成功", 200, new_work_order)
 
     def update_info(self, email, mobile, location, birth, description):
-        target = dao_service.user_info_dao.getById(session.get('id')).first()
+        try:
+            target = dao_service.user_info_dao.getById(session.get('id')).first()
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("失败", 1001, {})
 
         if email is not None:
             target.email = email
@@ -56,4 +60,10 @@ class UserHandler:
         if description is not None:
             target.description = description
 
-        return response("修改成功", 200, dao_service.user_info_dao.update(target))
+        try:
+            resp = dao_service.user_info_dao.update(target)
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("失败", 1001, {})
+
+        return response("修改成功", 200, resp)

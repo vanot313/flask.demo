@@ -1,3 +1,5 @@
+from sqlalchemy import *
+
 from common.models.user_info import UserInfo
 from application import db
 
@@ -31,3 +33,29 @@ class UserInfoDao:
         UserInfo.query.filter(UserInfo.id == int(id)).delete()
         db.session.commit()
         return []
+
+    def getFuzzy(self, id, username, email, location):
+
+        key1 = or_(UserInfo.username.like("%" + username + "%"), UserInfo.username.is_(None))
+        key2 = or_(UserInfo.id.like("%" + id + "%"), UserInfo.id.is_(None))
+        key3 = or_(UserInfo.email.like("%" + email + "%"), UserInfo.email.is_(None))
+        key4 = or_(UserInfo.location.like("%" + location + "%"), UserInfo.location.is_(None))
+
+        if username is not "":
+            key1 = UserInfo.username.like("%" + username + "%")
+        if id is not "":
+            key2 = UserInfo.id.like("%" + id + "%")
+        if email is not "":
+            key3 = UserInfo.email.like("%" + email + "%")
+        if location is not "":
+            key4 = UserInfo.location.like("%" + location + "%")
+
+        result = UserInfo.query.filter(
+            and_(
+                key1,
+                key2,
+                key3,
+                key4)
+        )
+
+        return result

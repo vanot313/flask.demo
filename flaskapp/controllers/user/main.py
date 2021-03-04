@@ -4,7 +4,7 @@ from util.response import *
 from dao import dao_service
 from application import app
 from common.models import *
-from config.method_setting import *
+from config.macro_setting import *
 
 user = Blueprint("user", __name__)
 
@@ -53,8 +53,8 @@ def register():
 
 
 # 修改个人信息
-@user.route('/update_userinfo', methods=['POST', 'GET'])
-def update_userinfo():
+@user.route('/update_info', methods=['POST', 'GET'])
+def update_info():
     if request.method == 'GET':
         return render_template("update.html")
 
@@ -70,7 +70,7 @@ def update_userinfo():
 
 # 获取个人信息(当前用户)
 @user.route('/detail', methods=['GET'])
-def getUser():
+def get_user():
     return response("success", 200, dao_service.user_info_dao.getById(session.get('id')).first())
 
 
