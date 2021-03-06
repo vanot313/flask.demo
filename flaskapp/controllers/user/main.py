@@ -5,11 +5,13 @@ from dao import dao_service
 from application import app
 from common.models import *
 from config.macro_setting import *
+from util.permission import *
 
 user = Blueprint("user", __name__)
 
 
 @user.route("/index", methods=['GET', 'POST'])
+@permission_required(USER)
 def index():
     if request.method == 'GET':
         return render_template("index.html",
@@ -54,6 +56,7 @@ def register():
 
 # 修改个人信息
 @user.route('/update_info', methods=['POST', 'GET'])
+@permission_required(USER)
 def update_info():
     if request.method == 'GET':
         return render_template("update.html")
@@ -70,18 +73,21 @@ def update_info():
 
 # 获取个人信息(当前用户)
 @user.route('/detail', methods=['GET'])
+@permission_required(USER)
 def detail():
     return response("success", 200, dao_service.user_info_dao.getById(session.get('id')).first())
 
 
 # 登出 注销 session
 @user.route('/logout', methods=['GET'])
+@permission_required(USER)
 def logout():
     return services_container.login_handler.logout()
 
 
 # 提交工单
 @user.route('/costd', methods=['POST', 'GET'])
+@permission_required(USER)
 def cost():
     if request.method == 'GET':
         return render_template("test.html")
@@ -95,6 +101,7 @@ def cost():
 
 
 @user.route('/earning', methods=['POST', 'GET'])
+@permission_required(USER)
 def earning():
     if request.method == 'GET':
         return render_template("test.html")
@@ -108,6 +115,7 @@ def earning():
 
 
 @user.route('/comprehensive', methods=['POST', 'GET'])
+@permission_required(USER)
 def comprehensive():
     if request.method == 'GET':
         return render_template("test.html")
@@ -127,6 +135,7 @@ def comprehensive():
 
 # 查看所有工单
 @user.route('/work_order_all', methods=['GET'])
+@permission_required(USER)
 def work_order_all():
     user_id = session.get('id')
     return response_multiple("查询成功", 200, dao_service.work_order_dao.getByUserId(user_id))
@@ -134,6 +143,7 @@ def work_order_all():
 
 # 查看工单详情
 @user.route('/work_order_detail', methods=['GET', 'POST'])
+@permission_required(USER)
 def work_order_detail():
     if request.method == 'GET':
         return render_template("detail.html")
@@ -146,6 +156,7 @@ def work_order_detail():
 # TODO 完成该逻辑
 # 申请专家权限
 @user.route('/apply_expert', methods=['GET', 'POST'])
+@permission_required(USER)
 def apply_expert():
     pass
 

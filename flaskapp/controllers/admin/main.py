@@ -3,6 +3,8 @@ from flask import *
 from services import services_container
 from dao import dao_service
 from util.response import *
+from util.permission import *
+from config.macro_setting import *
 
 # 创建一个蓝图对象
 admin = Blueprint("admin", __name__)
@@ -21,12 +23,14 @@ def login_admin():
 
 # 登出 注销 session
 @admin.route('/logout', methods=['GET'])
+@permission_required(ADMIN)
 def logout():
     return services_container.login_handler.logout()
 
 
 # 修改个人信息
 @admin.route('/update_info', methods=['POST', 'GET'])
+@permission_required(ADMIN)
 def update_info():
     if request.method == 'GET':
         return render_template("update.html")
@@ -43,6 +47,7 @@ def update_info():
 
 # 查询用户信息
 @admin.route('/get_user_info', methods=['POST', 'GET'])
+@permission_required(ADMIN)
 def get_user_info():
     if request.method == 'GET':
         return response_multiple("查询成功", 200, dao_service.user_info_dao.getAll())
@@ -57,6 +62,7 @@ def get_user_info():
 
 
 @admin.route('/update_user_info', methods=['POST'])
+@permission_required(ADMIN)
 def update_user_info():
     id = request.form.get('id')
     email = request.form.get('email')
@@ -69,6 +75,7 @@ def update_user_info():
 
 
 @admin.route('/get_work_order_info', methods=['POST', 'GET'])
+@permission_required(ADMIN)
 def get_work_order_info():
     if request.method == 'GET':
         return response_multiple("查询成功", 200, dao_service.work_order_dao.getAll())
@@ -79,6 +86,7 @@ def get_work_order_info():
 
 
 @admin.route('/get_login_log', methods=['POST', 'GET'])
+@permission_required(ADMIN)
 def get_login_log():
     if request.method == 'GET':
         return response_multiple("查询成功", 200, dao_service.login_log_dao.getAll())
@@ -89,6 +97,7 @@ def get_login_log():
 
 
 @admin.route('/get_log', methods=['POST', 'GET'])
+@permission_required(ADMIN)
 def get_log():
     if request.method == 'GET':
         return response_multiple("查询成功", 200, dao_service.log_dao.getAll())

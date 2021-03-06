@@ -4,6 +4,7 @@ from services import *
 from dao import dao_service
 from util.response import *
 from config.macro_setting import *
+from util.permission import *
 import json
 from application import db, app
 
@@ -14,6 +15,7 @@ expert = Blueprint("expert", __name__)
 
 
 @expert.route("/detail", methods=['GET'])
+@permission_required(EXPERT)
 def detail():
     return response("success", 200, dao_service.expert_info_dao.getById(session.get('id')).first())
 
@@ -31,12 +33,14 @@ def login_expert():
 
 # 登出 注销 session
 @expert.route('/logout', methods=['GET'])
+@permission_required(EXPERT)
 def logout():
     return services_container.login_handler.logout()
 
 
 # 修改个人信息
 @expert.route('/update_info', methods=['POST', 'GET'])
+@permission_required(EXPERT)
 def update_info():
     if request.method == 'GET':
         return render_template("update.html")
@@ -53,17 +57,20 @@ def update_info():
 
 # 查看所有待评估工单
 @expert.route('/work_order_all', methods=['GET'])
+@permission_required(EXPERT)
 def work_order_all():
     return response_multiple("查询成功", 200, dao_service.work_order_dao.getFit(status=ORDER_WAIT))
 
 
 # 查看自己负责的工单
 @expert.route('/work_order_done', methods=['GET'])
+@permission_required(EXPERT)
 def work_order_done():
     return response_multiple("查询成功", 200, dao_service.work_order_dao.getFit(expert_id=session.get('id')))
 
 
 @expert.route("/get_work_order_info", methods=['GET', 'POST'])
+@permission_required(EXPERT)
 def get_work_order_info():
     if request.method == 'GET':
         return render_template("getorderid.html")
@@ -74,6 +81,7 @@ def get_work_order_info():
 
 
 @expert.route('/download_order_file', methods=['POST', 'GET'])
+@permission_required(EXPERT)
 def download_order_file():
 
     if request.method == 'GET':
@@ -86,6 +94,7 @@ def download_order_file():
 
 
 @expert.route("/process_comprehensive", methods=['GET', 'POST'])
+@permission_required(EXPERT)
 def process_comprehensive():
     if request.method == 'GET':
         # TODO 返回给专家用户上传的数据集
@@ -106,6 +115,7 @@ def process_comprehensive():
 
 
 @expert.route("/process_cost", methods=['GET', 'POST'])
+@permission_required(EXPERT)
 def process_cost():
     if request.method == 'GET':
         return render_template("cost.html")
@@ -122,6 +132,7 @@ def process_cost():
 
 
 @expert.route("/process_earning", methods=['GET', 'POST'])
+@permission_required(EXPERT)
 def process_earning():
     if request.method == 'GET':
         # TODO 返回给专家用户指定的公司名称/数据集名称
