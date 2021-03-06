@@ -1,11 +1,17 @@
 from datetime import datetime
+from sqlalchemy import *
 from common.models.login import Login
 from application import db
 
 
 class LoginDao:
-    def getById(self, id):
-        result = Login.query.filter(Login.id == int(id)).filter(Login.status == 0).first()
+    def getByNameAndRole(self, username, rolename):
+        result = Login.query.filter(
+            and_(
+                Login.username == username,
+                Login.rolename == rolename
+            )
+        ).filter(Login.status == 0).first()
         return result
 
     def getAll(self):

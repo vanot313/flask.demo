@@ -26,7 +26,6 @@ def login():
         username = data['username']
         password = data['password']
 
-
         return services_container.login_handler.login_admin(username, password)
 
 
