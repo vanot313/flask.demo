@@ -1,4 +1,5 @@
 from flask import *
+from flask_cors import CORS
 from services import *
 from util.response import *
 from util.permission import *
@@ -15,12 +16,16 @@ admin = Blueprint("admin", __name__)
 def login():
     if request.method == 'GET':
         if services_container.login_handler.is_login():
-            return dao_service.expert_info_dao.getById(session.get('id')).first()
+            return dao_service.admin_info_dao.getById(session.get('id')).first()
 
         return render_template("login.html")
     else:
-        username = request.form.get('username')
-        password = request.form.get('password')
+
+        data = request.get_json(silent=True)
+
+        username = data['username']
+        password = data['password']
+
 
         return services_container.login_handler.login_admin(username, password)
 

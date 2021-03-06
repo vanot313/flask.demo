@@ -14,7 +14,7 @@ class LoginHandler:
             result = Login.query.filter(Login.username == username and Login.rolename == "admin").first()
 
             if result is None:
-                return response("登陆失败", 200, {})
+                return response("登陆失败", 1001, {})
             elif result.check_password(password):
                 session['id'] = result.id
 
@@ -23,7 +23,7 @@ class LoginHandler:
 
                 return response("登陆成功", 200, result)
             else:
-                return response("登陆失败", 200, {})
+                return response("登陆失败", 1001, {})
 
         except Exception as e:
             app.logger.info('Exception: %s', e)
@@ -43,7 +43,7 @@ class LoginHandler:
 
                 return response("登陆成功", 200, result)
             else:
-                return response("登陆失败", 200, {})
+                return response("登陆失败", 1001, {})
 
         except Exception as e:
             app.logger.info('Exception: %s', e)
@@ -54,7 +54,7 @@ class LoginHandler:
             result = Login.query.filter(Login.username == username and Login.rolename == "expert").first()
 
             if result is None:
-                return response("登陆失败", 200, {})
+                return response("登陆失败", 1001, {})
             elif result.check_password(password):
                 session['id'] = result.id
 
@@ -63,7 +63,7 @@ class LoginHandler:
 
                 return response("登陆成功", 200, result)
             else:
-                return response("登陆失败", 200, {})
+                return response("登陆失败", 1001, {})
 
         except Exception as e:
             app.logger.info('Exception: %s', e)
