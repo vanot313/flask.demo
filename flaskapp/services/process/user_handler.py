@@ -3,8 +3,8 @@ from flask import session
 from common.models import *
 from dao import dao_service
 
-from application import db, app
-from util.response import response
+from application import *
+from util.response import *
 
 
 class UserHandler:

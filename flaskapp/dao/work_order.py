@@ -8,19 +8,46 @@ from application import db
 
 class WorkOrderDao:
     # 根据user_id搜索 work_order
-    def getByUserId(self, id):
-        result = WorkOrder.query.filter(WorkOrder.user_id == int(id))\
-            .filter(WorkOrder.status == 0)
+    def getByUserId(self, id, status=None):
+        result = WorkOrder.query.filter(WorkOrder.user_id == int(id))
+
+        if status is not None:
+            result.filter(WorkOrder.status == status)
+
         return result
 
     # 根据order_id搜索 work_order
-    def getByOrderId(self, id):
-        result = WorkOrder.query.filter(WorkOrder.order_id == int(id))\
-            .filter(WorkOrder.status == 0)
+    def getByOrderId(self, id, status=None):
+        result = WorkOrder.query.filter(WorkOrder.order_id == int(id))
+
+        if status is not None:
+            result.filter(WorkOrder.status == status)
+
         return result
 
-    def getAll(self):
+    def getAll(self, status=None):
         result = WorkOrder.query.all()
+
+        if status is not None:
+            result.filter(WorkOrder.status == status)
+
+        return result
+
+    def getFit(self, user_id=None, order_id=None, expert_id=None, status=None):
+        result = WorkOrder.query
+
+        if user_id is not None:
+            result.filter(WorkOrder.user_id == user_id)
+
+        if order_id is not None:
+            result.filter(WorkOrder.order_id == order_id)
+
+        if expert_id is not None:
+            result.filter(WorkOrder.expert_id == expert_id)
+
+        if status is not None:
+            result.filter(WorkOrder.status == status)
+
         return result
 
     # 更新 work_order 信息

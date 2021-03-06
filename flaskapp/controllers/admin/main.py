@@ -86,3 +86,13 @@ def get_login_log():
     if request.method == 'POST':
         username = request.form.get('username')
         return dao_service.login_log_dao.getFuzzy(username)
+
+
+@admin.route('/get_log', methods=['POST', 'GET'])
+def get_log():
+    if request.method == 'GET':
+        return response_multiple("查询成功", 200, dao_service.log_dao.getAll())
+
+    if request.method == 'POST':
+        username = request.form.get('username')
+        return dao_service.log_dao.getFuzzy(username)

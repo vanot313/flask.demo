@@ -1,4 +1,4 @@
-class EarningValuation:
+class EarningValuationA:
     # 待评估数据资产的价值，最终结果
     P = 0
 

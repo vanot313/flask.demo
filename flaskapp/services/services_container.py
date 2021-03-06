@@ -4,14 +4,14 @@ from services.process.admin_handler import AdminHandler
 
 from services.register import RegisterHandler
 from services.login import LoginHandler
-from services.upload import UploadHandler
+from services.file import FileHandler
 from services.data import DataHandler
 
 
 class ServicesContainer:
     login_handler = LoginHandler()
     register_handler = RegisterHandler()
-    upload_handler = UploadHandler()
+    file_handler = FileHandler()
 
     expert_handler = ExpertHandler()
     user_handler = UserHandler()

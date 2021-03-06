@@ -70,7 +70,7 @@ def update_info():
 
 # 获取个人信息(当前用户)
 @user.route('/detail', methods=['GET'])
-def get_user():
+def detail():
     return response("success", 200, dao_service.user_info_dao.getById(session.get('id')).first())
 
 
@@ -115,7 +115,7 @@ def comprehensive():
     if request.method == 'POST':
         remarks = request.form.get('remarks')
         file = request.files['file']
-        filename = services_container.upload_handler.upload_single(file)
+        filename = services_container.file_handler.upload_single(file)
         method = COMPREHENSIVE
         user_id = session.get("id")
 

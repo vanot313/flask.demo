@@ -4,6 +4,7 @@ from common.models import *
 from util.response import response
 from dao import dao_service
 
+
 class LoginHandler:
     def __init__(self):
         pass
@@ -28,11 +29,9 @@ class LoginHandler:
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})
 
-
     def login_admin(self, username, password):
         try:
             result = Login.query.filter(Login.username == username and Login.rolename == "admin").first()
-
 
             if result is None:
                 return response("登陆失败", 200, {})
