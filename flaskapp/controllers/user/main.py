@@ -1,30 +1,23 @@
 from flask import *
 from services import *
 from util.response import *
+from util.permission import *
+from common.models import *
 from dao import dao_service
 from application import app
-from common.models import *
 from config.macro_setting import *
-from util.permission import *
 
 user = Blueprint("user", __name__)
-
-
-@user.route("/index", methods=['GET', 'POST'])
-@permission_required(USER)
-def index():
-    if request.method == 'GET':
-        return render_template("index.html",
-                               resp=dao_service.user_info_dao.getById(session.get('id')).first())
 
 
 # 登录
 @user.route("/login", methods=['POST', 'GET'])
 def login():
+    # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
         if services_container.login_handler.is_login():
-            return render_template("index.html",
-                                   resp=dao_service.user_info_dao.getById(session.get('id')).first())
+            return dao_service.user_info_dao.getById(session.get('id')).first()
+
         return render_template("login.html")
 
     if request.method == 'POST':
@@ -35,9 +28,24 @@ def login():
         # return redirect(request.args.get('next') or url_for('user.index'))
 
 
+# 登出 注销 session
+@user.route('/logout', methods=['GET'])
+@permission_required(USER)
+def logout():
+    return services_container.login_handler.logout()
+
+
+# 获取个人信息(当前用户)
+@user.route('/detail', methods=['GET'])
+@permission_required(USER)
+def detail():
+    return response("success", 200, dao_service.user_info_dao.getById(session.get('id')).first())
+
+
 # 注册
 @user.route('/register', methods=['POST', 'GET'])
 def register():
+    # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
         return render_template("register.html")
     elif request.method == 'POST':
@@ -55,9 +63,10 @@ def register():
 
 
 # 修改个人信息
-@user.route('/update_info', methods=['POST', 'GET'])
+@user.route('/update', methods=['POST', 'GET'])
 @permission_required(USER)
-def update_info():
+def update():
+    # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
         return render_template("update.html")
 
@@ -71,24 +80,11 @@ def update_info():
         return services_container.user_handler.update_info(email, mobile, location, birth, description)
 
 
-# 获取个人信息(当前用户)
-@user.route('/detail', methods=['GET'])
-@permission_required(USER)
-def detail():
-    return response("success", 200, dao_service.user_info_dao.getById(session.get('id')).first())
-
-
-# 登出 注销 session
-@user.route('/logout', methods=['GET'])
-@permission_required(USER)
-def logout():
-    return services_container.login_handler.logout()
-
-
 # 提交工单
-@user.route('/costd', methods=['POST', 'GET'])
+@user.route('/new_cost', methods=['POST', 'GET'])
 @permission_required(USER)
-def cost():
+def new_cost():
+    # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
         return render_template("test.html")
 
@@ -100,9 +96,10 @@ def cost():
         return services_container.user_handler.cost_handler(user_id, remarks, method)
 
 
-@user.route('/earning', methods=['POST', 'GET'])
+@user.route('/new_earning', methods=['POST', 'GET'])
 @permission_required(USER)
-def earning():
+def new_earning():
+    # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
         return render_template("test.html")
 
@@ -114,9 +111,10 @@ def earning():
         return services_container.user_handler.earning_handler(user_id, remarks, method)
 
 
-@user.route('/comprehensive', methods=['POST', 'GET'])
+@user.route('/new_comprehensive', methods=['POST', 'GET'])
 @permission_required(USER)
-def comprehensive():
+def new_comprehensive():
+    # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
         return render_template("test.html")
 
@@ -134,7 +132,7 @@ def comprehensive():
 
 
 # 查看所有工单
-@user.route('/work_order_all', methods=['GET'])
+@user.route('/all_work_order', methods=['GET'])
 @permission_required(USER)
 def work_order_all():
     user_id = session.get('id')
@@ -142,9 +140,10 @@ def work_order_all():
 
 
 # 查看工单详情
-@user.route('/work_order_detail', methods=['GET', 'POST'])
+@user.route('/detail_work_order', methods=['GET', 'POST'])
 @permission_required(USER)
 def work_order_detail():
+    # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
         return render_template("detail.html")
 
@@ -162,7 +161,7 @@ def apply_expert():
 
 
 # 智扬写的更新用户信息 保留
-@user.route('/update', methods=['POST'])
+@user.route('/update_user', methods=['POST'])
 def updateUser():
     json_data = request.get_json()
     if json_data is not None:

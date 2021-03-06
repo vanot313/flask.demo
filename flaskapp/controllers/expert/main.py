@@ -1,12 +1,11 @@
-# coding:utf-8
 from flask import *
 from services import *
-from dao import dao_service
 from util.response import *
-from config.macro_setting import *
 from util.permission import *
-import json
-from application import db, app
+from common.models import *
+from dao import dao_service
+from application import app
+from config.macro_setting import *
 
 # 创建一个蓝图对象
 from util.response import response
@@ -14,15 +13,12 @@ from util.response import response
 expert = Blueprint("expert", __name__)
 
 
-@expert.route("/detail", methods=['GET'])
-@permission_required(EXPERT)
-def detail():
-    return response("success", 200, dao_service.expert_info_dao.getById(session.get('id')).first())
-
-
 @expert.route("/login", methods=['GET', 'POST'])
-def login_expert():
+def login():
     if request.method == 'GET':
+        if services_container.login_handler.is_login():
+            return dao_service.expert_info_dao.getById(session.get('id')).first()
+
         return render_template("login.html")
     else:
         username = request.form.get('name')
@@ -38,10 +34,16 @@ def logout():
     return services_container.login_handler.logout()
 
 
-# 修改个人信息
-@expert.route('/update_info', methods=['POST', 'GET'])
+@expert.route("/detail", methods=['GET'])
 @permission_required(EXPERT)
-def update_info():
+def detail():
+    return response("success", 200, dao_service.expert_info_dao.getById(session.get('id')).first())
+
+
+# 修改个人信息
+@expert.route('/update', methods=['POST', 'GET'])
+@permission_required(EXPERT)
+def update():
     if request.method == 'GET':
         return render_template("update.html")
 
@@ -56,22 +58,22 @@ def update_info():
 
 
 # 查看所有待评估工单
-@expert.route('/work_order_all', methods=['GET'])
+@expert.route('/all_wait_work_order', methods=['GET'])
 @permission_required(EXPERT)
-def work_order_all():
+def all_wait_work_order():
     return response_multiple("查询成功", 200, dao_service.work_order_dao.getFit(status=ORDER_WAIT))
 
 
 # 查看自己负责的工单
-@expert.route('/work_order_done', methods=['GET'])
+@expert.route('/all_self_work_order', methods=['GET'])
 @permission_required(EXPERT)
-def work_order_done():
+def all_self_work_order():
     return response_multiple("查询成功", 200, dao_service.work_order_dao.getFit(expert_id=session.get('id')))
 
 
-@expert.route("/get_work_order_info", methods=['GET', 'POST'])
+@expert.route("/detail_work_order", methods=['GET', 'POST'])
 @permission_required(EXPERT)
-def get_work_order_info():
+def detail_work_order():
     if request.method == 'GET':
         return render_template("getorderid.html")
     else:
@@ -83,7 +85,6 @@ def get_work_order_info():
 @expert.route('/download_order_file', methods=['POST', 'GET'])
 @permission_required(EXPERT)
 def download_order_file():
-
     if request.method == 'GET':
         return render_template("getorderid.html")
     else:
@@ -111,7 +112,8 @@ def process_comprehensive():
         quality_weight = json.loads(request.form.get("quality_weight"))
         applied_weight = json.loads(request.form.get("applied_weight"))
 
-        return services_container.expert_handler.comprehensive_handler(order_id, rareness, timeliness, dimensional, economy, quality_weight, applied_weight)
+        return services_container.expert_handler.comprehensive_handler(order_id, rareness, timeliness, dimensional,
+                                                                       economy, quality_weight, applied_weight)
 
 
 @expert.route("/process_cost", methods=['GET', 'POST'])

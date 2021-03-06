@@ -48,10 +48,3 @@ class DataHandler:
             return response("失败", 1001, {})
         return response_multiple("查询成功", 200, base)
 
-    def get_user_info(self, id, name, email, location):
-        try:
-            ans = dao_service.user_info_dao.getFuzzy(id, name, email, location)
-            return response_multiple("查询成功", 200, ans)
-        except Exception as e:
-            app.logger.info('Exception: %s', e)
-            return response("失败", 1001, {})

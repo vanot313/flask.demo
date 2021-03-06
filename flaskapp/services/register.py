@@ -41,11 +41,7 @@ class RegisterHandler:
             if dao_service.user_dao.getByName(username) is None:
                 return response("用户名已存在", 301, {})
             dao_service.user_dao.add(new_user)
-        except Exception as e:
-            return response("数据库访问失败", 1001, {})
 
-
-        try:
             new_user_info = UserInfo(id=new_user.id, username=username, email=email,
                                      mobile=mobile, birth=birth, location=location)
             dao_service.user_info_dao.add(new_user_info)
