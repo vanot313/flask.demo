@@ -24,6 +24,8 @@ def permission_required(permission):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             try:
+                print(11111111111111111)
+                print(session.get('id'))
                 current_user_role = dao_service.user_role_dao.getById(session.get('id')).first().role_id
 
                 if not current_user_role and permission_can(current_user_role, permission):
