@@ -13,7 +13,7 @@ class Login(db.Model):
     username = db.Column(db.String(50))
     _password_ = db.Column(db.String(128))
     status = db.Column(db.CHAR(1))
-    rolename = db.Column(db.String(100))
+    rolename = db.Column(db.String(100), primary_key=True)
 
     @property
     def password(self):

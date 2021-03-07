@@ -5,7 +5,7 @@ from application import db
 
 class LogDao:
     def getById(self, id):
-        result = Log.query.filter(Log.id == int(id)).filter(Log.status == 0).first()
+        result = Log.query.filter(Log.id == int(id)).filter(Log.status == 0)
         return result
 
     def getByName(self, name):

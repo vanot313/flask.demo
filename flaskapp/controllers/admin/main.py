@@ -15,25 +15,27 @@ admin = Blueprint("admin", __name__)
 @admin.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        if services_container.login_handler.is_login():
-            return dao_service.admin_info_dao.getById(session.get('id')).first()
+        # if services_container.login_handler.is_login():
+        #     return dao_service.admin_info_dao.getById(session.get('id')).first()
 
         return render_template("login.html")
     else:
-        # username = request.form.get('username')
-        # password = request.form.get('password')
 
         data = request.get_json(silent=True)
 
-        username = data['username']
-        password = data['password']
+        if data is not None:
+            username = data['username']
+            password = data['password']
+        else:
+            username = request.form.get('username')
+            password = request.form.get('password')
 
         return services_container.login_handler.login_admin(username, password)
 
 
 # 登出 注销 session
 @admin.route('/logout', methods=['GET'])
-@permission_required(ADMIN)
+# @permission_required(ADMIN)
 def logout():
     return services_container.login_handler.logout()
 

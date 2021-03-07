@@ -185,19 +185,21 @@ def process_earning():
 
         pass
     else:
-        # order_id = request.form.get("order_id")
-        #
-        # n = request.form.get("n")
-        # r = request.form.get("r")
-        # R = json.loads(request.form.get("R"))
-
         data = request.get_json(silent=True)
 
-        order_id = data['order_id']
+        if data is not None:
+            order_id = data['order_id']
 
-        r = data['r']
-        n = data['n']
-        R = json.loads(data['R'])
+            r = data['r']
+            n = data['n']
+            R = json.loads(data['R'])
+
+        else:
+            order_id = request.form.get("order_id")
+
+            n = request.form.get("n")
+            r = request.form.get("r")
+            R = json.loads(request.form.get("R"))
 
         return services_container.expert_handler.earning_handler(order_id, n, r, R)
 

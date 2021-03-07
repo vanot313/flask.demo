@@ -1,7 +1,7 @@
 from flask import *
 from application import app
 from common.models import *
-from util.response import response
+from util.response import *
 from dao import dao_service
 
 
@@ -31,7 +31,7 @@ class LoginHandler:
 
     def login_admin(self, username, password):
         try:
-            result = dao_service.login_dao.getByNameAndRole(username=username, rolename="admin")
+            result = dao_service.login_dao.getByNameAndRole(username=username, rolename="admin").first()
 
             if result is None:
                 return response("登录失败", 200, {})
@@ -42,6 +42,7 @@ class LoginHandler:
                 dao_service.login_log_dao.add(new_log)
 
                 return response("登录成功", 200, result)
+
             else:
                 return response("登录失败", 1001, {})
 

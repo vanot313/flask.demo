@@ -8,10 +8,10 @@ class LoginDao:
     def getByNameAndRole(self, username, rolename):
         result = Login.query.filter(
             and_(
+                Login.rolename == rolename,
                 Login.username == username,
-                Login.rolename == rolename
             )
-        ).filter(Login.status == 0).first()
+        ).filter(Login.status == 0)
         return result
 
     def getAll(self):
