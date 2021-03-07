@@ -20,6 +20,8 @@ def login():
 
         return render_template("login.html")
     else:
+        # username = request.form.get('username')
+        # password = request.form.get('password')
 
         data = request.get_json(silent=True)
 
@@ -50,11 +52,19 @@ def update_info():
         return render_template("update.html")
 
     if request.method == 'POST':
-        email = request.form.get('email')
-        mobile = request.form.get('mobile')
-        location = request.form.get('location')
-        birth = request.form.get('birth')
-        description = request.form.get('description')
+        # email = request.form.get('email')
+        # mobile = request.form.get('mobile')
+        # location = request.form.get('location')
+        # birth = request.form.get('birth')
+        # description = request.form.get('description')
+
+        data = request.get_json(silent=True)
+
+        email = data['email']
+        mobile = data['mobile']
+        location = data['location']
+        birth = data['birth']
+        description = data['description']
 
         return services_container.admin_handler.update_info(email, mobile, location, birth, description)
 
@@ -67,10 +77,17 @@ def get_user_info():
         return response_multiple("查询成功", 200, dao_service.user_info_dao.getAll())
 
     if request.method == 'POST':
-        id = request.form.get('id')
-        name = request.form.get('username')
-        email = request.form.get('email')
-        location = request.form.get('location')
+        # id = request.form.get('id')
+        # name = request.form.get('username')
+        # email = request.form.get('email')
+        # location = request.form.get('location')
+
+        data = request.get_json(silent=True)
+
+        id = data['id']
+        name = data['name']
+        location = data['location']
+        email = data['email']
 
         return response_multiple("查询成功", 200, dao_service.user_info_dao.getFuzzy(id, name, email, location))
 
@@ -78,12 +95,21 @@ def get_user_info():
 @admin.route('/update_user_info', methods=['POST'])
 @permission_required(ADMIN)
 def update_user_info():
-    id = request.form.get('id')
-    email = request.form.get('email')
-    mobile = request.form.get('mobile')
-    birth = request.form.get('birth')
-    description = request.form.get('description')
-    location = request.form.get('location')
+    # id = request.form.get('id')
+    # email = request.form.get('email')
+    # mobile = request.form.get('mobile')
+    # birth = request.form.get('birth')
+    # description = request.form.get('description')
+    # location = request.form.get('location')
+
+    data = request.get_json(silent=True)
+
+    id = data['id']
+    birth = data['birth']
+    location = data['location']
+    description = data['description']
+    email = data['email']
+    mobile = data['mobile']
 
     return services_container.admin_handler.update_user_info(id, email, mobile, location, birth, description)
 
@@ -95,7 +121,12 @@ def get_work_order():
         return response_multiple("查询成功", 200, dao_service.work_order_dao.getAll())
 
     if request.method == 'POST':
-        order_id = request.form.get('order_id')
+        # order_id = request.form.get('order_id')
+
+        data = request.get_json(silent=True)
+
+        order_id = data['order_id']
+
         return dao_service.work_order_dao.getFuzzy(order_id)
 
 
@@ -106,7 +137,12 @@ def get_login_log():
         return response_multiple("查询成功", 200, dao_service.login_log_dao.getAll())
 
     if request.method == 'POST':
-        username = request.form.get('username')
+        # username = request.form.get('username')
+
+        data = request.get_json(silent=True)
+
+        username = data['username']
+
         return dao_service.login_log_dao.getFuzzy(username)
 
 
@@ -117,5 +153,10 @@ def get_log():
         return response_multiple("查询成功", 200, dao_service.log_dao.getAll())
 
     if request.method == 'POST':
-        username = request.form.get('username')
+        # username = request.form.get('username')
+
+        data = request.get_json(silent=True)
+
+        username = data['username']
+
         return dao_service.log_dao.getFuzzy(username)

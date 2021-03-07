@@ -21,8 +21,13 @@ def login():
 
         return render_template("login.html")
     else:
-        username = request.form.get('name')
-        password = request.form.get('password')
+        # username = request.form.get('name')
+        # password = request.form.get('password')
+
+        data = request.get_json(silent=True)
+
+        username = data['username']
+        password = data['password']
 
         return services_container.login_handler.login_expert(username, password)
 
@@ -48,11 +53,19 @@ def update():
         return render_template("update.html")
 
     if request.method == 'POST':
-        email = request.form.get('email')
-        mobile = request.form.get('mobile')
-        location = request.form.get('location')
-        birth = request.form.get('birth')
-        description = request.form.get('description')
+        # email = request.form.get('email')
+        # mobile = request.form.get('mobile')
+        # location = request.form.get('location')
+        # birth = request.form.get('birth')
+        # description = request.form.get('description')
+
+        data = request.get_json(silent=True)
+
+        birth = data['birth']
+        location = data['location']
+        description = data['description']
+        email = data['email']
+        mobile = data['mobile']
 
         return services_container.expert_handler.update_info(email, mobile, location, birth, description)
 
@@ -77,7 +90,11 @@ def detail_work_order():
     if request.method == 'GET':
         return render_template("getorderid.html")
     else:
-        order_id = request.form.get("order_id")
+        # order_id = request.form.get("order_id")
+
+        data = request.get_json(silent=True)
+
+        order_id = data['order_id']
 
         return services_container.data_handler.get_work_order_info_by_id(order_id)
 
@@ -88,7 +105,12 @@ def download_order_file():
     if request.method == 'GET':
         return render_template("getorderid.html")
     else:
-        order_id = request.form.get("order_id")
+        # order_id = request.form.get("order_id")
+
+        data = request.get_json(silent=True)
+
+        order_id = data['order_id']
+
         filename = dao_service.work_order_dao.getByOrderId(order_id).first().file_name
 
         return services_container.file_handler.download_file(filename=filename)
@@ -102,15 +124,27 @@ def process_comprehensive():
 
         pass
     else:
-        order_id = request.form.get("order_id")
+        # order_id = request.form.get("order_id")
+        #
+        # rareness = request.form.get("rareness")
+        # timeliness = request.form.get("timeliness")
+        # dimensional = request.form.get("dimensional")
+        # economy = request.form.get("economy")
+        #
+        # quality_weight = json.loads(request.form.get("quality_weight"))
+        # applied_weight = json.loads(request.form.get("applied_weight"))
 
-        rareness = request.form.get("rareness")
-        timeliness = request.form.get("timeliness")
-        dimensional = request.form.get("dimensional")
-        economy = request.form.get("economy")
+        data = request.get_json(silent=True)
 
-        quality_weight = json.loads(request.form.get("quality_weight"))
-        applied_weight = json.loads(request.form.get("applied_weight"))
+        order_id = data['order_id']
+
+        rareness = data['rareness']
+        timeliness = data['timeliness']
+        dimensional = data['dimensional']
+        economy = data['economy']
+
+        quality_weight = json.loads(data['quality_weight'])
+        applied_weight = json.loads(data['applied_weight'])
 
         return services_container.expert_handler.comprehensive_handler(order_id, rareness, timeliness, dimensional,
                                                                        economy, quality_weight, applied_weight)
@@ -122,13 +156,23 @@ def process_cost():
     if request.method == 'GET':
         return render_template("cost.html")
     else:
-        order_id = request.form.get("order_id")
+        # order_id = request.form.get("order_id")
+        #
+        # R = request.form.get("R")
+        # C = request.form.get("C")
+        # II = request.form.get("II")
+        # M = request.form.get("M")
+        # E = request.form.get("E")
 
-        R = request.form.get("R")
-        C = request.form.get("C")
-        II = request.form.get("II")
-        M = request.form.get("M")
-        E = request.form.get("E")
+        data = request.get_json(silent=True)
+
+        order_id = data['order_id']
+
+        R = data['R']
+        C = data['C']
+        II = data['II']
+        M = data['M']
+        E = data['E']
 
         return services_container.expert_handler.cost_handler(order_id, R, C, II, M, E)
 
@@ -141,11 +185,19 @@ def process_earning():
 
         pass
     else:
-        order_id = request.form.get("order_id")
+        # order_id = request.form.get("order_id")
+        #
+        # n = request.form.get("n")
+        # r = request.form.get("r")
+        # R = json.loads(request.form.get("R"))
 
-        n = request.form.get("n")
-        r = request.form.get("r")
-        R = json.loads(request.form.get("R"))
+        data = request.get_json(silent=True)
+
+        order_id = data['order_id']
+
+        r = data['r']
+        n = data['n']
+        R = json.loads(data['R'])
 
         return services_container.expert_handler.earning_handler(order_id, n, r, R)
 
