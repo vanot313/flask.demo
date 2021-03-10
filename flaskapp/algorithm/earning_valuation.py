@@ -29,7 +29,7 @@ class EarningValuationA:
             self.P = self.P + self.R[i - 1] / (1 + self.r) ** i
 
 
-# c = earning_valuation()
+# c = EarningValuationA()
 # c.getpar(5, 0.1, [5000, 1000, 2000, 500, 200])
 # print('数据资产的预期获利持续年限: {}'.format(c.n))
 # print('数据资产的折现率: {}'.format(c.r))

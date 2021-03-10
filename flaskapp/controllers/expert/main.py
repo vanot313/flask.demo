@@ -165,16 +165,30 @@ def process_cost():
         # II = request.form.get("II")
         # M = request.form.get("M")
         # E = request.form.get("E")
+        try:
 
-        data = request.get_json(silent=True)
+            data = request.get_json(silent=True)
+            if data is not None:
 
-        order_id = data['order_id']
+                order_id = data['order_id']
 
-        R = data['R']
-        C = data['C']
-        II = data['II']
-        M = data['M']
-        E = data['E']
+                R = data['R']
+                C = data['C']
+                II = data['II']
+                M = data['M']
+                E = data['E']
+
+            else:
+                R = request.form.get("R")
+                C = request.form.get("C")
+                II = request.form.get("II")
+                M = request.form.get("M")
+                E = request.form.get("E")
+
+        except Exception as e:
+            print(e)
+            return response("数据接收异常", 1002, {})
+
 
         R = float(R)
         C = float(C)
@@ -190,29 +204,36 @@ def process_cost():
 def process_earning():
     if request.method == 'GET':
         # TODO 返回给专家用户指定的公司名称/数据集名称
-
-        pass
+        dict = {}
+        dict['id'] = session.get('id')
+        return dict
     else:
-        data = request.get_json(silent=True)
+        print(request.form.get("R"))
 
-        if data is not None:
-            order_id = data['order_id']
+        try:
+            data = request.get_json(silent=True)
 
-            r = data['r']
-            n = data['n']
-            R = json.loads(data['R'])
+            if data is not None:
+                order_id = data['order_id']
 
-        else:
-            order_id = request.form.get("order_id")
+                r = data['r']
+                n = data['n']
+                R = json.loads(data['R'])
 
-            n = request.form.get("n")
-            r = request.form.get("r")
-            R = json.loads(request.form.get("R"))
+            else:
+                order_id = request.form.get("order_id")
 
-            n = int(n)
-            r = float(r)
-            for i in range(1, n + 1):
-                R[i] = float(R[i])
+                n = request.form.get("n")
+                r = request.form.get("r")
+                R = json.loads(request.form.get("R"))
+        except Exception as e:
+            print(e)
+            return response("数据接收异常", 1002, {})
+
+        n = int(n)
+        r = float(r)
+        for i in range(0, n):
+            R[i] = float(R[i])
 
         return services_container.expert_handler.earning_handler(order_id, n, r, R)
 

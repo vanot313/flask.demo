@@ -38,7 +38,6 @@ def permission_required(permission):
                 abort(403)
             except Exception as e:
                 print(e)
-                abort(403)
 
         return decorated_function
 

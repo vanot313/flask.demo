@@ -12,4 +12,4 @@ class EarningValuation(db.Model):
     P = db.Column(db.FLOAT)
     n = db.Column(db.FLOAT)
     r = db.Column(db.FLOAT)
-    RI = db.Column(db.FLOAT)
+    RI = (db.Column(db.TEXT))

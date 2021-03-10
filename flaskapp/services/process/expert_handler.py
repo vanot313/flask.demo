@@ -78,14 +78,14 @@ class ExpertHandler:
         handler = EarningValuationA()
         handler.getpar(n, r, R)
         handler.calculate()
-
         try:
             order_detail = dao_service.earning_valuation_dao.getByOrderId(work_order_id).first()
+            order_detail.P = handler.P
             order_detail.n = handler.n
             order_detail.r = handler.r
-            order_detail.RI = handler.R
+            order_detail.RI = str(handler.R)
 
-            dao_service.cost_valuation_dao.update(order_detail)
+            dao_service.earning_valuation_dao.update(order_detail)
 
             order = dao_service.work_order_dao.getByOrderId(work_order_id).first()
             order.status = ORDER_DONE
@@ -93,7 +93,7 @@ class ExpertHandler:
 
         except Exception as e:
             app.logger.info('Exception: %s', e)
-            return response("算法进行失败", 1001, {})
+            return response("数据库操作失败", 1001, {})
 
         return response("提交成功", 200, order_detail)
 
