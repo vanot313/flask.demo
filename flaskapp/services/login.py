@@ -11,7 +11,7 @@ class LoginHandler:
 
     def login_user(self, username, password):
         try:
-            result = Login.query.filter(Login.username == username and Login.rolename == "admin").first()
+            result = dao_service.login_dao.getByNameAndRole(username=username, rolename="user").first()
 
             if result is None:
                 return response("登录失败", 1001, {})
@@ -34,7 +34,7 @@ class LoginHandler:
             result = dao_service.login_dao.getByNameAndRole(username=username, rolename="admin").first()
 
             if result is None:
-                return response("登录失败", 200, {})
+                return response("登录失败", 1001, {})
             elif result.check_password(password):
                 session['id'] = result.id
 
@@ -52,7 +52,7 @@ class LoginHandler:
 
     def login_expert(self, username, password):
         try:
-            result = Login.query.filter(Login.username == username and Login.rolename == "expert").first()
+            result = dao_service.login_dao.getByNameAndRole(username=username, rolename="expert").first()
 
             if result is None:
                 return response("登录失败", 1001, {})
