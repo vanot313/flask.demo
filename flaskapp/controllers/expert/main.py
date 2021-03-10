@@ -218,4 +218,4 @@ def process_earning():
 @expert.route("/test", methods=['GET', 'POST'])
 def test():
     if request.method == 'GET':
-        return render_template("test.html")
+        return session.get('id')
