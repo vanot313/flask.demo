@@ -4,10 +4,8 @@ from application import db
 
 class UserRoleDao:
     def getById(self, id):
-        result = UserRole.query.filter(UserRole.user_id == int(id))
+        result = UserRole.query.filter(UserRole.user_id == id)
         return result
-
-
 
     def update(self, entity):
         result = UserRole.query.filter(UserRole.user_id == entity.user_id).first()

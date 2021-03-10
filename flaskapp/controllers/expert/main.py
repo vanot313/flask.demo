@@ -21,13 +21,15 @@ def login():
 
         return render_template("login.html")
     else:
-        # username = request.form.get('name')
-        # password = request.form.get('password')
 
         data = request.get_json(silent=True)
 
-        username = data['username']
-        password = data['password']
+        if data is not None:
+            username = data['username']
+            password = data['password']
+        else:
+            username = request.form.get('username')
+            password = request.form.get('password')
 
         return services_container.login_handler.login_expert(username, password)
 
@@ -218,4 +220,6 @@ def process_earning():
 @expert.route("/test", methods=['GET', 'POST'])
 def test():
     if request.method == 'GET':
-        return session.get('id')
+        dict = {}
+        dict['id'] = session.get('id')
+        return dict
