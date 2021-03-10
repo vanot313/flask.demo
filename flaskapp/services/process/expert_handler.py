@@ -6,7 +6,7 @@ from dao import *
 from services import services_container
 from algorithm.cost_valuation import CostValuationA
 from algorithm.earning_valuation import EarningValuationA
-from algorithm.comprehensive_valuation import ComprehensiveValuationA
+from algorithm.comprehensive_valuation import *
 from config.macro_setting import *
 
 
@@ -24,9 +24,13 @@ class ExpertHandler:
         # TODO 得到数据集文件安置的解决方案
         address = ""
 
-        handler.quality_value(address)
+        if handler.quality_value(address) == FILE_ERROR:
+            response("文件错误", 1001, {})
 
-        handler.applied_value(rareness, timeness, dimensional, economy)
+        if handler.applied_value(rareness, timeness, dimensional, economy) == Q_ERROR:
+            response("质量对比矩阵未通过一致性检验，需对对比矩阵重新构造", 1001, {})
+        elif handler.applied_value(rareness, timeness, dimensional, economy) == A_ERROR:
+            response("应用对比矩阵未通过一致性检验，需对对比矩阵重新构造", 1001, {})
 
         handler.matrix_value(quality_weight[0], quality_weight[1],
                              quality_weight[2], quality_weight[3],
@@ -44,11 +48,6 @@ class ExpertHandler:
         return 1
 
     def cost_handler(self, work_order_id, R, C, II, M, E):
-        R = float(R)
-        C = float(C)
-        II = float(II)
-        M = float(M)
-        E = float(E)
 
         handler = CostValuationA()
         handler.getpar(R, C, II, M, E)
@@ -76,20 +75,34 @@ class ExpertHandler:
         return response("提交成功", 200, order_detail)
 
     def earning_handler(self, work_order_id, n, r, R):
-        handler = EarningValuation()
+        handler = EarningValuationA()
         handler.getpar(n, r, R)
         handler.calculate()
 
-        # TODO 将估值数据存入数据库
-        # TODO 并返回结果
-        return 1
+        try:
+            order_detail = dao_service.earning_valuation_dao.getByOrderId(work_order_id).first()
+            order_detail.n = handler.n
+            order_detail.r = handler.r
+            order_detail.RI = handler.R
+
+            dao_service.cost_valuation_dao.update(order_detail)
+
+            order = dao_service.work_order_dao.getByOrderId(work_order_id).first()
+            order.status = ORDER_DONE
+            dao_service.work_order_dao.update(order)
+
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("算法进行失败", 1001, {})
+
+        return response("提交成功", 200, order_detail)
 
     def update_info(self, email, mobile, location, birth, description):
         try:
             target = dao_service.expert_info_dao.getById(session.get('id')).first()
         except Exception as e:
             app.logger.info('Exception: %s', e)
-            return response("失败", 1001, {})
+            return response("数据库查询失败", 1001, {})
 
         if email is not None:
             target.email = email

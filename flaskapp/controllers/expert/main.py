@@ -174,6 +174,12 @@ def process_cost():
         M = data['M']
         E = data['E']
 
+        R = float(R)
+        C = float(C)
+        II = float(II)
+        M = float(M)
+        E = float(E)
+
         return services_container.expert_handler.cost_handler(order_id, R, C, II, M, E)
 
 
@@ -200,6 +206,11 @@ def process_earning():
             n = request.form.get("n")
             r = request.form.get("r")
             R = json.loads(request.form.get("R"))
+
+            n = int(n)
+            r = float(r)
+            for i in range(1, n + 1):
+                R[i] = float(R[i])
 
         return services_container.expert_handler.earning_handler(order_id, n, r, R)
 

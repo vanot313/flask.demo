@@ -7,6 +7,8 @@ class UserRoleDao:
         result = UserRole.query.filter(UserRole.user_id == int(id))
         return result
 
+
+
     def update(self, entity):
         result = UserRole.query.filter(UserRole.user_id == entity.user_id).first()
         result = entity

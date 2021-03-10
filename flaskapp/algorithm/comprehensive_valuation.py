@@ -1,13 +1,18 @@
 import pandas as pd
 import numpy as np
 
+FILE_ERROR = 1
+Q_ERROR = 2
+A_ERROR = 3
+
+SUCCESS = 0
+
 
 class ComprehensiveValuationA:
     ## 用户输入参数（在这里指文件本身）
     # 判断的文件路径
     address = ""
     ## ----------
-
 
     # 完整性
     full = 0.0
@@ -45,7 +50,6 @@ class ComprehensiveValuationA:
     # 总价值得分
     S = 0
 
-
     def __init__(self):
         pass
 
@@ -53,8 +57,12 @@ class ComprehensiveValuationA:
     def quality_value(self, address):
         self.address = address
 
-        # 读取数据
-        data = pd.read_csv(self.address)
+        try:
+            # 读取数据
+            data = pd.read_csv(self.address)
+        except:
+            return FILE_ERROR
+
         # data = pd.read_csv('../uploadfile/uploadfile.data_JDWX.csv')
         all = data.shape[0]
 
@@ -80,6 +88,8 @@ class ComprehensiveValuationA:
         print('重复性: {:.2%}'.format(repeat))
         self.repeat = repeat
 
+        return SUCCESS
+
     # 应用价值评估 专家打分法
     def applied_value(self, r, t, d, e):
         self.rareness = r
@@ -93,6 +103,7 @@ class ComprehensiveValuationA:
 
         self.economy = e
         print('场景经济性: {:.2%}'.format(self.economy))
+        return SUCCESS
 
     # 输入矩阵参数 构造权重向量 专家打分法
     def matrix_value(self, fc, fu, fr, cu, cr, ur,
@@ -103,24 +114,25 @@ class ComprehensiveValuationA:
                                 [1 / fr, 1 / cr, 1 / ur, 1]
                                 ])
 
-        mat_applied = np.array([[1, rt, rd, re],
-                                [1 / rt, 1, td, te],
-                                [1 / rd, 1 / td, 1, de],
-                                [1 / re, 1 / te, 1 / de, 1]
+        mat_applied = np.array([[1, 1 / rt, 1 / rd, 1 / re],
+                                [rt, 1, 1 / td, 1 / te],
+                                [rd, td, 1, 1 / de],
+                                [re, te, de, 1]
                                 ])
 
         weight_quality = self.get_weight(mat_quality)
         if len(weight_quality) == 0:
             print("质量对比矩阵未通过一致性检验，需对对比矩阵重新构造")
-            return False
+            return Q_ERROR
 
         weight_applied = self.get_weight(mat_applied)
         if len(weight_applied) == 0:
             print("应用对比矩阵未通过一致性检验，需对对比矩阵重新构造")
-            return False
+            return A_ERROR
 
         self.quality_weight = weight_quality
         self.applied_weight = weight_applied
+        return SUCCESS
 
     # 计算最终价值
     def calculate(self):
@@ -146,7 +158,7 @@ class ComprehensiveValuationA:
         self.Sq = Sq
         self.Sa = Sa
         self.S = S
-
+        return SUCCESS
 
     # 根据特征法计算矩阵权重
     def get_weight(self, mat):
@@ -172,9 +184,8 @@ class ComprehensiveValuationA:
         else:
             return []
 
-
-# c = comprehensive_valuation()
-# c.quality_value('../uploadfile/uploadfile.data_JDWX.csv')
+# c = ComprehensiveValuationA()
+# c.quality_value('../uploadfile/6tSiFTUE2E8J7QRKl52D.csv')
 # c.applied_value(0.8, 0.2, 0.5, 0.5)
-# c.matrix_value(1, 3, 5, 3, 5, 3, 1 / 3, 1 / 5, 1 / 9, 1 / 3, 1 / 3, 1 / 3)
+# c.matrix_value(1, 3, 5, 3, 5, 3, 3, 5, 9, 3, 3, 3)
 # c.calculate()
