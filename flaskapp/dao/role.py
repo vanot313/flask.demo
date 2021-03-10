@@ -6,12 +6,12 @@ from application import db
 class RoleDao:
     # 根据id搜索role
     def getById(self, id):
-        result = Role.query.filter(Role.id == int(id)).first()
+        result = Role.query.filter(Role.id == int(id))
         return result
 
     # 根据 rolename 搜索role
     def getByRolename(self, name):
-        result = Role.query.filter(Role.rolename == name).first()
+        result = Role.query.filter(Role.rolename == name)
         return result
 
     def getAll(self):

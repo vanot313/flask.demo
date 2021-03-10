@@ -4,11 +4,11 @@ from application import db
 
 class ExpertInfoDao:
     def getById(self, id):
-        result = ExpertInfo.query.filter(ExpertInfo.id == int(id)).first()
+        result = ExpertInfo.query.filter(ExpertInfo.id == int(id))
         return result
 
     def getByName(self, name):
-        result = ExpertInfo.query.filter(ExpertInfo.username == name).first()
+        result = ExpertInfo.query.filter(ExpertInfo.username == name)
         return result
 
     def getAll(self):

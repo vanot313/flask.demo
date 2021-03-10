@@ -29,7 +29,6 @@ def serialize(model):
 def serialize_multiple(models):
     tuple = []
     for model in models:
-        print(11111222223333)
         from sqlalchemy.orm import class_mapper
         columns = [c.key for c in class_mapper(model.__class__).columns]
         tuple.append(dict((c, getattr(model, c)) for c in columns))

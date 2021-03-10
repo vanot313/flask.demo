@@ -4,15 +4,15 @@ from application import db
 
 class ExpertApplyDao:
     def getByApplyId(self, id):
-        result = ExpertApply.query.filter(ExpertApply.apply_id == int(id)).first()
+        result = ExpertApply.query.filter(ExpertApply.apply_id == int(id))
         return result
 
     def getByUserId(self, id):
-        result = ExpertApply.query.filter(ExpertApply.user_id == int(id)).first()
+        result = ExpertApply.query.filter(ExpertApply.user_id == int(id))
         return result
 
     def getByName(self, name):
-        result = ExpertApply.query.filter(ExpertApply.username == name).first()
+        result = ExpertApply.query.filter(ExpertApply.username == name)
         return result
 
     def getAll(self):
