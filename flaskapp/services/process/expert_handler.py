@@ -58,6 +58,13 @@ class ExpertHandler:
             order_detail.Sa = handler.Sa
             order_detail.S = handler.S
 
+            dao_service.comprehensive_valuation_dao.update(order_detail)
+
+            order = dao_service.work_order_dao.getByOrderId(work_order_id).first()
+            order.expert_id = session.get('id')
+            order.status = ORDER_DONE
+            dao_service.work_order_dao.update(order)
+
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("数据库操作失败", 1001, {})
@@ -84,6 +91,7 @@ class ExpertHandler:
             dao_service.cost_valuation_dao.update(order_detail)
 
             order = dao_service.work_order_dao.getByOrderId(work_order_id).first()
+            order.expert_id = session.get('id')
             order.status = ORDER_DONE
             dao_service.work_order_dao.update(order)
 
@@ -111,6 +119,7 @@ class ExpertHandler:
             dao_service.earning_valuation_dao.update(order_detail)
 
             order = dao_service.work_order_dao.getByOrderId(work_order_id).first()
+            order.expert_id = session.get('id')
             order.status = ORDER_DONE
             dao_service.work_order_dao.update(order)
 

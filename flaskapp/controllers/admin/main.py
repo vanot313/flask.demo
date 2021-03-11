@@ -23,8 +23,8 @@ def login():
             data = request.get_json(silent=True)
 
             if data is not None:
-                username = data['username']
-                password = data['password']
+                username = data.get('username')
+                password = data.get('password')
 
             else:
                 username = request.form.get('username')
@@ -63,11 +63,11 @@ def update():
             data = request.get_json(silent=True)
 
             if data is not None:
-                birth = data['birth']
-                location = data['location']
-                description = data['description']
-                email = data['email']
-                mobile = data['mobile']
+                birth = data.get('birth')
+                location = data.get('location')
+                description = data.get('description')
+                email = data.get('email')
+                mobile = data.get('mobile')
 
             else:
                 email = request.form.get('email')
@@ -95,10 +95,10 @@ def get_user_info():
             data = request.get_json(silent=True)
 
             if data is not None:
-                id = data['id']
-                location = data['location']
-                username = data['username']
-                email = data['email']
+                id = data.get('id')
+                location = data.get('location')
+                username = data.get('username')
+                email = data.get('email')
 
             else:
                 id = request.form.get('id')
@@ -120,12 +120,12 @@ def update_user_info():
         data = request.get_json(silent=True)
 
         if data is not None:
-            id = data['id']
-            birth = data['birth']
-            location = data['location']
-            description = data['description']
-            email = data['email']
-            mobile = data['mobile']
+            id = data.get('id')
+            birth = data.get('birth')
+            location = data.get('location')
+            description = data.get('description')
+            email = data.get('email')
+            mobile = data.get('mobile')
 
         else:
             id = request.form.get('id')
@@ -153,7 +153,7 @@ def get_work_order():
             data = request.get_json(silent=True)
 
             if data is not None:
-                order_id = data['order_id']
+                order_id = data.get('order_id')
 
             else:
                 order_id = request.form.get('order_id')
@@ -177,7 +177,7 @@ def get_login_log():
             data = request.get_json(silent=True)
 
             if data is not None:
-                username = data['username']
+                username = data.get('username')
 
             else:
                 username = request.form.get('username')
@@ -201,7 +201,7 @@ def get_log():
             data = request.get_json(silent=True)
 
             if data is not None:
-                username = data['username']
+                username = data.get('username')
 
             else:
                 username = request.form.get('username')

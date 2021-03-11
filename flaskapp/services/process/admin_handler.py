@@ -43,7 +43,7 @@ class AdminHandler:
             target = dao_service.user_info_dao.getById(id).first()
         except Exception as e:
             app.logger.info('Exception: %s', e)
-            return response("失败", 1001, {})
+            return response("查询用户信息失败", 1001, {})
 
         if email is not None:
             target.email = email
@@ -64,6 +64,6 @@ class AdminHandler:
             resp = dao_service.user_info_dao.update(target)
         except Exception as e:
             app.logger.info('Exception: %s', e)
-            return response("失败", 1001, {})
+            return response("修正信息失败", 1001, {})
 
         return response("修改成功", 200, resp)

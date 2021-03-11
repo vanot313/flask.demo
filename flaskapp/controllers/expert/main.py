@@ -24,8 +24,8 @@ def login():
             data = request.get_json(silent=True)
 
             if data is not None:
-                username = data['username']
-                password = data['password']
+                username = data.get('username')
+                password = data.get('password')
             else:
                 username = request.form.get('username')
                 password = request.form.get('password')
@@ -60,11 +60,11 @@ def update():
             data = request.get_json(silent=True)
 
             if data is not None:
-                birth = data['birth']
-                location = data['location']
-                description = data['description']
-                email = data['email']
-                mobile = data['mobile']
+                birth = data.get('birth')
+                location = data.get('location')
+                description = data.get('description')
+                email = data.get('email')
+                mobile = data.get('mobile')
 
             else:
                 email = request.form.get('email')
@@ -84,14 +84,14 @@ def update():
 @expert.route('/all_wait_work_order', methods=['GET'])
 @permission_required(EXPERT)
 def all_wait_work_order():
-    return response_multiple("查询成功", 200, dao_service.work_order_dao.getFit(status=ORDER_WAIT))
+    return response_multiple("查询成功", 200, dao_service.work_order_dao.getFuzzy(status=ORDER_WAIT))
 
 
 # 查看自己负责的工单
 @expert.route('/all_self_work_order', methods=['GET'])
 @permission_required(EXPERT)
 def all_self_work_order():
-    return response_multiple("查询成功", 200, dao_service.work_order_dao.getFit(expert_id=session.get('id')))
+    return response_multiple("查询成功", 200, dao_service.work_order_dao.getFuzzy(expert_id=session.get('id')))
 
 
 @expert.route("/detail_work_order", methods=['GET', 'POST'])
@@ -104,7 +104,7 @@ def detail_work_order():
             data = request.get_json(silent=True)
 
             if data is not None:
-                order_id = data['order_id']
+                order_id = data.get('order_id')
             else:
                 order_id = request.form.get("order_id")
 
@@ -125,7 +125,7 @@ def download_order_file():
             data = request.get_json(silent=True)
 
             if data is not None:
-                order_id = data['order_id']
+                order_id = data.get('order_id')
             else:
                 order_id = request.form.get("order_id")
 
@@ -149,15 +149,15 @@ def process_comprehensive():
         try:
             data = request.get_json(silent=True)
             if data is not None:
-                order_id = data['order_id']
+                order_id = data.get('order_id')
 
-                rareness = data['rareness']
-                timeliness = data['timeliness']
-                dimensional = data['dimensional']
-                economy = data['economy']
+                rareness = data.get('rareness')
+                timeliness = data.get('timeliness')
+                dimensional = data.get('dimensional')
+                economy = data.get('economy')
 
-                quality_weight = json.loads(data['quality_weight'])
-                applied_weight = json.loads(data['applied_weight'])
+                quality_weight = json.loads(data.get('quality_weight'))
+                applied_weight = json.loads(data.get('applied_weight'))
 
             else:
                 order_id = request.form.get("order_id")
@@ -196,13 +196,13 @@ def process_cost():
 
             data = request.get_json(silent=True)
             if data is not None:
-                order_id = data['order_id']
+                order_id = data.get('order_id')
 
-                R = data['R']
-                C = data['C']
-                II = data['II']
-                M = data['M']
-                E = data['E']
+                R = data.get('R')
+                C = data.get('C')
+                II = data.get('II')
+                M = data.get('M')
+                E = data.get('E')
 
             else:
                 order_id = request.form.get('order_id')
@@ -237,11 +237,11 @@ def process_earning():
             data = request.get_json(silent=True)
 
             if data is not None:
-                order_id = data['order_id']
+                order_id = data.get('order_id')
 
-                r = data['r']
-                n = data['n']
-                R = json.loads(data['R'])
+                r = data.get('r')
+                n = data.get('n')
+                R = json.loads(data.get('R'))
 
             else:
                 order_id = request.form.get("order_id")

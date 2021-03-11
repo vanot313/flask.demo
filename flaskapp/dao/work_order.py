@@ -33,20 +33,28 @@ class WorkOrderDao:
 
         return result
 
-    def getFit(self, user_id=None, order_id=None, expert_id=None, status=None):
-        result = WorkOrder.query
+    def getFuzzy(self, user_id=None, order_id=None, expert_id=None, status=None):
+        key1 = or_(WorkOrder.user_id.like("%" + user_id + "%"), WorkOrder.user_id.is_(None))
+        key2 = or_(WorkOrder.order_id.like("%" + order_id + "%"), WorkOrder.order_id.is_(None))
+        key3 = or_(WorkOrder.expert_id.like("%" + expert_id + "%"), WorkOrder.expert_id.is_(None))
+        key4 = or_(WorkOrder.status.like("%" + status + "%"), WorkOrder.status.is_(None))
 
-        if user_id is not None:
-            result.filter(WorkOrder.user_id == user_id)
+        if user_id is not "" or None:
+            key1 = WorkOrder.user_id.like("%" + user_id + "%")
+        if order_id is not "" or None:
+            key2 = WorkOrder.order_id.like("%" + order_id + "%")
+        if expert_id is not "" or None:
+            key3 = WorkOrder.expert_id.like("%" + expert_id + "%")
+        if status is not "" or None:
+            key4 = WorkOrder.status.like("%" + status + "%")
 
-        if order_id is not None:
-            result.filter(WorkOrder.order_id == order_id)
-
-        if expert_id is not None:
-            result.filter(WorkOrder.expert_id == expert_id)
-
-        if status is not None:
-            result.filter(WorkOrder.status == status)
+        result = WorkOrder.query.filter(
+            and_(
+                key1,
+                key2,
+                key3,
+                key4)
+        )
 
         return result
 

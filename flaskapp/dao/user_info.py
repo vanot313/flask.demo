@@ -41,13 +41,13 @@ class UserInfoDao:
         key3 = or_(UserInfo.email.like("%" + email + "%"), UserInfo.email.is_(None))
         key4 = or_(UserInfo.location.like("%" + location + "%"), UserInfo.location.is_(None))
 
-        if username is not "":
+        if username is not "" or None:
             key1 = UserInfo.username.like("%" + username + "%")
-        if id is not "":
+        if id is not "" or None:
             key2 = UserInfo.id.like("%" + id + "%")
-        if email is not "":
+        if email is not "" or None:
             key3 = UserInfo.email.like("%" + email + "%")
-        if location is not "":
+        if location is not "" or None:
             key4 = UserInfo.location.like("%" + location + "%")
 
         result = UserInfo.query.filter(
