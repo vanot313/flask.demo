@@ -47,6 +47,8 @@ def logout():
 @admin.route("/detail", methods=['GET'])
 @permission_required(ADMIN)
 def detail():
+    data = response("success", 200, dao_service.admin_info_dao.getById(session.get('id')).first())
+
     return response("success", 200, dao_service.admin_info_dao.getById(session.get('id')).first())
 
 
@@ -160,7 +162,7 @@ def get_work_order():
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        return dao_service.work_order_dao.getFuzzy(order_id)
+        return response_multiple("查询成功", 200, dao_service.work_order_dao.getFuzzy(order_id))
 
 
 @admin.route('/get_login_log', methods=['POST', 'GET'])
