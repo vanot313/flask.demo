@@ -53,28 +53,31 @@ def detail():
 @expert.route('/update', methods=['POST'])
 @permission_required(EXPERT)
 def update():
-    try:
-        data = request.get_json(silent=True)
+    if request.method == 'GET':
+        return render_template('update.html')
+    else:
+        try:
+            data = request.get_json(silent=True)
 
-        if data is not None:
-            birth = data['birth']
-            location = data['location']
-            description = data['description']
-            email = data['email']
-            mobile = data['mobile']
+            if data is not None:
+                birth = data['birth']
+                location = data['location']
+                description = data['description']
+                email = data['email']
+                mobile = data['mobile']
 
-        else:
-            email = request.form.get('email')
-            mobile = request.form.get('mobile')
-            location = request.form.get('location')
-            birth = request.form.get('birth')
-            description = request.form.get('description')
+            else:
+                email = request.form.get('email')
+                mobile = request.form.get('mobile')
+                location = request.form.get('location')
+                birth = request.form.get('birth')
+                description = request.form.get('description')
 
-    except Exception as e:
-        app.logger.info('Exception: %s', e)
-        return response("数据接收异常", 1002, {})
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
 
-    return services_container.expert_handler.update_info(email, mobile, location, birth, description)
+        return services_container.expert_handler.update_info(email, mobile, location, birth, description)
 
 
 # 查看所有待评估工单

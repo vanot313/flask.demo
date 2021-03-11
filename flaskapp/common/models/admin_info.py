@@ -15,3 +15,6 @@ class AdminInfo(db.Model):
     last_login_time = db.Column(db.DATETIME)
     avatar = db.Column(db.String(100))
     description = db.Column(db.String(100))
+
+    location = db.Column(db.String(128))
+    birth = db.Column(db.DATETIME)

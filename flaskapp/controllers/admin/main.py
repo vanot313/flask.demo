@@ -17,6 +17,7 @@ def login():
     if request.method == 'GET':
         if services_container.login_handler.is_login():
             return redirect(url_for('admin.detail'))
+        return render_template('login.html')
     else:
         try:
             data = request.get_json(silent=True)
@@ -38,7 +39,7 @@ def login():
 
 # 登出 注销 session
 @admin.route('/logout', methods=['GET'])
-# @permission_required(ADMIN)
+@permission_required(ADMIN)
 def logout():
     return services_container.login_handler.logout()
 
@@ -50,31 +51,34 @@ def detail():
 
 
 # 修改个人信息
-@admin.route('/update_info', methods=['POST'])
+@admin.route('/update', methods=['POST', 'GET'])
 @permission_required(ADMIN)
-def update_info():
-    try:
-        data = request.get_json(silent=True)
+def update():
+    if request.method == 'GET':
+        return render_template('update.html')
+    else:
+        try:
+            data = request.get_json(silent=True)
 
-        if data is not None:
-            birth = data['birth']
-            location = data['location']
-            description = data['description']
-            email = data['email']
-            mobile = data['mobile']
+            if data is not None:
+                birth = data['birth']
+                location = data['location']
+                description = data['description']
+                email = data['email']
+                mobile = data['mobile']
 
-        else:
-            email = request.form.get('email')
-            mobile = request.form.get('mobile')
-            location = request.form.get('location')
-            birth = request.form.get('birth')
-            description = request.form.get('description')
+            else:
+                email = request.form.get('email')
+                mobile = request.form.get('mobile')
+                location = request.form.get('location')
+                birth = request.form.get('birth')
+                description = request.form.get('description')
 
-    except Exception as e:
-        app.logger.info('Exception: %s', e)
-        return response("数据接收异常", 1002, {})
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
 
-    return services_container.admin_handler.update_info(email, mobile, location, birth, description)
+        return services_container.admin_handler.update_info(email, mobile, location, birth, description)
 
 
 # 查询用户信息

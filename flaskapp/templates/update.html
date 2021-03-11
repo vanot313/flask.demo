@@ -4,9 +4,11 @@
     {{ title }}
 </p>
 <form method="post" enctype="multipart/form-data">
-{#        <input type="text" name="email" placeholder="邮箱" />#}
-        <input type="text" name="mobile" placeholder="联系方式" />
-        <input type="text" name="location" placeholder="所在地区">
-        <input  type="submit"/>
+    <input type="text" name="email" placeholder="邮箱" />
+    <input type="text" name="description" placeholder="描述" />
+    <input type="date" name="birth" placeholder="生日" />
+    <input type="text" name="mobile" placeholder="联系方式" />
+    <input type="text" name="location" placeholder="所在地区">
+    <input  type="submit"/>
 </form>
 {% endblock %}

@@ -22,3 +22,6 @@ class ExpertInfo(db.Model):
     finished_num = db.Column(db.INT, default=0)
     waiting_num = db.Column(db.INT, default=0)
     score = db.Column(db.FLOAT, default=0)
+
+    location = db.Column(db.String(128))
+    birth = db.Column(db.DATETIME)
