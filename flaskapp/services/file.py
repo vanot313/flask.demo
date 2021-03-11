@@ -17,8 +17,11 @@ class FileHandler:
 
     def download_file(self, filename):
 
-        if os.path.isfile(os.path.join('uploadfile', filename)):
-            return send_file(os.path.join('uploadfile', filename), as_attachment=True)
+        try:
+            if os.path.isfile(os.path.join('uploadfile', filename)):
+                return send_file(os.path.join('uploadfile', filename), as_attachment=True)
+        except:
+            abort(404)
         abort(404)
 
         # path = os.path.join(os.path.abspath(os.path.join(os.getcwd(), "./uploadfile")))

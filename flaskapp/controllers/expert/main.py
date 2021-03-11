@@ -17,19 +17,21 @@ expert = Blueprint("expert", __name__)
 def login():
     if request.method == 'GET':
         if services_container.login_handler.is_login():
-            return dao_service.expert_info_dao.getById(session.get('id')).first()
-
-        return render_template("login.html")
+            return redirect(url_for('expert.detail'))
+        return render_template('login.html')
     else:
+        try:
+            data = request.get_json(silent=True)
 
-        data = request.get_json(silent=True)
-
-        if data is not None:
-            username = data['username']
-            password = data['password']
-        else:
-            username = request.form.get('username')
-            password = request.form.get('password')
+            if data is not None:
+                username = data['username']
+                password = data['password']
+            else:
+                username = request.form.get('username')
+                password = request.form.get('password')
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
 
         return services_container.login_handler.login_expert(username, password)
 
@@ -48,28 +50,31 @@ def detail():
 
 
 # 修改个人信息
-@expert.route('/update', methods=['POST', 'GET'])
+@expert.route('/update', methods=['POST'])
 @permission_required(EXPERT)
 def update():
-    if request.method == 'GET':
-        return render_template("update.html")
-
-    if request.method == 'POST':
-        # email = request.form.get('email')
-        # mobile = request.form.get('mobile')
-        # location = request.form.get('location')
-        # birth = request.form.get('birth')
-        # description = request.form.get('description')
-
+    try:
         data = request.get_json(silent=True)
 
-        birth = data['birth']
-        location = data['location']
-        description = data['description']
-        email = data['email']
-        mobile = data['mobile']
+        if data is not None:
+            birth = data['birth']
+            location = data['location']
+            description = data['description']
+            email = data['email']
+            mobile = data['mobile']
 
-        return services_container.expert_handler.update_info(email, mobile, location, birth, description)
+        else:
+            email = request.form.get('email')
+            mobile = request.form.get('mobile')
+            location = request.form.get('location')
+            birth = request.form.get('birth')
+            description = request.form.get('description')
+
+    except Exception as e:
+        app.logger.info('Exception: %s', e)
+        return response("数据接收异常", 1002, {})
+
+    return services_container.expert_handler.update_info(email, mobile, location, birth, description)
 
 
 # 查看所有待评估工单
@@ -92,11 +97,17 @@ def detail_work_order():
     if request.method == 'GET':
         return render_template("getorderid.html")
     else:
-        # order_id = request.form.get("order_id")
+        try:
+            data = request.get_json(silent=True)
 
-        data = request.get_json(silent=True)
+            if data is not None:
+                order_id = data['order_id']
+            else:
+                order_id = request.form.get("order_id")
 
-        order_id = data['order_id']
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
 
         return services_container.data_handler.get_work_order_info_by_id(order_id)
 
@@ -107,11 +118,17 @@ def download_order_file():
     if request.method == 'GET':
         return render_template("getorderid.html")
     else:
-        # order_id = request.form.get("order_id")
+        try:
+            data = request.get_json(silent=True)
 
-        data = request.get_json(silent=True)
+            if data is not None:
+                order_id = data['order_id']
+            else:
+                order_id = request.form.get("order_id")
 
-        order_id = data['order_id']
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
 
         filename = dao_service.work_order_dao.getByOrderId(order_id).first().file_name
 
@@ -126,27 +143,41 @@ def process_comprehensive():
 
         pass
     else:
-        # order_id = request.form.get("order_id")
-        #
-        # rareness = request.form.get("rareness")
-        # timeliness = request.form.get("timeliness")
-        # dimensional = request.form.get("dimensional")
-        # economy = request.form.get("economy")
-        #
-        # quality_weight = json.loads(request.form.get("quality_weight"))
-        # applied_weight = json.loads(request.form.get("applied_weight"))
+        try:
+            data = request.get_json(silent=True)
+            if data is not None:
+                order_id = data['order_id']
 
-        data = request.get_json(silent=True)
+                rareness = data['rareness']
+                timeliness = data['timeliness']
+                dimensional = data['dimensional']
+                economy = data['economy']
 
-        order_id = data['order_id']
+                quality_weight = json.loads(data['quality_weight'])
+                applied_weight = json.loads(data['applied_weight'])
 
-        rareness = data['rareness']
-        timeliness = data['timeliness']
-        dimensional = data['dimensional']
-        economy = data['economy']
+            else:
+                order_id = request.form.get("order_id")
 
-        quality_weight = json.loads(data['quality_weight'])
-        applied_weight = json.loads(data['applied_weight'])
+                rareness = request.form.get("rareness")
+                timeliness = request.form.get("timeliness")
+                dimensional = request.form.get("dimensional")
+                economy = request.form.get("economy")
+
+                quality_weight = json.loads(request.form.get("quality_weight"))
+                applied_weight = json.loads(request.form.get("applied_weight"))
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
+
+        rareness = float(rareness)
+        timeliness = float(timeliness)
+        dimensional = float(dimensional)
+        economy = float(economy)
+        for i in range(0, 5):
+            quality_weight[i] = float(quality_weight[i])
+        for i in range(0, 5):
+            applied_weight[i] = float(applied_weight[i])
 
         return services_container.expert_handler.comprehensive_handler(order_id, rareness, timeliness, dimensional,
                                                                        economy, quality_weight, applied_weight)
@@ -158,18 +189,10 @@ def process_cost():
     if request.method == 'GET':
         return render_template("cost.html")
     else:
-        # order_id = request.form.get("order_id")
-        #
-        # R = request.form.get("R")
-        # C = request.form.get("C")
-        # II = request.form.get("II")
-        # M = request.form.get("M")
-        # E = request.form.get("E")
         try:
 
             data = request.get_json(silent=True)
             if data is not None:
-
                 order_id = data['order_id']
 
                 R = data['R']
@@ -179,6 +202,8 @@ def process_cost():
                 E = data['E']
 
             else:
+                order_id = request.form.get('order_id')
+
                 R = request.form.get("R")
                 C = request.form.get("C")
                 II = request.form.get("II")
@@ -186,9 +211,8 @@ def process_cost():
                 E = request.form.get("E")
 
         except Exception as e:
-            print(e)
+            app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
-
 
         R = float(R)
         C = float(C)
@@ -204,12 +228,8 @@ def process_cost():
 def process_earning():
     if request.method == 'GET':
         # TODO 返回给专家用户指定的公司名称/数据集名称
-        dict = {}
-        dict['id'] = session.get('id')
-        return dict
+        pass
     else:
-        print(request.form.get("R"))
-
         try:
             data = request.get_json(silent=True)
 
@@ -227,7 +247,7 @@ def process_earning():
                 r = request.form.get("r")
                 R = json.loads(request.form.get("R"))
         except Exception as e:
-            print(e)
+            app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
         n = int(n)
@@ -244,3 +264,6 @@ def test():
         dict = {}
         dict['id'] = session.get('id')
         return dict
+
+# PROBLEM
+# 代码存在大量冗余，每次接收数据的函数都被相似的函数结构包裹

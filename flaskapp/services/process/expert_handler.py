@@ -9,7 +9,6 @@ from algorithm.earning_valuation import EarningValuationA
 from algorithm.comprehensive_valuation import *
 from config.macro_setting import *
 
-
 from application import *
 from util.response import *
 
@@ -19,40 +18,60 @@ from services.file import FileHandler
 class ExpertHandler:
     def comprehensive_handler(self, work_order_id, rareness, timeness, dimensional, economy, quality_weight,
                               applied_weight):
-        handler = ComprehensiveValuation()
+        handler = ComprehensiveValuationA()
 
-        # TODO 得到数据集文件安置的解决方案
-        address = ""
+        # 读取目标数据集位置
+        try:
+            filename = dao_service.work_order_dao.getByOrderId(work_order_id).first().file_name
+            address = os.path.join('uploadfile', filename)
+        except:
+            return response("数据库操作失败", 1001, {})
 
-        if handler.quality_value(address) == FILE_ERROR:
+        # 算法处理片段
+        msg = SUCCESS
+        msg = handler.quality_value(address)
+        if msg == FILE_ERROR:
             response("文件错误", 1001, {})
-
-        if handler.applied_value(rareness, timeness, dimensional, economy) == Q_ERROR:
+        msg = handler.applied_value(rareness, timeness, dimensional, economy)
+        msg = handler.matrix_value(quality_weight, applied_weight)
+        if msg == Q_ERROR:
             response("质量对比矩阵未通过一致性检验，需对对比矩阵重新构造", 1001, {})
-        elif handler.applied_value(rareness, timeness, dimensional, economy) == A_ERROR:
+        elif msg == A_ERROR:
             response("应用对比矩阵未通过一致性检验，需对对比矩阵重新构造", 1001, {})
-
-        handler.matrix_value(quality_weight[0], quality_weight[1],
-                             quality_weight[2], quality_weight[3],
-                             quality_weight[4], quality_weight[5],
-                             applied_weight[0], applied_weight[1],
-                             applied_weight[2], applied_weight[3],
-                             applied_weight[4], applied_weight[5])
-
         handler.calculate()
 
-        # TODO 将估值数据存入数据库
+        # 数据库保存模型片段
+        try:
+            order_detail = dao_service.comprehensive_valuation_dao.getByOrderId(work_order_id).first()
+            order_detail.full = handler.full
+            order_detail.correct = handler.correct
+            order_detail.uniformity = handler.uniformity
+            order_detail.repeatability = handler.repeatability
+            order_detail.rareness = handler.rareness
+            order_detail.timeliness = handler.timeliness
+            order_detail.dimensional = handler.dimensional
+            order_detail.economy = handler.economy
+            order_detail.quality_weight = str(handler.quality_weight)
+            order_detail.applied_weight = str(handler.applied_weight)
+            order_detail.RI = str(handler.RI)
+            order_detail.Sq = handler.Sq
+            order_detail.Sa = handler.Sa
+            order_detail.S = handler.S
 
-        # TODO 并返回结果
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据库操作失败", 1001, {})
 
-        return 1
+        return response("提交成功", 200, order_detail)
 
     def cost_handler(self, work_order_id, R, C, II, M, E):
-
         handler = CostValuationA()
+
+        # 算法处理片段
         handler.getpar(R, C, II, M, E)
         handler.calculate()
 
+        # 数据库保存模型片段
         try:
             order_detail = dao_service.cost_valuation_dao.getByOrderId(work_order_id).first()
             order_detail.P = handler.P
@@ -70,14 +89,18 @@ class ExpertHandler:
 
         except Exception as e:
             app.logger.info('Exception: %s', e)
-            return response("失败", 1001, {})
+            return response("数据库操作失败", 1001, {})
 
         return response("提交成功", 200, order_detail)
 
     def earning_handler(self, work_order_id, n, r, R):
         handler = EarningValuationA()
+
+        # 算法处理片段
         handler.getpar(n, r, R)
         handler.calculate()
+
+        # 数据库保存模型片段
         try:
             order_detail = dao_service.earning_valuation_dao.getByOrderId(work_order_id).first()
             order_detail.P = handler.P
@@ -126,5 +149,3 @@ class ExpertHandler:
             return response("失败", 1001, {})
 
         return response("修改成功", 200, resp)
-
-
