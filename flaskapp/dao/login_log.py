@@ -1,4 +1,7 @@
 from datetime import datetime
+
+from sqlalchemy import *
+
 from common.models.login_log import LoginLog
 from application import db
 
@@ -31,4 +34,31 @@ class LoginLogDao:
     def delete(self, id):
         result = LoginLog.query.filter(LoginLog.id == int(id)).delete()
         db.session.commit()
+        return result
+
+    def getFuzzy(self, username):
+
+        key1 = or_(LoginLog.username.like("%" + username + "%"), LoginLog.username.is_(None))
+        # key2 = or_(UserInfo.id.like("%" + id + "%"), UserInfo.id.is_(None))
+        # key3 = or_(UserInfo.email.like("%" + email + "%"), UserInfo.email.is_(None))
+        # key4 = or_(UserInfo.location.like("%" + location + "%"), UserInfo.location.is_(None))
+
+        if username is not "":
+            key1 = LoginLog.username.like("%" + username + "%")
+        # if id is not "":
+        #     key2 = UserInfo.id.like("%" + id + "%")
+        # if email is not "":
+        #     key3 = UserInfo.email.like("%" + email + "%")
+        # if location is not "":
+        #     key4 = UserInfo.location.like("%" + location + "%")
+
+        result = LoginLog.query.filter(
+            and_(
+                key1,
+                # key2,
+                # key3,
+                # key4
+            )
+        )
+
         return result

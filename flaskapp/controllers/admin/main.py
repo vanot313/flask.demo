@@ -167,6 +167,7 @@ def get_work_order():
 @permission_required(ADMIN)
 def get_login_log():
     if request.method == 'GET':
+        # return render_template("get.html")
         return response_multiple("查询成功", 200, dao_service.login_log_dao.getAll())
 
     if request.method == 'POST':
@@ -183,13 +184,14 @@ def get_login_log():
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        return dao_service.login_log_dao.getFuzzy(username)
+        return response_multiple("查询成功", 200, dao_service.login_log_dao.getFuzzy(username))
 
 
 @admin.route('/get_log', methods=['POST', 'GET'])
 @permission_required(ADMIN)
 def get_log():
     if request.method == 'GET':
+        # return render_template("get.html")
         return response_multiple("查询成功", 200, dao_service.log_dao.getAll())
 
     if request.method == 'POST':
@@ -206,4 +208,4 @@ def get_log():
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        return dao_service.log_dao.getFuzzy(username)
+        return response_multiple("查询成功", 200, dao_service.log_dao.getFuzzy(username))

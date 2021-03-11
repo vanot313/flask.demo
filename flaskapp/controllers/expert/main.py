@@ -98,7 +98,7 @@ def all_self_work_order():
 @permission_required(EXPERT)
 def detail_work_order():
     if request.method == 'GET':
-        return render_template("getorderid.html")
+        return render_template("get.html")
     else:
         try:
             data = request.get_json(silent=True)
@@ -119,7 +119,7 @@ def detail_work_order():
 @permission_required(EXPERT)
 def download_order_file():
     if request.method == 'GET':
-        return render_template("getorderid.html")
+        return render_template("get.html")
     else:
         try:
             data = request.get_json(silent=True)
