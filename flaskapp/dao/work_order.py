@@ -33,20 +33,21 @@ class WorkOrderDao:
 
         return result
 
-    def getFuzzy(self, user_id=None, order_id=None, expert_id=None, status=None):
-        key1 = or_(WorkOrder.user_id.like("%" + user_id + "%"), WorkOrder.user_id.is_(None))
-        key2 = or_(WorkOrder.order_id.like("%" + order_id + "%"), WorkOrder.order_id.is_(None))
-        key3 = or_(WorkOrder.expert_id.like("%" + expert_id + "%"), WorkOrder.expert_id.is_(None))
-        key4 = or_(WorkOrder.status.like("%" + status + "%"), WorkOrder.status.is_(None))
+    def getFuzzy(self, user_id="", order_id="", expert_id="", status=""):
 
-        if user_id is not "" or None:
-            key1 = WorkOrder.user_id.like("%" + user_id + "%")
-        if order_id is not "" or None:
-            key2 = WorkOrder.order_id.like("%" + order_id + "%")
-        if expert_id is not "" or None:
-            key3 = WorkOrder.expert_id.like("%" + expert_id + "%")
-        if status is not "" or None:
-            key4 = WorkOrder.status.like("%" + status + "%")
+        key1 = or_(WorkOrder.user_id.like("%" + str(user_id) + "%"), WorkOrder.user_id.is_(None))
+        key2 = or_(WorkOrder.order_id.like("%" + str(order_id) + "%"), WorkOrder.order_id.is_(None))
+        key3 = or_(WorkOrder.expert_id.like("%" + str(expert_id) + "%"), WorkOrder.expert_id.is_(None))
+        key4 = or_(WorkOrder.status.like("%" + str(status) + "%"), WorkOrder.status.is_(None))
+
+        if user_id is not "":
+            key1 = WorkOrder.user_id.like("%" + str(user_id) + "%")
+        if order_id is not "":
+            key2 = WorkOrder.order_id.like("%" + str(order_id) + "%")
+        if expert_id is not "":
+            key3 = WorkOrder.expert_id.like("%" + str(expert_id) + "%")
+        if status is not "":
+            key4 = WorkOrder.status.like("%" + str(status) + "%")
 
         result = WorkOrder.query.filter(
             and_(
@@ -83,30 +84,3 @@ class WorkOrderDao:
         WorkOrder.query.filter(WorkOrder.order_id == int(id)).delete()
         db.session.commit()
         return []
-
-    def getFuzzy(self, order_id):
-
-        key1 = or_(WorkOrder.order_id.like("%" + order_id + "%"), WorkOrder.order_id.is_(None))
-        # key2 = or_(UserInfo.id.like("%" + id + "%"), UserInfo.id.is_(None))
-        # key3 = or_(UserInfo.email.like("%" + email + "%"), UserInfo.email.is_(None))
-        # key4 = or_(UserInfo.location.like("%" + location + "%"), UserInfo.location.is_(None))
-
-        if order_id is not "":
-            key1 = WorkOrder.order_id.like("%" + order_id + "%")
-        # if id is not "":
-        #     key2 = UserInfo.id.like("%" + id + "%")
-        # if email is not "":
-        #     key3 = UserInfo.email.like("%" + email + "%")
-        # if location is not "":
-        #     key4 = UserInfo.location.like("%" + location + "%")
-
-        result = WorkOrder.query.filter(
-            and_(
-                key1,
-                # key2,
-                # key3,
-                # key4
-            )
-        )
-
-        return result
