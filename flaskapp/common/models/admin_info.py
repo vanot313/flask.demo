@@ -17,4 +17,4 @@ class AdminInfo(db.Model):
     description = db.Column(db.String(100))
 
     location = db.Column(db.String(128))
-    birth = db.Column(db.DATETIME)
+    birth = db.Column(db.DATE)

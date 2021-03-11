@@ -24,4 +24,4 @@ class ExpertInfo(db.Model):
     score = db.Column(db.FLOAT, default=0)
 
     location = db.Column(db.String(128))
-    birth = db.Column(db.DATETIME)
+    birth = db.Column(db.DATE)
