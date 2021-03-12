@@ -36,7 +36,7 @@ class LogDao:
         db.session.commit()
         return []
 
-    def getFuzzy(self, username):
+    def getFuzzy(self, username=""):
 
         key1 = or_(Log.username.like("%" + username + "%"), Log.username.is_(None))
         # key2 = or_(UserInfo.id.like("%" + id + "%"), UserInfo.id.is_(None))

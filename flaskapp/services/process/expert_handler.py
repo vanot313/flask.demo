@@ -155,6 +155,6 @@ class ExpertHandler:
             resp = dao_service.expert_info_dao.update(target)
         except Exception as e:
             app.logger.info('Exception: %s', e)
-            return response("失败", 1001, {})
+            return response("数据库操作失败", 1001, {})
 
         return response("修改成功", 200, resp)

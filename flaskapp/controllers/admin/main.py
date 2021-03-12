@@ -88,6 +88,7 @@ def update():
 @permission_required(ADMIN)
 def get_user_info():
     if request.method == 'GET':
+        # return render_template('get.html')
         return response_multiple("查询成功", 200, dao_service.user_info_dao.getAll())
 
     if request.method == 'POST':
@@ -147,6 +148,7 @@ def update_user_info():
 def get_work_order():
     if request.method == 'GET':
         return response_multiple("查询成功", 200, dao_service.work_order_dao.getAll())
+        # return render_template("get.html")
 
     if request.method == 'POST':
         try:
@@ -162,7 +164,7 @@ def get_work_order():
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        return response_multiple("查询成功", 200, dao_service.work_order_dao.getFuzzy(order_id))
+        return response_multiple("查询成功", 200, dao_service.work_order_dao.getFuzzy(order_id=order_id))
 
 
 @admin.route('/get_login_log', methods=['POST', 'GET'])

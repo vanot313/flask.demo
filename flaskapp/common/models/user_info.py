@@ -14,14 +14,14 @@ class UserInfo(db.Model):
     create_time = db.Column(db.DATETIME)
     modify_time = db.Column(db.DATETIME)
     last_login_time = db.Column(db.DATETIME)
-    avatar = db.Column(db.String(100), default="default")
+    avator = db.Column(db.String(100), default="default")
     description = db.Column(db.String(100))
     msg_num = db.Column(db.INT, default=0)
     finished_num = db.Column(db.INT, default=0)
     waiting_num = db.Column(db.INT, default=0)
     data_assets = db.Column(db.FLOAT, default=0)
 
-    location = db.Column(db.String(128))
     birth = db.Column(db.DATETIME)
-
+    location = db.Column(db.String(128))
+    sex = db.Column(db.INT)
 
