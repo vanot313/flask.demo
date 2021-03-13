@@ -37,9 +37,11 @@ def logout():
 
 # 获取个人信息(当前用户)
 @user.route('/detail', methods=['GET'])
-@permission_required(USER)
+# @permission_required(USER)
 def detail():
-    return response("success", 200, dao_service.user_info_dao.getById(session.get('id')).first())
+    id = request.args.get('id')
+    # print(dao_service.user_info_dao.getById(session.get('id')))
+    return response("success", 200, dao_service.user_info_dao.getById(id))
 
 
 # 注册
@@ -53,18 +55,19 @@ def register():
         name = request.form.get('username')
         password = request.form.get('password')
         email = request.form.get('email')
-        mobile = request.form.get('mobile')
+        mobile = request.form.get('phoneNum')
         # avatar = request.form.get('avatar')
-        # description = request.form.get('description')
+        description = request.form.get('introduction')
         location = request.form.get('location')
         birth = request.form.get('birth')
+        sex = request.form.get('sex')
 
-        return services_container.register_handler.register_user(name, password, email, mobile, location, birth)
+        return services_container.register_handler.register_user(name, password, email, mobile, location, birth, description, sex)
 
 
 # 修改个人信息
 @user.route('/update', methods=['POST', 'GET'])
-@permission_required(USER)
+#@permission_required(USER)
 def update():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -72,12 +75,14 @@ def update():
 
     if request.method == 'POST':
         email = request.form.get('email')
-        mobile = request.form.get('mobile')
+        mobile = request.form.get('phoneNum')
         location = request.form.get('location')
         birth = request.form.get('birth')
-        description = request.form.get('description')
-
-        return services_container.user_handler.update_info(email, mobile, location, birth, description)
+        description = request.form.get('introduction')
+        sex = request.form.get('sex')
+        username = request.form.get('username')
+        id = request.form.get('id')
+        return services_container.user_handler.update_info(id, username, sex, email, mobile, location, birth, description)
 
 
 # 提交工单
@@ -152,6 +157,16 @@ def work_order_detail():
         return services_container.data_handler.get_work_order_detail_by_id(order_id)
 
 
+@user.route('/get_all_user', methods=['GET'])
+def get_all_user():
+    return services_container.user_handler.get_all_user()
+
+
+@user.route('/get_all_expert', methods=['GET'])
+def get_all_expert():
+    return services_container.user_handler.get_all_expert()
+
+
 # TODO 完成该逻辑
 # 申请专家权限
 @user.route('/apply_expert', methods=['GET', 'POST'])
@@ -160,6 +175,7 @@ def apply_expert():
     pass
 
 
+'''
 # 智扬写的更新用户信息 保留
 @user.route('/update_user', methods=['POST'])
 def updateUser():
@@ -172,3 +188,4 @@ def updateUser():
         except Exception as e:
             app.logger.info("Exception: %s", e)
             return response('失败', 1001, {})
+'''

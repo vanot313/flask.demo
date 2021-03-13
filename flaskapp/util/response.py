@@ -11,10 +11,21 @@ def response(msg, code, data):
 
 
 def response_multiple(msg, code, data):
-    if not data :
+    if not data:
         result = {'msg': msg, 'code': code, 'success': (code == 200)}
     else:
         result = {'msg': msg, 'code': code, 'data': serialize_multiple(data), 'success': (code == 200)}
+    return jsonify(result)
+
+
+def response_dict(msg, code, data):
+    if not data:
+        result = {'msg': msg, 'code': code, 'success': (code == 200)}
+    else:
+        res = {}
+        for i in data:
+            res[i] = serialize(data[i])
+        result = {'msg': msg, 'code': code, 'data': res, 'success': (code == 200)}
     return jsonify(result)
 
 

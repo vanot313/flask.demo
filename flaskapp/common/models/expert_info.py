@@ -25,3 +25,4 @@ class ExpertInfo(db.Model):
 
     location = db.Column(db.String(128))
     birth = db.Column(db.DATE)
+    title = db.Column(db.INT)

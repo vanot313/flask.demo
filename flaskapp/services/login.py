@@ -17,11 +17,14 @@ class LoginHandler:
                 return response("登录失败", 1001, {})
             elif result.check_password(password):
                 session['id'] = result.id
-
+                print(session.get('id'))
                 new_log = LoginLog(username=username, rolename="user")
                 dao_service.login_log_dao.add(new_log)
 
-                return response("登录成功", 200, result)
+                res = dao_service.user_info_dao.getById(result.id)
+                result = {'msg': "登录成功", 'code': 200, 'usermsg': serialize(res), 'data': serialize(res),
+                          'success': 'true'}
+                return jsonify(result)
             else:
                 return response("登录失败", 1001, {})
 
