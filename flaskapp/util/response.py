@@ -49,4 +49,4 @@ def serialize_multiple(models):
 # code 含义
 # 200 成功
 # 1001 查询失败
-# 1002
+# 1002 信息不完全
