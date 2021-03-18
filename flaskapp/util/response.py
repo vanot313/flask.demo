@@ -1,5 +1,5 @@
 from flask import jsonify
-
+from common.models import *
 
 # 返回到前端json数据格式
 def response(msg, code, data):

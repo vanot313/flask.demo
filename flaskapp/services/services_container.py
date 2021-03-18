@@ -1,3 +1,4 @@
+from dao.crawler import CrawlerDao
 from services.process.expert_handler import ExpertHandler
 from services.process.user_handler import UserHandler
 from services.process.admin_handler import AdminHandler
@@ -18,3 +19,5 @@ class ServicesContainer:
     admin_handler = AdminHandler()
 
     data_handler = DataHandler()
+
+    crawl_handler = CrawlerDao()

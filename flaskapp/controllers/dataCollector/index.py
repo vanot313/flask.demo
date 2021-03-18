@@ -1,11 +1,15 @@
 # coding:utf-8
 from flask import *
 from application import db
-from common.models.user import User
+from common.models.crawler import Crawler
 import random
+
+from services import ServicesContainer
 from util import str_tools, response
 import subprocess
 import os
+
+from util.response import serialize
 
 dataCollector = Blueprint("dataCollector", __name__)
 
@@ -13,6 +17,7 @@ dataCollector = Blueprint("dataCollector", __name__)
 # 上传代码
 @dataCollector.route("/upload", methods=['POST'])
 def upload():
+    name = request.form.get('name')
     filename = request.form.get('filename')
     remark = request.form.get('remarks')
     file = request.files['file']
@@ -22,8 +27,9 @@ def upload():
     path = './webScrapy/webScrapy/spiders/' + filename
     # 保存路径
     file.save(path)
-
-    return response.response("upload success", 200, {})
+    new_Crawl = Crawler(name=name, filepath=filename, remarks=remark)
+    result = ServicesContainer.crawl_handler.add(new_Crawl)
+    return response.response("upload success", 200, result)
 
 
 # 执行爬虫
@@ -32,7 +38,7 @@ def execute():
     status = 1
     output = "nothing"
 
-    exeFile = request.form.get('exeFile')
+    name = request.form.get('name')
     outFile = request.form.get('outFile')
 
     # 判断是否存在爬虫文件夹
@@ -44,12 +50,12 @@ def execute():
     if not os.path.exists("collectorFile"):
         os.mkdir('collectorFile')
 
-    if exeFile is None and outFile is None:
+    if name is None and outFile is None:
         return response.response('请选择文件', 1002, {})
 
     outFile = '../../../collectorFile/' + outFile
     print(outFile)
-    cmd = 'cd ./webScrapy/webScrapy/spiders/ & scrapy crawl ' + exeFile + ' -o ' + outFile
+    cmd = 'cd ./webScrapy/webScrapy/spiders/ & scrapy crawl ' + name + ' -o ' + outFile
     status, output = 0, ''
     try:
         status, output = subprocess.getstatusoutput(cmd)
@@ -64,7 +70,10 @@ def execute():
         return jsonify("爬虫失败", 200, {"status": status,
                                      "output": output})
     else:
-        return jsonify("爬虫成功", 200, {"status": status})
+        result = ServicesContainer.crawl_handler.getByName(name)
+        result.datapath = outFile
+        res = ServicesContainer.crawl_handler.update(result)
+        return jsonify("爬虫成功", 200, {"status": status, 'data': serialize(res)})
 
 
 @dataCollector.route("/download", methods=['POST'])
@@ -79,6 +88,11 @@ def download():
 # index
 @dataCollector.route("/getAll", methods=['GET'])
 def index():
-    return jsonify("爬虫", 200, 'hello')
+    try:
+        print(ServicesContainer.crawl_handler.getAll())
+        return response.response_multiple('成功', 200, ServicesContainer.crawl_handler.getAll())
+    except Exception as e:
+        return response.response('查询失败', 1001, {})
+
 
 
