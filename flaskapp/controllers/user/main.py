@@ -62,12 +62,13 @@ def register():
         birth = request.form.get('birth')
         sex = request.form.get('sex')
 
-        return services_container.register_handler.register_user(name, password, email, mobile, location, birth, description, sex)
+        return services_container.register_handler.register_user(name, password, email, mobile, location, birth,
+                                                                 description, sex)
 
 
 # 修改个人信息
 @user.route('/update', methods=['POST', 'GET'])
-#@permission_required(USER)
+# @permission_required(USER)
 def update():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -82,12 +83,13 @@ def update():
         sex = request.form.get('sex')
         username = request.form.get('username')
         id = request.form.get('id')
-        return services_container.user_handler.update_info(id, username, sex, email, mobile, location, birth, description)
+        return services_container.user_handler.update_info(id, username, sex, email, mobile, location, birth,
+                                                           description)
 
 
 # 提交工单
 @user.route('/new_cost', methods=['POST', 'GET'])
-@permission_required(USER)
+#@permission_required(USER)
 def new_cost():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -96,13 +98,14 @@ def new_cost():
     if request.method == 'POST':
         remarks = request.form.get('remarks')
         method = COST
-        user_id = session.get("id")
-
+        name = request.form.get('username')
+        result = dao_service.user_info_dao.getByName(name)
+        user_id = result.id
         return services_container.user_handler.cost_handler(user_id, remarks, method)
 
 
 @user.route('/new_earning', methods=['POST', 'GET'])
-@permission_required(USER)
+#@permission_required(USER)
 def new_earning():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -111,13 +114,15 @@ def new_earning():
     if request.method == 'POST':
         remarks = request.form.get('remarks')
         method = EARNING
-        user_id = session.get("id")
+        name = request.form.get('username')
+        result = dao_service.user_info_dao.getByName(name)
+        user_id = result.id
 
         return services_container.user_handler.earning_handler(user_id, remarks, method)
 
 
 @user.route('/new_comprehensive', methods=['POST', 'GET'])
-@permission_required(USER)
+#@permission_required(USER)
 def new_comprehensive():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -126,11 +131,13 @@ def new_comprehensive():
     if request.method == 'POST':
         remarks = request.form.get('remarks')
         file = request.files['file']
-        filename = services_container.file_handler.upload_single(file)
         method = COMPREHENSIVE
-        user_id = session.get("id")
+        name = request.form.get('username')
+        result = dao_service.user_info_dao.getByName(name)
+        user_id = result.id
 
         if file is not None:
+            filename = services_container.file_handler.upload_single(file)
             return services_container.user_handler.comprehensive_handler(user_id, remarks, method, filename)
         else:
             return response('上传失败', 1001, {})

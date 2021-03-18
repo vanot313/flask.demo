@@ -108,16 +108,16 @@ class ComprehensiveValuationA:
     # 输入矩阵参数 构造权重向量 专家打分法
     def matrix_value(self, weight,
                      applied):
-        mat_quality = np.array([[1,             weight[0],      weight[1],      weight[2]],
-                                [1 / weight[0], 1,              weight[3],      weight[4]],
-                                [1 / weight[1], 1 / weight[3],  1,              weight[5]],
-                                [1 / weight[2], 1 / weight[4],  1 / weight[5],  1]
+        mat_quality = np.array([[1, weight[0], weight[1], weight[2]],
+                                [1 / weight[0], 1, weight[3], weight[4]],
+                                [1 / weight[1], 1 / weight[3], 1, weight[5]],
+                                [1 / weight[2], 1 / weight[4], 1 / weight[5], 1]
                                 ])
 
-        mat_applied = np.array([[1,             1 / applied[0], 1 / applied[1], 1 / applied[2]],
-                                [applied[0],    1,              1 / applied[3], 1 / applied[4]],
-                                [applied[1],    applied[3],     1,              1 / applied[5]],
-                                [applied[2],    applied[4],     applied[5],     1]
+        mat_applied = np.array([[1, 1 / applied[0], 1 / applied[1], 1 / applied[2]],
+                                [applied[0], 1, 1 / applied[3], 1 / applied[4]],
+                                [applied[1], applied[3], 1, 1 / applied[5]],
+                                [applied[2], applied[4], applied[5], 1]
                                 ])
 
         weight_quality = self.get_weight(mat_quality)

@@ -17,6 +17,7 @@ class CostValuationA:
     M = 1
     # 数据集的环境约束因素修正系数
     E = 1
+
     ## ..........
 
     def __init__(self):

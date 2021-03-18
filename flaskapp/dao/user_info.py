@@ -6,11 +6,11 @@ from application import db
 
 class UserInfoDao:
     def getById(self, id):
-        result = UserInfo.query.filter(UserInfo.id == int(id))
+        result = UserInfo.query.filter(UserInfo.id == int(id)).first()
         return result
 
     def getByName(self, name):
-        result = UserInfo.query.filter(UserInfo.username == name)
+        result = UserInfo.query.filter(UserInfo.username == name).first()
         return result
 
     def getAll(self):

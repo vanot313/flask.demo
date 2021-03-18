@@ -12,7 +12,7 @@ class FileHandler:
 
         file.save(os.path.join(os.path.abspath(os.path.join(os.getcwd(), "./uploadfile")),
                                filename))
-
+        print(filename)
         return filename
 
     def download_file(self, filename):
