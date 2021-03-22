@@ -50,7 +50,7 @@ def detail():
 
 
 # 修改个人信息
-@expert.route('/update', methods=['POST'])
+@expert.route('/update', methods=['GET', 'POST'])
 @permission_required(EXPERT)
 def update():
     if request.method == 'GET':
@@ -260,13 +260,6 @@ def process_earning():
 
         return services_container.expert_handler.earning_handler(order_id, n, r, R)
 
-
-@expert.route("/test", methods=['GET', 'POST'])
-def test():
-    if request.method == 'GET':
-        dict = {}
-        dict['id'] = session.get('id')
-        return dict
 
 # PROBLEM
 # 代码存在大量冗余，每次接收数据的函数都被相似的函数结构包裹
