@@ -55,6 +55,7 @@ class ComprehensiveValuationA:
 
     # 质量价值评估 分析数据表
     def quality_value(self, address):
+
         self.address = address
 
         try:
@@ -92,6 +93,7 @@ class ComprehensiveValuationA:
 
     # 应用价值评估 专家打分法
     def applied_value(self, r, t, d, e):
+
         self.rareness = r
         print('稀缺性: {:.2%}'.format(self.rareness))
 
@@ -108,6 +110,7 @@ class ComprehensiveValuationA:
     # 输入矩阵参数 构造权重向量 专家打分法
     def matrix_value(self, weight,
                      applied):
+
         mat_quality = np.array([[1, weight[0], weight[1], weight[2]],
                                 [1 / weight[0], 1, weight[3], weight[4]],
                                 [1 / weight[1], 1 / weight[3], 1, weight[5]],
@@ -150,14 +153,14 @@ class ComprehensiveValuationA:
 
         print("质量价值估分 {:.3f}".format(Sq))
         print("应用价值估分 {:.3f}".format(Sa))
-
         S = (Sa * Sq) / 100
 
         print("资产价值估分 {:.3f}".format(S))
-
         self.Sq = Sq
         self.Sa = Sa
         self.S = S
+
+        self.transfer_weight()
         return SUCCESS
 
     # 根据特征法计算矩阵权重
@@ -184,8 +187,16 @@ class ComprehensiveValuationA:
         else:
             return []
 
+    def transfer_weight(self):
+        for i in range(0, 3):
+
+            self.applied_weight[i] = str(self.applied_weight[i].real)
+            print(self.applied_weight[i])
+            self.quality_weight[i] = self.quality_weight[i].real
+            print(self.quality_weight[i])
+
 # c = ComprehensiveValuationA()
 # c.quality_value('../uploadfile/6tSiFTUE2E8J7QRKl52D.csv')
 # c.applied_value(0.8, 0.2, 0.5, 0.5)
-# c.matrix_value(1, 3, 5, 3, 5, 3, 3, 5, 9, 3, 3, 3)
+# c.matrix_value([1, 3, 5, 3, 5, 3],[ 3, 5, 9, 3, 3, 3])
 # c.calculate()

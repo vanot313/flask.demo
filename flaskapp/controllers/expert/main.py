@@ -156,8 +156,11 @@ def process_comprehensive():
                 dimensional = data.get('dimensional')
                 economy = data.get('economy')
 
-                quality_weight = json.loads(data.get('quality_weight'))
-                applied_weight = json.loads(data.get('applied_weight'))
+                quality_weight = data.get('quality_weight')
+                applied_weight = data.get('applied_weight')
+
+                print(quality_weight)
+                print(applied_weight)
 
             else:
                 order_id = request.form.get("order_id")
@@ -167,8 +170,8 @@ def process_comprehensive():
                 dimensional = request.form.get("dimensional")
                 economy = request.form.get("economy")
 
-                quality_weight = json.loads(request.form.get("quality_weight"))
-                applied_weight = json.loads(request.form.get("applied_weight"))
+                quality_weight = request.form.get("quality_weight")
+                applied_weight = request.form.get("applied_weight")
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})

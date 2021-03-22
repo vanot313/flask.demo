@@ -29,15 +29,19 @@ class ExpertHandler:
 
         # 算法处理片段
         msg = SUCCESS
+
         msg = handler.quality_value(address)
+
         if msg == FILE_ERROR:
-            response("文件错误", 1001, {})
+            return response("文件错误", 1001, {})
+
         msg = handler.applied_value(rareness, timeness, dimensional, economy)
+
         msg = handler.matrix_value(quality_weight, applied_weight)
         if msg == Q_ERROR:
-            response("质量对比矩阵未通过一致性检验，需对对比矩阵重新构造", 1001, {})
+            return response("质量对比矩阵未通过一致性检验，需对对比矩阵重新构造", 1001, {})
         elif msg == A_ERROR:
-            response("应用对比矩阵未通过一致性检验，需对对比矩阵重新构造", 1001, {})
+            return response("应用对比矩阵未通过一致性检验，需对对比矩阵重新构造", 1001, {})
         handler.calculate()
 
         # 数据库保存模型片段
@@ -51,12 +55,12 @@ class ExpertHandler:
             order_detail.timeliness = handler.timeliness
             order_detail.dimensional = handler.dimensional
             order_detail.economy = handler.economy
-            order_detail.quality_weight = str(handler.quality_weight)
-            order_detail.applied_weight = str(handler.applied_weight)
+            order_detail.quality_weight = str(handler.quality_weight.tolist())
+            order_detail.applied_weight = str(handler.applied_weight.tolist())
             order_detail.RI = str(handler.RI)
-            order_detail.Sq = handler.Sq
-            order_detail.Sa = handler.Sa
-            order_detail.S = handler.S
+            order_detail.Sq = float(handler.Sq.real)
+            order_detail.Sa = float(handler.Sa.real)
+            order_detail.S = float(handler.S.real)
 
             dao_service.comprehensive_valuation_dao.update(order_detail)
 
