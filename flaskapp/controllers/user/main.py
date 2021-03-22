@@ -137,8 +137,9 @@ def new_comprehensive():
         user_id = result.id
 
         if file is not None:
-            filename = services_container.file_handler.upload_single(file)
-            return services_container.user_handler.comprehensive_handler(user_id, remarks, method, filename)
+            filename = file.filename
+            filepath = services_container.file_handler.upload_single(file)
+            return services_container.user_handler.comprehensive_handler(user_id, remarks, method, filepath, filename)
         else:
             return response('上传失败', 1001, {})
 

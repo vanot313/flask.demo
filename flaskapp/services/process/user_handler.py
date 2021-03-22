@@ -11,15 +11,15 @@ from util.response import *
 
 
 class UserHandler:
-    def comprehensive_handler(self, user_id, remarks, method, filename):
-        new_work_order = WorkOrder(user_id=user_id, u_remarks=remarks, method=method, file_name=filename)
+    def comprehensive_handler(self, user_id, remarks, method, filepath, filename):
+        new_work_order = WorkOrder(user_id=user_id, u_remarks=remarks, method=method, filepath=filepath, file_name=filename)
         dao_service.work_order_dao.add(new_work_order)
 
         order_id = new_work_order.order_id
         new_comprehensive = ComprehensiveValuation(order_id=order_id)
         dao_service.comprehensive_valuation_dao.add(new_comprehensive)
         c = ComprehensiveValuationA()
-        c.quality_value('../uploadfile/' + filename)
+        c.quality_value('../uploadfile/' + filepath)
         c.applied_value(0.8, 0.2, 0.5, 0.5)
         c.matrix_value([1, 3, 5, 3, 5, 3], [3, 5, 9, 3, 3, 3])
         c.calculate()

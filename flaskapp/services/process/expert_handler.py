@@ -22,8 +22,8 @@ class ExpertHandler:
 
         # 读取目标数据集位置
         try:
-            filename = dao_service.work_order_dao.getByOrderId(work_order_id).first().file_name
-            address = os.path.join('uploadfile', filename)
+            file_path = dao_service.work_order_dao.getByOrderId(work_order_id).first().file_path
+            address = os.path.join('uploadfile', file_path)
         except:
             return response("数据库操作失败", 1001, {})
 
@@ -46,7 +46,7 @@ class ExpertHandler:
             order_detail.full = handler.full
             order_detail.correct = handler.correct
             order_detail.uniformity = handler.uniformity
-            order_detail.repeatability = handler.repeatability
+            order_detail.repeatability = handler.repeat
             order_detail.rareness = handler.rareness
             order_detail.timeliness = handler.timeliness
             order_detail.dimensional = handler.dimensional

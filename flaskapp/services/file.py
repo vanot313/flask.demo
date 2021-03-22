@@ -9,19 +9,26 @@ class FileHandler:
         pass
 
     def upload_single(self, file):
-        filename = str_tools.ranstr(20) + ".csv"
+        filepath = str_tools.ranstr(20) + ".csv"
 
         file.save(os.path.join(os.path.abspath(os.path.join(os.getcwd(), "./uploadfile")),
-                               filename))
-        print(filename)
-        return filename
+                               filepath))
+        print(filepath)
+        return filepath
 
-    def download_file(self, filename):
+    def download_file(self, filepath):
 
         try:
-            if os.path.isfile(os.path.join('uploadfile', filename)):
-                return send_file(os.path.join('uploadfile', filename), as_attachment=True)
+            if os.path.isfile(os.path.join('uploadfile', filepath)):
+                return send_file(os.path.join('uploadfile', filepath), as_attachment=True)
             else:
                 return response("文件不存在", 404, {})
         except:
             return response("下载失败", 404, {})
+
+        # path = os.path.join(os.path.abspath(os.path.join(os.getcwd(), "./uploadfile")))
+        #
+        # if os.path.isfile(os.path.join(path, filename)):
+        #     return send_from_directory(path, filename, as_attachment=True)
+        #
+        # return send_from_directory(path, filename, as_attachment=True)
