@@ -121,7 +121,6 @@ class ExpertHandler:
             order_detail.RI = str(handler.R)
 
             dao_service.earning_valuation_dao.update(order_detail)
-
             order = dao_service.work_order_dao.getByOrderId(work_order_id).first()
             order.expert_id = session.get('id')
             order.status = ORDER_DONE

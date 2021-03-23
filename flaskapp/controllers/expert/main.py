@@ -244,14 +244,16 @@ def process_earning():
 
                 r = data.get('r')
                 n = data.get('n')
-                R = json.loads(data.get('R'))
+                R = data.get('RI')
+
 
             else:
                 order_id = request.form.get("order_id")
 
                 n = request.form.get("n")
                 r = request.form.get("r")
-                R = json.loads(request.form.get("R"))
+                R = request.form.get("RI")
+
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
