@@ -33,7 +33,13 @@ class WorkOrderDao:
 
         return result
 
-    def getFuzzy(self, user_id="", order_id="", expert_id="", status=""):
+    def getFuzzy(self, user_id="", order_id="", expert_id="", status="", page="1", per_page="10"):
+        if page is None:
+            page = 1
+        if per_page is None:
+            per_page = 10
+        if order_id is None:
+            order_id = ''
 
         key1 = or_(WorkOrder.user_id.like("%" + str(user_id) + "%"), WorkOrder.user_id.is_(None))
         key2 = or_(WorkOrder.order_id.like("%" + str(order_id) + "%"), WorkOrder.order_id.is_(None))
@@ -49,7 +55,7 @@ class WorkOrderDao:
         if status is not "":
             key4 = WorkOrder.status.like("%" + str(status) + "%")
 
-        result = WorkOrder.query.filter(
+        result = WorkOrder.query.order_by(WorkOrder.modify_time.desc()).filter(
             and_(
                 key1,
                 key2,
@@ -58,7 +64,13 @@ class WorkOrderDao:
             )
         )
 
-        return result
+        result = result.paginate(page=int(page), per_page=int(per_page))
+        ans = {}
+        ans['data'] = result.items
+        ans['pages'] = result.pages
+        ans['total'] = result.total
+
+        return ans
 
     # 更新 work_order 信息
     def update(self, entity):

@@ -34,13 +34,19 @@ class UserInfoDao:
         db.session.commit()
         return []
 
-    # TODO
-    def getFuzzy(self, id="", username="", email="", location=""):
-        print(id)
-        print(username)
-        print(email)
-        print(location)
-
+    def getFuzzy(self, id="", username="", email="", location="", page='1', per_page='10'):
+        if page is None:
+            page = 1
+        if per_page is None:
+            per_page = 10
+        if id is None:
+            id = ''
+        if username is None:
+            username = ''
+        if email is None:
+            email = ''
+        if location is None:
+            location = ''
 
         key1 = or_(UserInfo.username.like("%" + username + "%"), UserInfo.username.is_(None))
         key2 = or_(UserInfo.id.like("%" + id + "%"), UserInfo.id.is_(None))
@@ -61,7 +67,14 @@ class UserInfoDao:
                 key1,
                 key2,
                 key3,
-                key4)
+                key4
+            )
         )
 
-        return result
+        result = result.paginate(page=int(page), per_page=int(per_page))
+        ans = {}
+        ans['data'] = result.items
+        ans['pages'] = result.pages
+        ans['total'] = result.total
+
+        return ans

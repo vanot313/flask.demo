@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 
 from sqlalchemy import *
@@ -36,7 +37,11 @@ class LoginLogDao:
         db.session.commit()
         return result
 
-    def getFuzzy(self, username=""):
+    def getFuzzy(self, username="", page="1", per_page="10"):
+        if page is None:
+            page = 1
+        if per_page is None:
+            per_page = 10
 
         key1 = or_(LoginLog.username.like("%" + username + "%"), LoginLog.username.is_(None))
         # key2 = or_(UserInfo.id.like("%" + id + "%"), UserInfo.id.is_(None))
@@ -52,7 +57,7 @@ class LoginLogDao:
         # if location is not "":
         #     key4 = UserInfo.location.like("%" + location + "%")
 
-        result = LoginLog.query.filter(
+        result = LoginLog.query.order_by(LoginLog.login_time.desc()).filter(
             and_(
                 key1,
                 # key2,
@@ -61,4 +66,10 @@ class LoginLogDao:
             )
         )
 
-        return result
+        result = result.paginate(page=int(page), per_page=int(per_page))
+        ans = {}
+        ans['data'] = result.items
+        ans['pages'] = result.pages
+        ans['total'] = result.total
+
+        return ans

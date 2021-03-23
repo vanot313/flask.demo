@@ -88,8 +88,8 @@ def update():
 @permission_required(ADMIN)
 def get_user_info():
     if request.method == 'GET':
-        # return render_template('get.html')
-        return response_multiple("查询成功", 200, dao_service.user_info_dao.getAll())
+        return render_template('get.html')
+        # return response_multiple("查询成功", 200, dao_service.user_info_dao.getAll())
 
     if request.method == 'POST':
         try:
@@ -100,18 +100,22 @@ def get_user_info():
                 location = data.get('location')
                 username = data.get('username')
                 email = data.get('email')
+                page = data.get('page')
+                per_page = data.get('per_page')
 
             else:
                 id = request.form.get('id')
                 email = request.form.get('email')
                 location = request.form.get('location')
                 username = request.form.get('username')
+                page = request.form.get('page')
+                per_page = request.form.get('per_page')
 
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        return response_multiple("查询成功", 200, dao_service.user_info_dao.getFuzzy(id, username, email, location))
+        return response_dict("查询成功", 200, dao_service.user_info_dao.getFuzzy(id, username, email, location, page, per_page))
 
 
 @admin.route('/update_user_info', methods=['POST'])
@@ -147,8 +151,8 @@ def update_user_info():
 @permission_required(ADMIN)
 def get_work_order():
     if request.method == 'GET':
-        return response_multiple("查询成功", 200, dao_service.work_order_dao.getAll())
-        # return render_template("get.html")
+        # return response_multiple("查询成功", 200, dao_service.work_order_dao.getAll())
+        return render_template("get.html")
 
     if request.method == 'POST':
         try:
@@ -156,23 +160,27 @@ def get_work_order():
 
             if data is not None:
                 order_id = data.get('order_id')
+                page = data.get('page')
+                per_page = data.get('per_page')
 
             else:
                 order_id = request.form.get('order_id')
+                page = request.form.get('page')
+                per_page = request.form.get('per_page')
 
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        return response_multiple("查询成功", 200, dao_service.work_order_dao.getFuzzy(order_id=order_id))
+        return response_dict("查询成功", 200, dao_service.work_order_dao.getFuzzy(order_id=order_id, page=page, per_page=per_page))
 
 
 @admin.route('/get_login_log', methods=['POST', 'GET'])
 @permission_required(ADMIN)
 def get_login_log():
     if request.method == 'GET':
-        # return render_template("get.html")
-        return response_multiple("查询成功", 200, dao_service.login_log_dao.getAll())
+        return render_template("get.html")
+        # return response_multiple("查询成功", 200, dao_service.login_log_dao.getAll())
 
     if request.method == 'POST':
         try:
@@ -180,15 +188,19 @@ def get_login_log():
 
             if data is not None:
                 username = data.get('username')
+                page = data.get('page')
+                per_page = data.get('per_page')
 
             else:
                 username = request.form.get('username')
+                page = request.form.get('page')
+                per_page = request.form.get('per_page')
 
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        return response_multiple("查询成功", 200, dao_service.login_log_dao.getFuzzy(username))
+        return response_dict("查询成功", 200, dao_service.login_log_dao.getFuzzy(username, page, per_page))
 
 
 @admin.route('/get_log', methods=['POST', 'GET'])
@@ -204,12 +216,16 @@ def get_log():
 
             if data is not None:
                 username = data.get('username')
+                page = data.get('page')
+                per_page = data.get('per_page')
 
             else:
                 username = request.form.get('username')
+                page = request.form.get('page')
+                per_page = request.form.get('per_page')
 
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        return response_multiple("查询成功", 200, dao_service.log_dao.getFuzzy(username))
+        return response_multiple("查询成功", 200, dao_service.log_dao.getFuzzy(username, page, per_page))

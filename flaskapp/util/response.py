@@ -1,5 +1,7 @@
 from flask import jsonify
 from common.models import *
+from collections import Iterable
+
 
 # 返回到前端json数据格式
 def response(msg, code, data):
@@ -24,7 +26,14 @@ def response_dict(msg, code, data):
     else:
         res = {}
         for i in data:
-            res[i] = serialize(data[i])
+            if isinstance(data[i], Iterable):
+                res[i] = serialize_multiple(data[i])
+            else:
+                try:
+                    res[i] = serialize(data[i])
+                except:
+                    res[i] = data[i]
+
         result = {'msg': msg, 'code': code, 'data': res, 'success': (code == 200)}
     return jsonify(result)
 
@@ -32,6 +41,7 @@ def response_dict(msg, code, data):
 # 序列化单个数据
 def serialize(model):
     from sqlalchemy.orm import class_mapper
+
     columns = [c.key for c in class_mapper(model.__class__).columns]
 
     return dict((c, str(getattr(model, c))) for c in columns)
