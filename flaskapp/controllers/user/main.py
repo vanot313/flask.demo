@@ -89,7 +89,7 @@ def update():
 
 # 提交工单
 @user.route('/new_cost', methods=['POST', 'GET'])
-#@permission_required(USER)
+# @permission_required(USER)
 def new_cost():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -105,7 +105,7 @@ def new_cost():
 
 
 @user.route('/new_earning', methods=['POST', 'GET'])
-#@permission_required(USER)
+# @permission_required(USER)
 def new_earning():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -122,7 +122,7 @@ def new_earning():
 
 
 @user.route('/new_comprehensive', methods=['POST', 'GET'])
-#@permission_required(USER)
+# @permission_required(USER)
 def new_comprehensive():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -146,15 +146,16 @@ def new_comprehensive():
 
 # 查看所有工单
 @user.route('/all_work_order', methods=['GET'])
-@permission_required(USER)
+# @permission_required(USER)
 def work_order_all():
+    # user_id = request.form.get('id')
     user_id = session.get('id')
     return response_multiple("查询成功", 200, dao_service.work_order_dao.getByUserId(user_id))
 
 
 # 查看工单详情
 @user.route('/detail_work_order', methods=['GET', 'POST'])
-@permission_required(USER)
+# @permission_required(USER)
 def work_order_detail():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -178,7 +179,7 @@ def get_all_expert():
 # TODO 完成该逻辑
 # 申请专家权限
 @user.route('/apply_expert', methods=['GET', 'POST'])
-@permission_required(USER)
+# @permission_required(USER)
 def apply_expert():
     pass
 
@@ -196,4 +197,26 @@ def updateUser():
         except Exception as e:
             app.logger.info("Exception: %s", e)
             return response('失败', 1001, {})
+            
+            
+工单申请具体流程：
+1.进入到前端界面
+2.填写 
+    选择专家  访问 user/get_all_expert 接口获取专家信息
+    选择方法  成本法、收益法不需要传文件     综合市场法要传文件 
+                参数 file
+            成本法创建  user/new_cost
+            收益法创建  user/new_earning
+            综合估值法  user/new_comprehensive
+            其他参数
+                username 用户名
+                remarks  备注
+3.查看全部工单 简略信息  user/all_work_order 
+    参数 id 用户id
+4.具体查看某一个工单  user/detail_work_order
+    参数 order_id 工单的id
+
+
 '''
+
+

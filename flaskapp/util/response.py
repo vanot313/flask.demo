@@ -3,6 +3,7 @@ from common.models import *
 from collections import Iterable
 
 
+
 # 返回到前端json数据格式
 def response(msg, code, data):
     if not data:
