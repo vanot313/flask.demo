@@ -8,12 +8,13 @@ class FileHandler:
     def __init__(self):
         pass
 
-    def upload_single(self, file):
+    def upload_single(self, file, path):
+
+
         filepath = str_tools.ranstr(20) + ".csv"
 
-        file.save(os.path.join(os.path.abspath(os.path.join(os.getcwd(), "./uploadfile")),
+        file.save(os.path.join(os.path.abspath(os.path.join(os.getcwd(), "./uploadfile" + "/" + path)),
                                filepath))
-        print(filepath)
         return filepath
 
     def download_file(self, filepath):

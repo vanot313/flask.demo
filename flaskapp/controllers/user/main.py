@@ -89,7 +89,7 @@ def update():
 
 # 提交工单
 @user.route('/new_cost', methods=['POST', 'GET'])
-#@permission_required(USER)
+# @permission_required(USER)
 def new_cost():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -105,7 +105,7 @@ def new_cost():
 
 
 @user.route('/new_earning', methods=['POST', 'GET'])
-#@permission_required(USER)
+# @permission_required(USER)
 def new_earning():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -122,24 +122,50 @@ def new_earning():
 
 
 @user.route('/new_comprehensive', methods=['POST', 'GET'])
-#@permission_required(USER)
+# @permission_required(USER)
 def new_comprehensive():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
-        return render_template("test.html")
+        return render_template("upload.html")
 
     if request.method == 'POST':
         remarks = request.form.get('remarks')
         file = request.files['file']
         method = COMPREHENSIVE
-        name = request.form.get('username')
-        result = dao_service.user_info_dao.getByName(name)
-        user_id = result.id
+
+        if session.get("id") is None:
+            name = request.form.get('username')
+            result = dao_service.user_info_dao.getByName(name)
+            user_id = result.id
+        else:
+            user_id = session.get("id")
 
         if file is not None:
             filename = file.filename
-            filepath = services_container.file_handler.upload_single(file)
+            filepath = services_container.file_handler.upload_single(file, "comprehensive")
             return services_container.user_handler.comprehensive_handler(user_id, remarks, method, filepath, filename)
+        else:
+            return response('上传失败', 1001, {})
+
+
+@user.route('/new_market', methods=['POST', 'GET'])
+# @permission_required(USER)
+def new_market():
+    # TEMP 在生产环境中将被弃用
+    if request.method == 'GET':
+        return render_template("upload.html")
+
+    if request.method == 'POST':
+        remarks = request.form.get('remarks')
+        file = request.files['file']
+        method = MARKET
+
+        user_id = session.get("id")
+
+        if file is not None:
+            filename = file.filename
+            filepath = services_container.file_handler.upload_single(file, "market")
+            return services_container.user_handler.market_handler(user_id, remarks, method, filepath, filename)
         else:
             return response('上传失败', 1001, {})
 
