@@ -1,0 +1,77 @@
+1%Ticker Symbol
+1%Period Ending
+4%Accounts Payable
+4%Accounts Receivable
+3%Add'l income/expense items
+2%After Tax ROE
+2%Capital Expenditures
+2%Capital Surplus
+2%Cash Ratio
+2%Cash and Cash Equivalents
+3%Changes in Inventories
+5%Common Stocks
+4%Cost of Revenue
+3%Current Ratio
+4%Deferred Asset Charges
+4%Deferred Liability Charges
+2%Depreciation
+3%Earnings Before Interest and Tax
+3%Earnings Before Tax
+3%Effect of Exchange Rate
+2%Equity Earnings/Loss Unconsolidated Subsidiary
+2%Fixed Assets
+1%Goodwill
+4%Gross Margin
+4%Gross Profit
+4%Income Tax
+2%Intangible Assets
+3%Interest Expense
+4%Inventory
+4%Investments
+3%Liabilities
+4%Long-Term Debt
+4%Long-Term Investments
+5%Minority Interest
+5%Misc. Stocks
+4%Net Borrowings
+3%Net Cash Flow
+3%Net Cash Flow-Operating
+4%Net Cash Flows-Financing
+4%Net Cash Flows-Investing
+3%Net Income
+3%Net Income Adjustments
+5%Net Income Applicable to Common Shareholders
+4%Net Income-Cont. Operations
+3%Net Receivables
+3%Non-Recurring Items
+4%Operating Income
+4%Operating Margin
+2%Other Assets
+3%Other Current Assets
+3%Other Current Liabilities
+1%Other Equity
+4%Other Financing Activities
+4%Other Investing Activities
+3%Other Liabilities
+3%Other Operating Activities
+3%Other Operating Items
+3%Pre-Tax Margin
+2%Pre-Tax ROE
+4%Profit Margin
+3%Quick Ratio
+1%Research and Development
+4%Retained Earnings
+5%Sale and Purchase of Stock
+1%Sales, General and Admin.
+3%Short-Term Debt / Current Portion of Long-Term Debt
+3%Short-Term Investments
+3%Total Current Assets
+3%Total Current Liabilities
+5%Total Equity
+4%Total Liabilities
+4%Total Liabilities & Equity
+4%Total Revenue
+5%Treasury Stock
+1%For Year
+5%Earnings Per Share
+5%Estimated Shares Outstanding
