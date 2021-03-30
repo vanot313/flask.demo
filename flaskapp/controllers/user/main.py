@@ -2,9 +2,7 @@ from flask import *
 from services import *
 from util.response import *
 from util.permission import *
-from common.models import *
 from dao import dao_service
-from application import app
 from config.macro_setting import *
 
 user = Blueprint("user", __name__)
@@ -37,7 +35,7 @@ def logout():
 
 # 获取个人信息(当前用户)
 @user.route('/detail', methods=['GET'])
-# @permission_required(USER)
+@permission_required(USER)
 def detail():
     id = request.args.get('id')
     # print(dao_service.user_info_dao.getById(session.get('id')))
@@ -68,7 +66,7 @@ def register():
 
 # 修改个人信息
 @user.route('/update', methods=['POST', 'GET'])
-# @permission_required(USER)
+@permission_required(USER)
 def update():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -88,8 +86,6 @@ def update():
 
 
 # 提交工单
-# @user.route('/new_cost', methods=['POST', 'GET'])
-# @permission_required(USER)
 def new_cost(request):
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -110,8 +106,6 @@ def new_cost(request):
         return services_container.user_handler.cost_handler(user_id, remarks, method, expert_id)
 
 
-# @user.route('/new_earning', methods=['POST', 'GET'])
-# @permission_required(USER)
 def new_earning(request):
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -132,8 +126,6 @@ def new_earning(request):
         return services_container.user_handler.earning_handler(user_id, remarks, method, expert_id)
 
 
-# @user.route('/new_comprehensive', methods=['POST', 'GET'])
-# @permission_required(USER)
 def new_comprehensive(request):
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -163,8 +155,6 @@ def new_comprehensive(request):
             return response('上传失败', 1001, {})
 
 
-# @user.route('/new_market', methods=['POST', 'GET'])
-# @permission_required(USER)
 def new_market(request):
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -190,6 +180,7 @@ def new_market(request):
 
 
 @user.route('/new_work', methods=['POST'])
+@permission_required(USER)
 def new_work():
     method = request.form.get('method')
     if method == '1':
@@ -205,7 +196,7 @@ def new_work():
 
 # 查看所有工单
 @user.route('/all_work_order', methods=['GET'])
-# @permission_required(USER)
+@permission_required(USER)
 def work_order_all():
     # user_id = request.form.get('id')
     user_id = session.get('id')
@@ -214,7 +205,7 @@ def work_order_all():
 
 # 查看工单详情
 @user.route('/detail_work_order', methods=['GET', 'POST'])
-# @permission_required(USER)
+@permission_required(USER)
 def work_order_detail():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -226,21 +217,15 @@ def work_order_detail():
 
 
 @user.route('/get_all_user', methods=['GET'])
+@permission_required(USER)
 def get_all_user():
     return services_container.user_handler.get_all_user()
 
 
 @user.route('/get_all_expert', methods=['GET'])
+@permission_required(USER)
 def get_all_expert():
     return services_container.user_handler.get_all_expert()
-
-
-# TODO 完成该逻辑
-# 申请专家权限
-@user.route('/apply_expert', methods=['GET', 'POST'])
-# @permission_required(USER)
-def apply_expert():
-    pass
 
 
 '''
