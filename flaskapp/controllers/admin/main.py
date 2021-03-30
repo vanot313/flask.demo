@@ -118,6 +118,26 @@ def get_user_info():
         return response_dict("查询成功", 200, dao_service.user_info_dao.getFuzzy(id, username, email, location, page, per_page))
 
 
+# 查看工单详情
+@admin.route('/detail_work_order', methods=['GET', 'POST'])
+@permission_required(ADMIN)
+def work_order_detail():
+    # TEMP 在生产环境中将被弃用
+    if request.method == 'GET':
+        return render_template("detail.html")
+
+    if request.method == 'POST':
+        data = request.get_json(silent=True)
+
+        if data is not None:
+            order_id = data.get('order_id')
+
+        else:
+            order_id = request.form.get('order_id')
+
+        return services_container.data_handler.get_work_order_detail_by_id_grant(order_id)
+
+
 @admin.route('/update_user_info', methods=['POST'])
 @permission_required(ADMIN)
 def update_user_info():

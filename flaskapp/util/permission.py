@@ -28,7 +28,7 @@ def permission_required(permission):
                 current_user_role = dao_service.user_role_dao.getById(session.get('id'))
 
                 if not current_user_role:
-                    abort(403)
+                    abort(401)
 
                 for role in current_user_role:
 
