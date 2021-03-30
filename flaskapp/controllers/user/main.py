@@ -88,9 +88,9 @@ def update():
 
 
 # 提交工单
-@user.route('/new_cost', methods=['POST', 'GET'])
+# @user.route('/new_cost', methods=['POST', 'GET'])
 # @permission_required(USER)
-def new_cost():
+def new_cost(request):
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
         return render_template("test.html")
@@ -99,14 +99,20 @@ def new_cost():
         remarks = request.form.get('remarks')
         method = COST
         name = request.form.get('username')
+
         result = dao_service.user_info_dao.getByName(name)
         user_id = result.id
-        return services_container.user_handler.cost_handler(user_id, remarks, method)
+
+        expert_id = request.form.get("expert_id")
+        if expert_id is None:
+            expert_id = 0
+
+        return services_container.user_handler.cost_handler(user_id, remarks, method, expert_id)
 
 
-@user.route('/new_earning', methods=['POST', 'GET'])
+# @user.route('/new_earning', methods=['POST', 'GET'])
 # @permission_required(USER)
-def new_earning():
+def new_earning(request):
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
         return render_template("test.html")
@@ -116,14 +122,19 @@ def new_earning():
         method = EARNING
         name = request.form.get('username')
         result = dao_service.user_info_dao.getByName(name)
+        expert_id = request.form.get('expert_id')
+
+        if expert_id is None:
+            expert_id = 0
+
         user_id = result.id
 
-        return services_container.user_handler.earning_handler(user_id, remarks, method)
+        return services_container.user_handler.earning_handler(user_id, remarks, method, expert_id)
 
 
-@user.route('/new_comprehensive', methods=['POST', 'GET'])
+# @user.route('/new_comprehensive', methods=['POST', 'GET'])
 # @permission_required(USER)
-def new_comprehensive():
+def new_comprehensive(request):
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
         return render_template("upload.html")
@@ -132,6 +143,10 @@ def new_comprehensive():
         remarks = request.form.get('remarks')
         file = request.files['file']
         method = COMPREHENSIVE
+        expert_id = request.form.get('expert_id')
+
+        if expert_id is None:
+            expert_id = 0
 
         if session.get("id") is None:
             name = request.form.get('username')
@@ -143,14 +158,14 @@ def new_comprehensive():
         if file is not None:
             filename = file.filename
             filepath = services_container.file_handler.upload_single(file, "comprehensive")
-            return services_container.user_handler.comprehensive_handler(user_id, remarks, method, filepath, filename)
+            return services_container.user_handler.comprehensive_handler(user_id, remarks, method, filepath, filename, expert_id)
         else:
             return response('上传失败', 1001, {})
 
 
-@user.route('/new_market', methods=['POST', 'GET'])
+# @user.route('/new_market', methods=['POST', 'GET'])
 # @permission_required(USER)
-def new_market():
+def new_market(request):
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
         return render_template("upload.html")
@@ -161,13 +176,31 @@ def new_market():
         method = MARKET
 
         user_id = session.get("id")
+        expert_id = request.form.get('expert_id')
+        if expert_id is None:
+            expert_id = 0
 
         if file is not None:
             filename = file.filename
             filepath = services_container.file_handler.upload_single(file, "market")
-            return services_container.user_handler.market_handler(user_id, remarks, method, filepath, filename)
+            return services_container.user_handler.market_handler(user_id, remarks, method,
+                                                                  filepath, filename, expert_id)
         else:
             return response('上传失败', 1001, {})
+
+
+@user.route('/new_work', methods=['POST'])
+def new_work():
+    method = request.form.get('method')
+    if method == '1':
+        return new_cost(request)
+    elif method == '2':
+        return new_earning(request)
+    elif method == '3':
+        return new_comprehensive(request)
+    elif method == '4':
+        return new_market(request)
+    return response('创建失败', 1002, {})
 
 
 # 查看所有工单
@@ -229,14 +262,18 @@ def updateUser():
 1.进入到前端界面
 2.填写 
     选择专家  访问 user/get_all_expert 接口获取专家信息
-    选择方法  成本法、收益法不需要传文件     综合市场法要传文件 
-                参数 file
-            成本法创建  user/new_cost
-            收益法创建  user/new_earning
-            综合估值法  user/new_comprehensive
+    选择方法  具体调用接口 user/new_work
+            成本法、收益法不需要传文件     综合市场法要传文件 
+                参数 file 文件类型为csv
+            成本法创建  '1'
+            收益法创建  '2'
+            综合估值法  '3'
+            市场法     '4'
             其他参数
-                username 用户名
-                remarks  备注
+                username 用户名 string
+                remarks  备注 string
+                method   选择方法 string
+                expert_id 专家id int（可以不选择，不选择则不上传该参数，或者将其置为0）
 3.查看全部工单 简略信息  user/all_work_order 
     参数 id 用户id
 4.具体查看某一个工单  user/detail_work_order
@@ -244,5 +281,3 @@ def updateUser():
 
 
 '''
-
-
