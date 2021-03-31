@@ -35,7 +35,7 @@ def logout():
 
 # 获取个人信息(当前用户)
 @user.route('/detail', methods=['GET'])
-@permission_required(USER)
+# @permission_required(USER)
 def detail():
     id = request.args.get('id')
     # print(dao_service.user_info_dao.getById(session.get('id')))
@@ -66,7 +66,7 @@ def register():
 
 # 修改个人信息
 @user.route('/update', methods=['POST', 'GET'])
-@permission_required(USER)
+# @permission_required(USER)
 def update():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -180,7 +180,7 @@ def new_market(request):
 
 
 @user.route('/new_work', methods=['POST'])
-@permission_required(USER)
+# @permission_required(USER)
 def new_work():
     method = request.form.get('method')
     if method == '1':
@@ -196,16 +196,16 @@ def new_work():
 
 # 查看所有工单
 @user.route('/all_work_order', methods=['GET'])
-@permission_required(USER)
+# @permission_required(USER)
 def work_order_all():
-    # user_id = request.form.get('id')
-    user_id = session.get('id')
+    user_id = request.args.get('id')
+    # user_id = session.get('id')
     return response_multiple("查询成功", 200, dao_service.work_order_dao.getByUserId(user_id))
 
 
 # 查看工单详情
 @user.route('/detail_work_order', methods=['GET', 'POST'])
-@permission_required(USER)
+# @permission_required(USER)
 def work_order_detail():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
@@ -217,32 +217,19 @@ def work_order_detail():
 
 
 @user.route('/get_all_user', methods=['GET'])
-@permission_required(USER)
+# @permission_required(USER)
 def get_all_user():
     return services_container.user_handler.get_all_user()
 
 
 @user.route('/get_all_expert', methods=['GET'])
-@permission_required(USER)
+# @permission_required(USER)
 def get_all_expert():
     return services_container.user_handler.get_all_expert()
 
 
 '''
-# 智扬写的更新用户信息 保留
-@user.route('/update_user', methods=['POST'])
-def updateUser():
-    json_data = request.get_json()
-    if json_data is not None:
-        # 注册用户
-        user = User.from_json(json_data)
-        try:
-            return response("添加成功", 200, dao_service.user_dao.update(user))
-        except Exception as e:
-            app.logger.info("Exception: %s", e)
-            return response('失败', 1001, {})
-            
-            
+          
 工单申请具体流程：
 1.进入到前端界面
 2.填写 
