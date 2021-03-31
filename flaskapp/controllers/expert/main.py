@@ -84,21 +84,21 @@ def update():
 @expert.route('/all_wait_work_order', methods=['GET'])
 @permission_required(EXPERT)
 def all_wait_work_order():
-    return response_multiple("查询成功", 200, dao_service.work_order_dao.getFuzzy(status=ORDER_WAIT))
+    return response_dict("查询成功", 200, dao_service.work_order_dao.getFuzzy(status=ORDER_WAIT))
 
 
 # 查看自己负责的工单
 @expert.route('/all_self_work_order', methods=['GET'])
 @permission_required(EXPERT)
 def all_self_work_order():
-    return response_multiple("查询成功", 200, dao_service.work_order_dao.getFuzzy(expert_id=session.get('id')))
+    return response_dict("查询成功", 200, dao_service.work_order_dao.getFuzzy(expert_id=session.get('id')))
 
 
 @expert.route("/detail_work_order", methods=['GET', 'POST'])
 @permission_required(EXPERT)
 def detail_work_order():
     if request.method == 'GET':
-        return render_template("get.html")
+        return render_template("detail.html")
     else:
         try:
             data = request.get_json(silent=True)
@@ -112,7 +112,8 @@ def detail_work_order():
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        return services_container.data_handler.get_work_order_info_by_id(order_id)
+        # TODO 切换回受保护的查询 get_work_order_detail_by_id
+        return services_container.data_handler.get_work_order_detail_by_id_grant(order_id)
 
 
 @expert.route('/download_order_file', methods=['POST', 'GET'])

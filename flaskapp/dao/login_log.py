@@ -42,6 +42,8 @@ class LoginLogDao:
             page = 1
         if per_page is None:
             per_page = 10
+        if username is None:
+            username = ''
 
         key1 = or_(LoginLog.username.like("%" + username + "%"), LoginLog.username.is_(None))
         # key2 = or_(UserInfo.id.like("%" + id + "%"), UserInfo.id.is_(None))
