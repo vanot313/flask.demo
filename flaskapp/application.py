@@ -23,6 +23,7 @@ class Application(Flask):
         db.init_app(self)
 
 
+
 # app = Flask(__name__)
 # manager = Manager(app)
 #

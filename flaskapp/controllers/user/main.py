@@ -1,8 +1,11 @@
+import time
+
 from flask import *
 from services import *
 from util.response import *
 from util.permission import *
 from dao import dao_service
+from application import app
 from config.macro_setting import *
 
 user = Blueprint("user", __name__)
@@ -11,19 +14,26 @@ user = Blueprint("user", __name__)
 # 登录
 @user.route("/login", methods=['POST', 'GET'])
 def login():
-    # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
         if services_container.login_handler.is_login():
-            return dao_service.user_info_dao.getById(session.get('id')).first()
+            return redirect(url_for('user.detail'))
+        return render_template('login.html')
+    else:
+        try:
+            data = request.get_json(silent=True)
 
-        return render_template("login.html")
+            if data is not None:
+                username = data.get('username')
+                password = data.get('password')
 
-    if request.method == 'POST':
-        name = request.form.get('username')
-        password = request.form.get('password')
+            else:
+                username = request.form.get('username')
+                password = request.form.get('password')
 
-        return services_container.login_handler.login_user(name, password)
-        # return redirect(request.args.get('next') or url_for('user.index'))
+        except Exception as e:
+            return response("数据接收异常", 1002, {})
+
+        return services_container.login_handler.login_user(username, password)
 
 
 # 登出 注销 session
@@ -35,197 +45,350 @@ def logout():
 
 # 获取个人信息(当前用户)
 @user.route('/detail', methods=['GET'])
-# @permission_required(USER)
+@permission_required(USER)
 def detail():
-    id = request.args.get('id')
-    # print(dao_service.user_info_dao.getById(session.get('id')))
-    return response("success", 200, dao_service.user_info_dao.getById(id))
+    return response("success", 200, dao_service.user_info_dao.getById(session.get('id')).first())
 
 
 # 注册
 @user.route('/register', methods=['POST', 'GET'])
 def register():
-    # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
         return render_template("register.html")
     elif request.method == 'POST':
-        # id = request.form.get('user_id')
-        name = request.form.get('username')
-        password = request.form.get('password')
-        email = request.form.get('email')
-        mobile = request.form.get('phoneNum')
-        # avatar = request.form.get('avatar')
-        description = request.form.get('introduction')
-        location = request.form.get('location')
-        birth = request.form.get('birth')
-        sex = request.form.get('sex')
+        try:
+            data = request.get_json(silent=True)
 
-        return services_container.register_handler.register_user(name, password, email, mobile, location, birth,
-                                                                 description, sex)
+            if data is not None:
+                username = data.get('username')
+                password = data.get('password')
+                email = data.get('email')
+                mobile = data.get('mobile')
+                location = data.get('location')
+                birth = data.get('birth')
+
+            else:
+                username = request.form.get('username')
+                password = request.form.get('password')
+                email = request.form.get('email')
+                mobile = request.form.get('mobile')
+                location = request.form.get('location')
+                birth = request.form.get('birth')
+
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
+
+        return services_container.register_handler.register_user(username, password, email, mobile, location, birth)
 
 
 # 修改个人信息
 @user.route('/update', methods=['POST', 'GET'])
-# @permission_required(USER)
+@permission_required(USER)
 def update():
-    # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
-        return render_template("update.html")
+        return render_template('update.html')
+    else:
+        try:
+            data = request.get_json(silent=True)
 
-    if request.method == 'POST':
-        email = request.form.get('email')
-        mobile = request.form.get('phoneNum')
-        location = request.form.get('location')
-        birth = request.form.get('birth')
-        description = request.form.get('introduction')
-        sex = request.form.get('sex')
-        username = request.form.get('username')
-        id = request.form.get('id')
-        return services_container.user_handler.update_info(id, username, sex, email, mobile, location, birth,
-                                                           description)
+            if data is not None:
+                birth = data.get('birth')
+                location = data.get('location')
+                description = data.get('description')
+                email = data.get('email')
+                mobile = data.get('mobile')
+
+            else:
+                email = request.form.get('email')
+                mobile = request.form.get('mobile')
+                location = request.form.get('location')
+                birth = request.form.get('birth')
+                description = request.form.get('description')
+
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
+
+        return services_container.user_handler.update_info(email, mobile, location, birth, description)
 
 
 # 提交工单
-def new_cost(request):
+@user.route('/new_cost', methods=['POST', 'GET'])
+@permission_required(USER)
+def new_cost():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
-        return render_template("test.html")
+        return render_template("new_cost.html")
 
     if request.method == 'POST':
-        remarks = request.form.get('remarks')
-        method = COST
-        name = request.form.get('username')
+        try:
+            data = request.get_json(silent=True)
 
-        result = dao_service.user_info_dao.getByName(name)
-        user_id = result.id
+            if data is not None:
+                remarks = data.get('remarks')
+                method = COST
 
-        expert_id = request.form.get("expert_id")
-        if expert_id is None:
-            expert_id = 0
+                user_id = session.get("id")
+
+                expert_id = data.get("expert_id")
+                if expert_id is None:
+                    expert_id = 0
+
+
+            else:
+                remarks = request.form.get('remarks')
+                method = COST
+
+                user_id = session.get("id")
+
+                expert_id = request.form.get("expert_id")
+                if expert_id is None:
+                    expert_id = 0
+
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
 
         return services_container.user_handler.cost_handler(user_id, remarks, method, expert_id)
 
 
-def new_earning(request):
+@user.route('/new_earning', methods=['POST', 'GET'])
+@permission_required(USER)
+def new_earning():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
-        return render_template("test.html")
+        return render_template("new_cost.html")
 
     if request.method == 'POST':
-        remarks = request.form.get('remarks')
-        method = EARNING
-        name = request.form.get('username')
-        result = dao_service.user_info_dao.getByName(name)
-        expert_id = request.form.get('expert_id')
+        try:
+            data = request.get_json(silent=True)
 
-        if expert_id is None:
-            expert_id = 0
+            if data is not None:
+                remarks = data.get('remarks')
+                method = EARNING
 
-        user_id = result.id
+                user_id = session.get("id")
+
+                expert_id = data.get("expert_id")
+                if expert_id is None:
+                    expert_id = 0
+
+
+            else:
+                remarks = request.form.get('remarks')
+                method = EARNING
+
+                user_id = session.get("id")
+
+                expert_id = request.form.get("expert_id")
+                if expert_id is None:
+                    expert_id = 0
+
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
 
         return services_container.user_handler.earning_handler(user_id, remarks, method, expert_id)
 
 
-def new_comprehensive(request):
+@user.route('/new_comprehensive', methods=['POST', 'GET'])
+@permission_required(USER)
+def new_comprehensive():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
-        return render_template("upload.html")
+        return render_template("new_comprehensive.html")
 
     if request.method == 'POST':
-        remarks = request.form.get('remarks')
-        file = request.files['file']
-        method = COMPREHENSIVE
-        expert_id = request.form.get('expert_id')
+        # try:
+        #     data = request.get_json(silent=True)
+        #
+        #     if data is not None:
+        #         remarks = data.get('remarks')
+        #         method = COMPREHENSIVE
+        #
+        #         user_id = session.get("id")
+        #
+        #         expert_id = data.get("expert_id")
+        #         if expert_id is None:
+        #             expert_id = 0
+        #
+        #
+        #     else:
+        #         remarks = request.form.get('remarks')
+        #         method = COMPREHENSIVE
+        #
+        #         user_id = session.get("id")
+        #
+        #         expert_id = request.form.get("expert_id")
+        #         if expert_id is None:
+        #             expert_id = 0
+        #
+        # except Exception as e:
+        #     app.logger.info('Exception: %s', e)
+        #     return response("数据接收异常", 1002, {})
 
-        if expert_id is None:
-            expert_id = 0
-
-        if session.get("id") is None:
-            name = request.form.get('username')
-            result = dao_service.user_info_dao.getByName(name)
-            user_id = result.id
-        else:
+        try:
             user_id = session.get("id")
+            expert_id = request.form["expert_id"]
+            remarks = request.form["remarks"]
+
+            method = COMPREHENSIVE
+            file = request.files['file']
+
+            if expert_id is None:
+                expert_id = 0
+
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
 
         if file is not None:
             filename = file.filename
             filepath = services_container.file_handler.upload_single(file, "comprehensive")
-            return services_container.user_handler.comprehensive_handler(user_id, remarks, method, filepath, filename, expert_id)
+            return services_container.user_handler.comprehensive_handler(user_id, remarks, method, filepath, filename,
+                                                                         expert_id)
         else:
             return response('上传失败', 1001, {})
 
 
-def new_market(request):
+@user.route('/new_market', methods=['POST', 'GET'])
+@permission_required(USER)
+def new_market():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
-        return render_template("upload.html")
+        return render_template("new_comprehensive.html")
 
     if request.method == 'POST':
-        remarks = request.form.get('remarks')
-        file = request.files['file']
-        method = MARKET
+        try:
+            user_id = session.get("id")
+            # expert_id = request.form["expert_id"]
+            # remarks = request.form["remarks"]
+            expert_id = request.form.get("expert_id")
+            remarks = request.form.get("remarks")
 
-        user_id = session.get("id")
-        expert_id = request.form.get('expert_id')
-        if expert_id is None:
-            expert_id = 0
+            method = COMPREHENSIVE
+            file = request.files['file']
+
+            if expert_id is None:
+                expert_id = 0
+
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
 
         if file is not None:
             filename = file.filename
             filepath = services_container.file_handler.upload_single(file, "market")
-            return services_container.user_handler.market_handler(user_id, remarks, method,
-                                                                  filepath, filename, expert_id)
+            return services_container.user_handler.market_handler(user_id, remarks, method, filepath, filename,
+                                                                  expert_id)
         else:
             return response('上传失败', 1001, {})
 
 
-@user.route('/new_work', methods=['POST'])
+# @user.route('/new_work', methods=['POST'])
 # @permission_required(USER)
-def new_work():
-    method = request.form.get('method')
-    if method == '1':
-        return new_cost(request)
-    elif method == '2':
-        return new_earning(request)
-    elif method == '3':
-        return new_comprehensive(request)
-    elif method == '4':
-        return new_market(request)
-    return response('创建失败', 1002, {})
-
-
-# 查看所有工单
-@user.route('/all_work_order', methods=['GET'])
-# @permission_required(USER)
-def work_order_all():
-    user_id = request.args.get('id')
-    # user_id = session.get('id')
-    return response_multiple("查询成功", 200, dao_service.work_order_dao.getByUserId(user_id))
+# def new_work():
+#     try:
+#         data = request.get_json(silent=True)
+#
+#         if data is not None:
+#             method = data.get('method')
+#
+#         else:
+#             method = request.form.get('method')
+#
+#     except Exception as e:
+#         app.logger.info('Exception: %s', e)
+#         return response("数据接收异常", 1002, {})
+#
+#     if method == '1':
+#         return new_cost(request)
+#     elif method == '2':
+#         return new_earning(request)
+#     elif method == '3':
+#         return new_comprehensive(request)
+#     elif method == '4':
+#         return new_market(request)
+#
+#     return response('创建失败', 1002, {})
 
 
 # 查看工单详情
 @user.route('/detail_work_order', methods=['GET', 'POST'])
-# @permission_required(USER)
+@permission_required(USER)
 def work_order_detail():
-    # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
         return render_template("detail.html")
 
     if request.method == 'POST':
-        order_id = request.form.get('order_id')
+        try:
+            data = request.get_json(silent=True)
+
+            if data is not None:
+                order_id = data.get('order_id')
+
+            else:
+                order_id = request.form.get('order_id')
+
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
+
         return services_container.data_handler.get_work_order_detail_by_id(order_id)
 
 
-@user.route('/get_all_user', methods=['GET'])
-# @permission_required(USER)
-def get_all_user():
-    return services_container.user_handler.get_all_user()
+# 查看所有工单
+@user.route('/all_work_order', methods=['GET'])
+@permission_required(USER)
+def work_order_all():
+    return response("123", 1, dao_service.work_order_dao.getByOrderId(id=69).first())
+    # return response_multiple("查询成功", 200, dao_service.work_order_dao.getByUserId(session.get('id')))
 
 
-@user.route('/get_all_expert', methods=['GET'])
+@user.route('/get_work_order', methods=['GET', 'POST'])
+@permission_required(USER)
+def get_work_order():
+    if request.method == 'GET':
+        # return response_multiple("查询成功", 200, dao_service.work_order_dao.getAll())
+        return render_template("get.html")
+
+    if request.method == 'POST':
+        try:
+            data = request.get_json(silent=True)
+
+            if data is not None:
+                order_id = data.get('order_id')
+                status = data.get('status')
+                page = data.get('page')
+                per_page = data.get('per_page')
+
+            else:
+                order_id = request.form.get('order_id')
+                status = request.form.get('status')
+                page = request.form.get('page')
+                per_page = request.form.get('per_page')
+
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
+
+        return response_dict("查询成功", 200,
+                             dao_service.work_order_dao.getFuzzy(user_id=session.get("id"), order_id=order_id,
+                                                                 status=status,
+                                                                 page=page, per_page=per_page))
+
+
+# @user.route('/get_all_user', methods=['GET'])
 # @permission_required(USER)
-def get_all_expert():
-    return services_container.user_handler.get_all_expert()
+# def get_all_user():
+#     return response_multiple("所有人员返回成功", 200, dao_service.user_info_dao.getAll())
+#
+#
+# @user.route('/get_all_expert', methods=['GET'])
+# @permission_required(USER)
+# def get_all_expert():
+#     return response_multiple("所有人员返回成功", 200, dao_service.expert_info_dao.getAll())
 
 
 '''

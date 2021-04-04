@@ -18,10 +18,10 @@ class WorkOrderDao:
 
     # 根据order_id搜索 work_order
     def getByOrderId(self, id, status=None):
-        result = WorkOrder.query.filter(WorkOrder.order_id == int(id))
+        result = WorkOrder.query.filter(WorkOrder.order_id == id)
 
-        if status is not None:
-            result.filter(WorkOrder.status == status)
+        # if status is not None:
+        #     result.filter(WorkOrder.status == status)
 
         return result
 

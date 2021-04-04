@@ -2,6 +2,7 @@ from dao.admin_info import AdminInfoDao
 from dao.comprehensive_valuation import ComprehensiveValuationDao
 from dao.cost_valuation import CostValuationDao
 from dao.earning_valuation import EarningValuationDao
+from dao.market_valuation import MarketValuationDao
 from dao.expert_apply import ExpertApplyDao
 from dao.expert_info import ExpertInfoDao
 from dao.log import LogDao
@@ -20,6 +21,7 @@ class DaoService:
     comprehensive_valuation_dao = ComprehensiveValuationDao()
     cost_valuation_dao = CostValuationDao()
     earning_valuation_dao = EarningValuationDao()
+    market_valutation_dao = MarketValuationDao()
     expert_apply_dao = ExpertApplyDao()
     expert_info_dao = ExpertInfoDao()
     log_dao = LogDao()

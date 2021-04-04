@@ -38,13 +38,17 @@ class RegisterHandler:
     def register_user(self, username, password, email, mobile, location, birth):
         new_user = User(username=username, password=password)
         try:
-            if dao_service.user_dao.getByName(username) is None:
+
+            if dao_service.user_dao.getByName(username).first() is not None:
                 return response("用户名已存在", 301, {})
+
             dao_service.user_dao.add(new_user)
 
             new_user_info = UserInfo(id=new_user.id, username=username, email=email,
                                      mobile=mobile, birth=birth, location=location)
+
             dao_service.user_info_dao.add(new_user_info)
+
         except Exception as e:
             return response("数据库访问失败", 1001, {})
 

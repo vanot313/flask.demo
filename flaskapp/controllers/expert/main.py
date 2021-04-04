@@ -160,8 +160,6 @@ def process_comprehensive():
                 quality_weight = data.get('quality_weight')
                 applied_weight = data.get('applied_weight')
 
-                print(quality_weight)
-                print(applied_weight)
 
             else:
                 order_id = request.form.get("order_id")

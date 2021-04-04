@@ -1,9 +1,7 @@
 from flask import *
-from flask_cors import CORS
 from services import *
 from util.response import *
 from util.permission import *
-from common.models import *
 from dao import dao_service
 from application import app
 from config.macro_setting import *
@@ -31,7 +29,6 @@ def login():
                 password = request.form.get('password')
 
         except Exception as e:
-            app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
         return services_container.login_handler.login_admin(username, password)
@@ -47,8 +44,6 @@ def logout():
 @admin.route("/detail", methods=['GET'])
 @permission_required(ADMIN)
 def detail():
-    data = response("success", 200, dao_service.admin_info_dao.getById(session.get('id')).first())
-
     return response("success", 200, dao_service.admin_info_dao.getById(session.get('id')).first())
 
 

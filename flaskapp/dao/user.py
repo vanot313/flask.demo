@@ -9,7 +9,6 @@ class UserDao:
         result = User.query.filter(User.id == int(id)).filter(User.status == 0)
         return result
 
-    # 根据id搜索user
     def getByName(self, name):
         result = User.query.filter(User.username == name)
         return result

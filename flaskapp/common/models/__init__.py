@@ -16,5 +16,6 @@ from common.models.admin_info import AdminInfo
 from common.models.work_order import WorkOrder
 # from common.models.market_approach
 from common.models.comprehensive_valuation import ComprehensiveValuation
+from common.models.market_valuation import MarketValuation
 from common.models.earning_valuation import EarningValuation
 from common.models.cost_valuation import CostValuation

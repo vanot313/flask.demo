@@ -21,7 +21,7 @@ class UserInfo(db.Model):
     waiting_num = db.Column(db.INT, default=0)
     data_assets = db.Column(db.FLOAT, default=0)
 
-    birth = db.Column(db.DATETIME)
+    birth = db.Column(db.DATE)
     location = db.Column(db.String(128))
     sex = db.Column(db.INT)
 
