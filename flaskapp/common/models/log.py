@@ -16,3 +16,6 @@ class Log(db.Model):
     ip = db.Column(db.String(64))
     create_time = db.Column(db.TIMESTAMP)
     location = db.Column(db.String(50))
+    from_id = db.Column(db.BIGINT)
+    to_id = db.Column(db.BIGINT)
+    order_id = db.Column(db.BIGINT)

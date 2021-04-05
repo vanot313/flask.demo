@@ -22,10 +22,12 @@ class ExpertHandler:
 
         # 读取目标数据集位置
         try:
-            file_path = dao_service.work_order_dao.getByOrderId(work_order_id).first().file_path
-            address = os.path.join('uploadfile', file_path)
+            order = dao_service.work_order_dao.getByOrderId(work_order_id).first()
         except:
-            return response("数据库操作失败", 1001, {})
+            return response("数据库查询失败", 1001, {})
+
+        file_path = order.file_path
+        address = os.path.join('uploadfile', file_path)
 
         # 算法处理片段
         msg = SUCCESS
@@ -64,7 +66,6 @@ class ExpertHandler:
 
             dao_service.comprehensive_valuation_dao.update(order_detail)
 
-            order = dao_service.work_order_dao.getByOrderId(work_order_id).first()
             order.expert_id = session.get('id')
             order.status = ORDER_DONE
             dao_service.work_order_dao.update(order)
@@ -72,6 +73,9 @@ class ExpertHandler:
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("数据库操作失败", 1001, {})
+
+        new_log = Log(from_id=session.get('id'), to_id=order.user_id, order_id=order.order_id, operation="新建综合估值法工单")
+        dao_service.log_dao.add(new_log)
 
         return response("提交成功", 200, order_detail)
 
@@ -103,6 +107,9 @@ class ExpertHandler:
             app.logger.info('Exception: %s', e)
             return response("数据库操作失败", 1001, {})
 
+        new_log = Log(from_id=session.get('id'), to_id=order.user_id, order_id=order.order_id, operation="评估成本法工单")
+        dao_service.log_dao.add(new_log)
+
         return response("提交成功", 200, order_detail)
 
     def earning_handler(self, work_order_id, n, r, R):
@@ -129,6 +136,9 @@ class ExpertHandler:
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("数据库操作失败", 1001, {})
+
+        new_log = Log(from_id=session.get('id'), to_id=order.user_id, order_id=order.order_id, operation="评估收益法工单")
+        dao_service.log_dao.add(new_log)
 
         return response("提交成功", 200, order_detail)
 
@@ -160,4 +170,8 @@ class ExpertHandler:
             app.logger.info('Exception: %s', e)
             return response("数据库操作失败", 1001, {})
 
+        new_log = Log(from_id=session.get('id'), to_id=session.get('id'), operation="更新个人信息")
+        dao_service.log_dao.add(new_log)
+
         return response("修改成功", 200, resp)
+

@@ -66,6 +66,7 @@
 * POST  
     获取  
     + 工单描述 remarks
+    + 专家ID expert_id （可不做）
     
     返回 工单信息 WorkOrder  
 
@@ -77,6 +78,7 @@
 * POST  
     获取  
     + 工单描述 remarks
+    + 专家ID expert_id （可不做）
     
     返回 工单信息 WorkOrder  
 
@@ -87,6 +89,19 @@
 * POST  
     获取  
     + 工单描述 remarks
+    + 专家ID expert_id （可不做）
+    + 上传（单个）数据集 csv文件 file
+    
+    返回 工单信息 WorkOrder  
+
+
+### `/new_market`  `GET` `POST` 用户新建 MARKET 工单
+* GET     
+    返回 测试页面（不准确） 在生产环境中被弃用
+* POST  
+    获取  
+    + 工单描述 remarks
+    + 专家ID expert_id （可不做）
     + 上传（单个）数据集 csv文件 file
     
     返回 工单信息 WorkOrder  
@@ -107,8 +122,34 @@
     返回 工单信息 WorkOrder 与 具体工单信息 CostValuation/EarningValuation/ComprehensiveValuation  
 
 
-### `/apply_expert`  `GET` `POST` 申请专家权限
+### `/get_work_order`  `GET` `POST` 带参数筛选工单（）
+* GET     
+    返回 测试页面（不准确） 在生产环境中被弃用
+* POST  
+    获取  
+    + 工单id order_id
+    + 工单状态 status
+    + 分页当前页 page
+    + 分页每页页数 per_page
+    
+    返回 工单信息 WorkOrder（带分页）
 
+
+### `/get_log`  `GET` `POST` 带参数筛选工单（）
+* GET     
+    返回 与用户有关的日志信息 Log（带分页）
+
+
+### `/apply_expert`  `GET` `POST` 申请专家权限
+* GET     
+    返回 测试页面（不准确） 在生产环境中被弃用
+* POST  
+    获取  
+    + 真实姓名 realname
+    + 头衔 job_title
+    + 自我介绍 introduction
+    
+    返回 申请信息 ExpertApply
 
 
 ## `/expert` 专家接口
@@ -152,12 +193,12 @@
 
 ### `/all_wait_work_order`  `GET`  查看所有待评估的工单
 * GET     
-    返回 所有待评估的工单 WorkOrder[]
+    返回 所有待评估的工单 WorkOrder[]（带分页）
 
 
 ### `/all_self_work_order`  `GET`  查看所有自己负责的工单
 * GET     
-    返回 所有自己负责的工单 WorkOrder[]
+    返回 所有自己负责的工单 WorkOrder[]（带分页）
 
 
 ### `/detail_work_order`  `GET` `POST` 查询工单详情
@@ -280,8 +321,10 @@
     + 用户名 username  
     + 邮箱 email
     + 地址 location
+    + 分页当前页 page
+    + 分页每页页数 per_page
     
-    返回 用户信息 UserInfo[]
+    返回 用户信息 UserInfo[]（带分页）
     
 * 注 这里的获取内容可以缺省
 
@@ -308,10 +351,23 @@
 * POST  
     获取  
     + 工单id order_id
+    + 分页当前页 page
+    + 分页每页页数 per_page
     
-    返回 工单信息 WorkOrder[]
+    返回 工单信息 WorkOrder[]（带分页）
     
 * 注 这里的获取内容可以缺省
+
+
+### `/detail_work_order`  `GET` `POST` 查询工单详情
+* GET     
+    返回 测试页面（不准确） 在生产环境中被弃用
+    
+* POST  
+    获取  
+    + 工单id order_id
+    
+    返回 工单信息 WorkOrder 与 具体工单信息 CostValuation/EarningValuation/ComprehensiveValuation  
 
 
 ### `/get_login_log`  `GET` `POST` 查询登录日志信息
@@ -321,8 +377,10 @@
 * POST  
     获取  
     + 用户名 username
+    + 分页当前页 page
+    + 分页每页页数 per_page
     
-    返回 登录日志信息 LoginLog[]
+    返回 登录日志信息 LoginLog[]（带分页）
     
 * 注 这里的获取内容可以缺省
 
@@ -334,9 +392,79 @@
 * POST  
     获取  
     + 用户名 username
+    + 分页当前页 page
+    + 分页每页页数 per_page
     
-    返回 日志信息 Log[]
+    返回 日志信息 Log[]（带分页）
     
 * 注 这里的获取内容可以缺省
 
     
+### `/get_expert_apply`  `GET` `POST` 查询专家申请表单
+* GET     
+    返回 测试页面（不准确） 在生产环境中被弃用
+    
+* POST  
+    获取  
+    + 分页当前页 page
+    + 分页每页页数 per_page    
+
+    返回 专家申请信息 ExpertApply[]（带分页）
+    
+* 注 这里的获取内容可以缺省
+
+
+### `/update_expert_apply`  `GET` `POST` 审批专家申请表单
+* GET     
+    返回 测试页面（不准确） 在生产环境中被弃用
+    
+* POST  
+    获取  
+    + 专家ID apply_id
+    + 审批结果 status（参阅宏变量）
+    
+    返回 专家申请信息 ExpertApply
+
+------------------
+## 涉及的宏变量
+### 工单类别
+```
+# 成本法
+COST = 1
+# 收益法
+EARNING = 2
+# 综合估值法
+COMPREHENSIVE = 3
+# 市场法
+MARKET = 4
+```
+
+### 工单状态
+```
+# 等待
+ORDER_WAIT = 0  
+# 完成
+ORDER_DONE = 1  
+# 接受
+ORDER_RECE = 2  
+# 冻结
+ORDER_FREEZE = 3  
+```
+
+### 人员权限
+```
+SUPER_ADMIN = 1
+ADMIN = 2
+EXPERT = 3
+USER = 4
+```
+
+### 专家审批状态
+```
+# 等待
+WAIT = 0
+# 通过
+PASS = 1
+# 拒绝
+DENY = 2
+```

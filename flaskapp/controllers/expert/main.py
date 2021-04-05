@@ -143,7 +143,6 @@ def download_order_file():
 @permission_required(EXPERT)
 def process_comprehensive():
     if request.method == 'GET':
-        # TODO 返回给专家用户上传的数据集
 
         pass
     else:

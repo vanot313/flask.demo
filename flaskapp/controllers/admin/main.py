@@ -110,27 +110,8 @@ def get_user_info():
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        return response_dict("查询成功", 200, dao_service.user_info_dao.getFuzzy(id, username, email, location, page, per_page))
-
-
-# 查看工单详情
-@admin.route('/detail_work_order', methods=['GET', 'POST'])
-@permission_required(ADMIN)
-def work_order_detail():
-    # TEMP 在生产环境中将被弃用
-    if request.method == 'GET':
-        return render_template("detail.html")
-
-    if request.method == 'POST':
-        data = request.get_json(silent=True)
-
-        if data is not None:
-            order_id = data.get('order_id')
-
-        else:
-            order_id = request.form.get('order_id')
-
-        return services_container.data_handler.get_work_order_detail_by_id_grant(order_id)
+        return response_dict("查询成功", 200,
+                             dao_service.user_info_dao.getFuzzy(id, username, email, location, page, per_page))
 
 
 @admin.route('/update_user_info', methods=['POST'])
@@ -187,7 +168,28 @@ def get_work_order():
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        return response_dict("查询成功", 200, dao_service.work_order_dao.getFuzzy(order_id=order_id, page=page, per_page=per_page))
+        return response_dict("查询成功", 200,
+                             dao_service.work_order_dao.getFuzzy(order_id=order_id, page=page, per_page=per_page))
+
+
+# 查看工单详情
+@admin.route('/detail_work_order', methods=['GET', 'POST'])
+@permission_required(ADMIN)
+def work_order_detail():
+    # TEMP 在生产环境中将被弃用
+    if request.method == 'GET':
+        return render_template("detail.html")
+
+    if request.method == 'POST':
+        data = request.get_json(silent=True)
+
+        if data is not None:
+            order_id = data.get('order_id')
+
+        else:
+            order_id = request.form.get('order_id')
+
+        return services_container.data_handler.get_work_order_detail_by_id_grant(order_id)
 
 
 @admin.route('/get_login_log', methods=['POST', 'GET'])
@@ -244,3 +246,53 @@ def get_log():
             return response("数据接收异常", 1002, {})
 
         return response_multiple("查询成功", 200, dao_service.log_dao.getFuzzy(username, page, per_page))
+
+
+@admin.route('/get_expert_apply', methods=['POST', 'GET'])
+@permission_required(ADMIN)
+def get_expert_apply():
+    if request.method == 'GET':
+        return render_template("post.html")
+
+    if request.method == 'POST':
+        try:
+            data = request.get_json(silent=True)
+
+            if data is not None:
+                page = data.get('page')
+                per_page = data.get('per_page')
+
+            else:
+                page = request.form.get('page')
+                per_page = request.form.get('per_page')
+
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
+
+        return response_dict("查询成功", 200, dao_service.expert_apply_dao.getAll(page, per_page))
+
+
+@admin.route('/update_expert_apply', methods=['POST', 'GET'])
+@permission_required(ADMIN)
+def update_expert_apply():
+    if request.method == 'GET':
+        return render_template("post.html")
+
+    if request.method == 'POST':
+        try:
+            data = request.get_json(silent=True)
+
+            if data is not None:
+                status = data.get('status')
+                apply_id = data.get('apply_id')
+
+            else:
+                status = request.form.get('status')
+                apply_id = request.form.get('apply_id')
+
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
+
+        return services_container.admin_handler.update_expert_apply(status, apply_id)

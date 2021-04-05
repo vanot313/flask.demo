@@ -83,9 +83,10 @@ class UserHandler:
         # c.calculate()
         # print(c.S)
 
-        result = {'msg': "工单申请成功", 'code': 200, 'data': serialize(new_work_order),
-                  'success': 'true'}
-        return jsonify(result)
+        new_log = Log(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建市场法工单")
+        dao_service.log_dao.add(new_log)
+
+        return response("工单申请成功", 200, new_work_order)
 
     def comprehensive_handler(self, user_id, remarks, method, filepath, filename, expert_id):
         if expert_id != 0:
@@ -103,6 +104,9 @@ class UserHandler:
         order_id = new_work_order.order_id
         new_comprehensive = ComprehensiveValuation(order_id=order_id)
         dao_service.comprehensive_valuation_dao.add(new_comprehensive)
+
+        new_log = dao_service.log_dao(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建综合估值法工单")
+        dao_service.log_dao.add(new_log)
 
         return response("工单申请成功", 200, new_work_order)
 
@@ -123,6 +127,9 @@ class UserHandler:
         new_cost = CostValuation(order_id=order_id)
         dao_service.cost_valuation_dao.add(new_cost)
 
+        new_log = Log(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建成本法工单")
+        dao_service.log_dao.add(new_log)
+
         return response("工单申请成功", 200, new_work_order)
 
     def earning_handler(self, user_id, remarks, method, expert_id):
@@ -141,6 +148,9 @@ class UserHandler:
         order_id = new_work_order.order_id
         new_earning = EarningValuation(order_id=order_id)
         dao_service.earning_valuation_dao.add(new_earning)
+
+        new_log = Log(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建收益法工单")
+        dao_service.log_dao.add(new_log)
 
         return response("工单申请成功", 200, new_work_order)
 
@@ -172,7 +182,25 @@ class UserHandler:
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})
 
+        new_log = Log(from_id=session.get('id'), to_id=session.get('id'), operation="更新个人信息")
+        dao_service.log_dao.add(new_log)
+
         return response("修改成功", 200, resp)
+
+    def apply_for_expert(self, realname, job_title, introduction):
+        UserInfo = dao_service.user_info_dao.getById(session.get("id")).first()
+
+        try:
+            new_apply = ExpertApply(user_id=UserInfo.id, username=UserInfo.username, email=UserInfo.email,
+                                    mobile=UserInfo.mobile, realname=realname, job_title=job_title, introduction=introduction)
+            dao_service.expert_apply_dao.add(new_apply)
+        except:
+            return response("数据库插入失败", 1001, {})
+
+        new_log = Log(from_id=session.get('id'), to_id=session.get('id'), operation="申请专家权限")
+        dao_service.log_dao.add(new_log)
+
+        return response("申请成功", 200, new_apply)
 
     # def get_all_user(self):
     #     try:

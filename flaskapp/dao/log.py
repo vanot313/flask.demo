@@ -36,8 +36,30 @@ class LogDao:
         db.session.commit()
         return []
 
-    def getFuzzy(self, username=""):
+    def getByUser(self, user_id, page="1", per_page="10"):
+        if page is None:
+            page = 1
+        if per_page is None:
+            per_page = 10
 
+        key1 = Log.from_id == user_id
+        key2 = Log.to_id == user_id
+
+        result = Log.query.order_by(Log.create_time.desc()).filter(
+            or_(
+                key1,
+                key2,
+                # key3,
+                # key4
+            )
+        )
+
+        result = result.paginate(page=int(page), per_page=int(per_page))
+        ans = {'data': result.items, 'pages': result.pages, 'total': result.total}
+
+        return ans
+
+    def getFuzzy(self, username=""):
         key1 = or_(Log.username.like("%" + username + "%"), Log.username.is_(None))
         # key2 = or_(UserInfo.id.like("%" + id + "%"), UserInfo.id.is_(None))
         # key3 = or_(UserInfo.email.like("%" + email + "%"), UserInfo.email.is_(None))

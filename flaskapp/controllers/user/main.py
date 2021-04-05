@@ -200,34 +200,6 @@ def new_comprehensive():
         return render_template("new_comprehensive.html")
 
     if request.method == 'POST':
-        # try:
-        #     data = request.get_json(silent=True)
-        #
-        #     if data is not None:
-        #         remarks = data.get('remarks')
-        #         method = COMPREHENSIVE
-        #
-        #         user_id = session.get("id")
-        #
-        #         expert_id = data.get("expert_id")
-        #         if expert_id is None:
-        #             expert_id = 0
-        #
-        #
-        #     else:
-        #         remarks = request.form.get('remarks')
-        #         method = COMPREHENSIVE
-        #
-        #         user_id = session.get("id")
-        #
-        #         expert_id = request.form.get("expert_id")
-        #         if expert_id is None:
-        #             expert_id = 0
-        #
-        # except Exception as e:
-        #     app.logger.info('Exception: %s', e)
-        #     return response("数据接收异常", 1002, {})
-
         try:
             user_id = session.get("id")
             expert_id = request.form["expert_id"]
@@ -262,10 +234,10 @@ def new_market():
     if request.method == 'POST':
         try:
             user_id = session.get("id")
-            # expert_id = request.form["expert_id"]
-            # remarks = request.form["remarks"]
-            expert_id = request.form.get("expert_id")
-            remarks = request.form.get("remarks")
+            expert_id = request.form["expert_id"]
+            remarks = request.form["remarks"]
+            # expert_id = request.form.get("expert_id")
+            # remarks = request.form.get("remarks")
 
             method = COMPREHENSIVE
             file = request.files['file']
@@ -284,34 +256,6 @@ def new_market():
                                                                   expert_id)
         else:
             return response('上传失败', 1001, {})
-
-
-# @user.route('/new_work', methods=['POST'])
-# @permission_required(USER)
-# def new_work():
-#     try:
-#         data = request.get_json(silent=True)
-#
-#         if data is not None:
-#             method = data.get('method')
-#
-#         else:
-#             method = request.form.get('method')
-#
-#     except Exception as e:
-#         app.logger.info('Exception: %s', e)
-#         return response("数据接收异常", 1002, {})
-#
-#     if method == '1':
-#         return new_cost(request)
-#     elif method == '2':
-#         return new_earning(request)
-#     elif method == '3':
-#         return new_comprehensive(request)
-#     elif method == '4':
-#         return new_market(request)
-#
-#     return response('创建失败', 1002, {})
 
 
 # 查看工单详情
@@ -342,8 +286,7 @@ def work_order_detail():
 @user.route('/all_work_order', methods=['GET'])
 @permission_required(USER)
 def work_order_all():
-    return response("123", 1, dao_service.work_order_dao.getByOrderId(id=69).first())
-    # return response_multiple("查询成功", 200, dao_service.work_order_dao.getByUserId(session.get('id')))
+    return response_multiple("查询成功", 200, dao_service.work_order_dao.getByUserId(session.get('id')))
 
 
 @user.route('/get_work_order', methods=['GET', 'POST'])
@@ -378,6 +321,39 @@ def get_work_order():
                                                                  status=status,
                                                                  page=page, per_page=per_page))
 
+
+@user.route('/get_log', methods=['GET', 'POST'])
+@permission_required(USER)
+def get_log():
+    if request.method == 'GET':
+        return response_dict("查询成功", 200,
+                             dao_service.log_dao.getByUser(session.get("id")))
+
+
+@user.route('/apply_for_expert', methods=['GET', 'POST'])
+@permission_required(USER)
+def apply_for_expert():
+    if request.method == 'GET':
+        return render_template("apply.html")
+    elif request.method == 'POST':
+        try:
+            data = request.get_json(silent=True)
+
+            if data is not None:
+                realname = data.get('realname')
+                job_title = data.get('job_title')
+                introduction = data.get('introduction')
+
+            else:
+                realname = request.form.get('realname')
+                job_title = request.form.get('job_title')
+                introduction = request.form.get('introduction')
+
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
+
+        return services_container.user_handler.apply_for_expert(realname, job_title, introduction)
 
 # @user.route('/get_all_user', methods=['GET'])
 # @permission_required(USER)
