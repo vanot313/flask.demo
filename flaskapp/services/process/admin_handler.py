@@ -73,19 +73,14 @@ class AdminHandler:
 
         try:
             apply = dao_service.expert_apply_dao.getByApplyId(apply_id).first()
-            apply.status = status
-            # db.session.close()
-
-            dao_service.expert_apply_dao.update(apply)
             user_id = apply.user_id
 
-            if int(status) == PASS:
-                new_userrole = UserRole(user_id=user_id, role_id=EXPERT)
-                dao_service.user_role_dao.add(new_userrole)
+            apply.status = status
+            dao_service.expert_apply_dao.update(apply)
 
+            if int(status) == PASS:
                 new_log = Log(from_id=session.get('id'), to_id=user_id, operation="允许专家权限")
                 dao_service.log_dao.add(new_log)
-
             else:
                 new_log = Log(from_id=session.get('id'), to_id=user_id, operation="拒绝专家权限")
                 dao_service.log_dao.add(new_log)
