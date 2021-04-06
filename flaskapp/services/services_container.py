@@ -10,6 +10,8 @@ from services.data import DataHandler
 
 
 class ServicesContainer:
+    i = 1.0
+
     login_handler = LoginHandler()
     register_handler = RegisterHandler()
     file_handler = FileHandler()

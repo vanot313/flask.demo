@@ -10,6 +10,8 @@ class MarketValuationDao:
 
     # 根据order_id搜索 work_order
     def getByOrderId(self, id):
+        print(db)
+
         result = MarketValuation.query.filter(MarketValuation.order_id == int(id))
         return result
 
@@ -29,4 +31,3 @@ class MarketValuationDao:
         db.session.add(entity)
         db.session.commit()
         return entity
-

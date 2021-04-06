@@ -1,8 +1,9 @@
 import pymysql
 from flask import session
-from application import app
+from application import db, app
 from time import sleep
 from concurrent.futures import ThreadPoolExecutor
+from sqlalchemy import text
 from algorithm.comprehensive_valuation import ComprehensiveValuationA
 from algorithm.cost_valuation import CostValuationA
 from algorithm.earning_valuation import EarningValuationA
@@ -10,6 +11,7 @@ from algorithm.market.market_valuation import MarketValuationA
 from common.models import *
 from config.macro_setting import *
 from dao import dao_service
+from services import services_container
 
 from application import *
 from util.response import *
@@ -18,39 +20,92 @@ from util.response import *
 class UserHandler:
     executor = ThreadPoolExecutor(1)
 
-    def market_predict(self, order_id, file_path):
+    def market_predict(self, order_id, file_path, expert_id):
+        from config import local_setting
+        from flask import Flask
+        from flask_sqlalchemy import SQLAlchemy
+        from common.models import MarketValuation
+
+        app = Flask("report")
+        app.config.from_pyfile('config/local_setting.py')
+        db = SQLAlchemy(app)
+
+        from services.services_container import ServicesContainer
+
 
         file_path = os.path.join('uploadfile', file_path)
         handler = MarketValuationA()
         handler.load(file_path)
         handler.predict()
 
-        order_detail = dao_service.market_valutation_dao.getByOrderId(order_id).first()
-        order_detail.graininess = float(handler.graininess)
-        order_detail.dimension = float(handler.dimension)
-        order_detail.activity = float(handler.activity)
-        order_detail.scale = float(handler.scale)
-        order_detail.correlation = float(handler.correlation)
-        order_detail.suggestion = int(handler.suggestion)
-        order_detail.amount = float(handler.amount)
-        order_detail.size = float(handler.size)
-        order_detail.growth = float(handler.growth)
-        order_detail.coverage = float(handler.coverage)
-        order_detail.attribute = float(handler.attribute)
-        order_detail.source = float(handler.source)
-        order_detail.maintenance = float(handler.maintenance)
-        order_detail.incoming = float(handler.incoming)
-        order_detail.outgoing = float(handler.outgoing)
+        db.session.execute(text("update t_market_valuation \
+                set graininess=:graininess,dimension=:dimension,activity=:activity,correlation=:correlation,amount=:amount,growth=:growth,coverage=:coverage,attribute=:attribute,source=:source,maintenance=:maintenance,incoming=:incoming,outgoing=:outgoing,size=:size,scale=:scale,suggestion=:suggestion\
+                where                           \
+                order_id=:order_id"
+                                ),
+                           {
+                               "order_id": order_id,
+                               "graininess": float(handler.graininess),
+                               "dimension": float(handler.dimension),
+                               "activity": float(handler.activity),
+                               "scale": float(handler.scale),
+                               "correlation": float(handler.correlation),
+                               "suggestion": int(handler.suggestion),
+                               "amount": float(handler.amount),
+                               "size": float(handler.size),
+                               "growth": float(handler.growth),
+                               "coverage": float(handler.coverage),
+                               "attribute": float(handler.attribute),
+                               "source": float(handler.source),
+                               "maintenance": float(handler.maintenance),
+                               "incoming": float(handler.incoming),
+                               "outgoing": float(handler.outgoing),
+                           })
+        db.session.commit()
 
-        dao_service.market_valutation_dao.update(order_detail)
-        order = dao_service.work_order_dao.getByOrderId(order_id).first()
-        order.expert_id = session.get('id')
-        order.status = ORDER_DONE
-        dao_service.work_order_dao.update(order)
+        # order_detail = dao_service.market_valutation_dao.getByOrderId(order_id).first()
+        # order_detail.graininess = float(handler.graininess)
+        # order_detail.dimension = float(handler.dimension)
+        # order_detail.activity = float(handler.activity)
+        # order_detail.scale = float(handler.scale)
+        # order_detail.correlation = float(handler.correlation)
+        # order_detail.suggestion = int(handler.suggestion)
+        # order_detail.amount = float(handler.amount)
+        # order_detail.size = float(handler.size)
+        # order_detail.growth = float(handler.growth)
+        # order_detail.coverage = float(handler.coverage)
+        # order_detail.attribute = float(handler.attribute)
+        # order_detail.source = float(handler.source)
+        # order_detail.maintenance = float(handler.maintenance)
+        # order_detail.incoming = float(handler.incoming)
+        # order_detail.outgoing = float(handler.outgoing)
 
+        # dao_service.market_valutation_dao.update(order_detail)
 
+        # result = MarketValuation.query.filter(MarketValuation.order_id == order_detail.order_id).first()
 
-        return response("提交成功", 200, order_detail)
+        # result = order_detail
+
+        db.session.execute(text("update t_work_order \
+                set expert_id=:expert_id,status=:status\
+                where                           \
+                order_id=:order_id"
+                                ),
+                           {
+                               "order_id": order_id,
+                               "expert_id": expert_id,
+                               "status": ORDER_DONE
+                           })
+        db.session.commit()
+
+        # order = dao_service.work_order_dao.getByOrderId(order_id).first()
+
+        # order.expert_id = expert_id
+        # order.status = ORDER_DONE
+
+        # dao_service.work_order_dao.update(order)
+
+        return response("工单估值成功", 200, {})
 
     def market_handler(self, user_id, remarks, method, filepath, filename, expert_id):
         if expert_id != 0:
@@ -66,22 +121,11 @@ class UserHandler:
             return response('创建失败', 1002, {})
 
         order_id = new_work_order.order_id
-        new_comprehensive = MarketValuation(order_id=order_id)
-        dao_service.market_valutation_dao.add(new_comprehensive)
+        new_market = MarketValuation(order_id=order_id)
+        dao_service.market_valutation_dao.add(new_market)
 
-        # self.executor.submit(self.market_predict, order_id, filepath)
-        self.market_predict(order_id, filepath)
-
-        # order_id = new_work_order.order_id
-        # new_comprehensive = ComprehensiveValuation(order_id=order_id)
-        # dao_service.comprehensive_valuation_dao.add(new_comprehensive)
-
-        # c = ComprehensiveValuationA()
-        # c.quality_value('../uploadfile/' + filepath)
-        # c.applied_value(0.8, 0.2, 0.5, 0.5)
-        # c.matrix_value([1, 3, 5, 3, 5, 3], [3, 5, 9, 3, 3, 3])
-        # c.calculate()
-        # print(c.S)
+        self.executor.submit(self.market_predict, order_id, filepath, expert_id)
+        # self.market_predict(order_id, filepath)
 
         new_log = Log(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建市场法工单")
         dao_service.log_dao.add(new_log)
@@ -192,7 +236,8 @@ class UserHandler:
 
         try:
             new_apply = ExpertApply(user_id=UserInfo.id, username=UserInfo.username, email=UserInfo.email,
-                                    mobile=UserInfo.mobile, realname=realname, job_title=job_title, introduction=introduction)
+                                    mobile=UserInfo.mobile, realname=realname, job_title=job_title,
+                                    introduction=introduction)
             dao_service.expert_apply_dao.add(new_apply)
         except:
             return response("数据库插入失败", 1001, {})

@@ -22,8 +22,6 @@ class Application(Flask):
         CORS(self, supports_credentials=True)
         db.init_app(self)
 
-
-
 # app = Flask(__name__)
 # manager = Manager(app)
 #

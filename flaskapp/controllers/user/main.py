@@ -229,17 +229,19 @@ def new_comprehensive():
 def new_market():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
+        print(services_container)
+        print(services_container.i)
         return render_template("new_comprehensive.html")
 
     if request.method == 'POST':
         try:
             user_id = session.get("id")
-            expert_id = request.form["expert_id"]
-            remarks = request.form["remarks"]
-            # expert_id = request.form.get("expert_id")
-            # remarks = request.form.get("remarks")
+            # expert_id = request.form["expert_id"]
+            # remarks = request.form["remarks"]
+            expert_id = request.form.get("expert_id")
+            remarks = request.form.get("remarks")
 
-            method = COMPREHENSIVE
+            method = MARKET
             file = request.files['file']
 
             if expert_id is None:

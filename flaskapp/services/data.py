@@ -7,8 +7,8 @@ from util.response import *
 
 
 class DataHandler:
-    def __init__(self):
-        pass
+
+    i = 1.0
 
     def get_work_order_detail_by_id(self, order_id):
         tuple = {}

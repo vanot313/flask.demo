@@ -7,6 +7,8 @@ from application import db
 
 
 class WorkOrderDao:
+    i = 1.0
+
     # 根据user_id搜索 work_order
     def getByUserId(self, id, status=None):
         result = WorkOrder.query.filter(WorkOrder.user_id == int(id))

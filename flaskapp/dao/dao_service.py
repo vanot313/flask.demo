@@ -17,6 +17,8 @@ from dao.work_order import WorkOrderDao
 
 
 class DaoService:
+    i = 2.0
+
     admin_info_dao = AdminInfoDao()
     comprehensive_valuation_dao = ComprehensiveValuationDao()
     cost_valuation_dao = CostValuationDao()
