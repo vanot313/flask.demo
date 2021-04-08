@@ -10,6 +10,7 @@ def permission_can(current_user_role, permission):
     :param permission
     :return:
     """
+
     return current_user_role == permission
 
 
@@ -24,6 +25,7 @@ def permission_required(permission):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             try:
+                print(id(session))
                 print("session:", session.get('id'))
                 current_user_role = dao_service.user_role_dao.getById(session.get('id'))
 

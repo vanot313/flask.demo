@@ -18,6 +18,9 @@ class LoginHandler:
             elif result.check_password(password):
                 session['id'] = result.id
 
+                print("^^^^^^^^^^^^^^^^^^^^^^^^^")
+                print(id(session))
+
                 new_log = LoginLog(username=username, rolename="user")
                 dao_service.login_log_dao.add(new_log)
 
@@ -60,6 +63,10 @@ class LoginHandler:
             elif result.check_password(password):
                 session['id'] = result.id
 
+                print("^^^^^^^^^^^^^^^^^^^^^^^^^")
+                print(id(session))
+
+
                 new_log = LoginLog(username=username, rolename="admin")
                 dao_service.login_log_dao.add(new_log)
 
@@ -80,6 +87,10 @@ class LoginHandler:
                 return response("登录失败", 1001, {})
             elif result.check_password(password):
                 session['id'] = result.id
+
+                print("^^^^^^^^^^^^^^^^^^^^^^^^^")
+
+                print(id(session))
 
                 new_log = LoginLog(username=username, rolename="expert")
                 dao_service.login_log_dao.add(new_log)

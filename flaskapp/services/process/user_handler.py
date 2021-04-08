@@ -20,18 +20,16 @@ from util.response import *
 class UserHandler:
     executor = ThreadPoolExecutor(1)
 
+    def many_market_predict(self):
+        pass
+
     def market_predict(self, order_id, file_path, expert_id):
-        from config import local_setting
         from flask import Flask
         from flask_sqlalchemy import SQLAlchemy
-        from common.models import MarketValuation
 
         app = Flask("report")
         app.config.from_pyfile('config/local_setting.py')
         db = SQLAlchemy(app)
-
-        from services.services_container import ServicesContainer
-
 
         file_path = os.path.join('uploadfile', file_path)
         handler = MarketValuationA()
