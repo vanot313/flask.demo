@@ -148,7 +148,7 @@ def update_user_info():
 def get_work_order():
     if request.method == 'GET':
         # return response_multiple("查询成功", 200, dao_service.work_order_dao.getAll())
-        return render_template("get.html")
+        return render_template("post.html")
 
     if request.method == 'POST':
         try:
@@ -158,18 +158,20 @@ def get_work_order():
                 order_id = data.get('order_id')
                 page = data.get('page')
                 per_page = data.get('per_page')
+                status = data.get("status")
 
             else:
                 order_id = request.form.get('order_id')
                 page = request.form.get('page')
                 per_page = request.form.get('per_page')
+                status = request.form.get("status")
 
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
         return response_dict("查询成功", 200,
-                             dao_service.work_order_dao.getFuzzy(order_id=order_id, page=page, per_page=per_page))
+                             dao_service.work_order_dao.getFuzzy(order_id=order_id, page=page, per_page=per_page, status=status))
 
 
 # 查看工单详情
@@ -261,16 +263,18 @@ def get_expert_apply():
             if data is not None:
                 page = data.get('page')
                 per_page = data.get('per_page')
+                status = data.get('status')
 
             else:
                 page = request.form.get('page')
                 per_page = request.form.get('per_page')
+                status = request.form.get('status')
 
         except Exception as e:
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        return response_dict("查询成功", 200, dao_service.expert_apply_dao.getAll(page, per_page))
+        return response_dict("查询成功", 200, dao_service.expert_apply_dao.getFuzzy(page=page, per_page=per_page, status=status))
 
 
 @admin.route('/update_expert_apply', methods=['POST', 'GET'])

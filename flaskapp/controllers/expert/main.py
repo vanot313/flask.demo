@@ -81,17 +81,45 @@ def update():
 
 
 # 查看所有待评估工单
-@expert.route('/all_wait_work_order', methods=['GET'])
+@expert.route('/all_wait_work_order', methods=['POST'])
 @permission_required(EXPERT)
 def all_wait_work_order():
-    return response_dict("查询成功", 200, dao_service.work_order_dao.getFuzzy(status=ORDER_WAIT))
+    try:
+        data = request.get_json(silent=True)
+
+        if data is not None:
+            page = data.get('page')
+            per_page = data.get('per_page')
+        else:
+            page = request.form.get('page')
+            per_page = request.form.get('per_page')
+
+    except Exception as e:
+        app.logger.info('Exception: %s', e)
+        return response("数据接收异常", 1002, {})
+
+    return response_dict("查询成功", 200, dao_service.work_order_dao.getFuzzy(status=ORDER_WAIT, page=page, per_page=per_page))
 
 
 # 查看自己负责的工单
-@expert.route('/all_self_work_order', methods=['GET'])
+@expert.route('/all_self_work_order', methods=['POST'])
 @permission_required(EXPERT)
 def all_self_work_order():
-    return response_dict("查询成功", 200, dao_service.work_order_dao.getFuzzy(expert_id=session.get('id')))
+    try:
+        data = request.get_json(silent=True)
+
+        if data is not None:
+            page = data.get('page')
+            per_page = data.get('per_page')
+        else:
+            page = request.form.get('page')
+            per_page = request.form.get('per_page')
+
+    except Exception as e:
+        app.logger.info('Exception: %s', e)
+        return response("数据接收异常", 1002, {})
+
+    return response_dict("查询成功", 200, dao_service.work_order_dao.getFuzzy(expert_id=session.get('id'), page=page, per_page=per_page))
 
 
 @expert.route("/detail_work_order", methods=['GET', 'POST'])
