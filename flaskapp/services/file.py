@@ -21,6 +21,7 @@ class FileHandler:
 
         try:
             if os.path.isfile(os.path.join('uploadfile', filepath)):
+
                 return send_file(os.path.join('uploadfile', filepath), as_attachment=True)
             else:
                 return response("文件不存在", 404, {})

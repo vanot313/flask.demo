@@ -81,24 +81,27 @@ def update():
 
 
 # 查看所有待评估工单
-@expert.route('/all_wait_work_order', methods=['POST'])
+@expert.route('/all_wait_work_order', methods=['POST', 'GET'])
 @permission_required(EXPERT)
 def all_wait_work_order():
-    try:
-        data = request.get_json(silent=True)
+    if request.method == 'GET':
+        return render_template('get.html')
+    else:
+        try:
+            data = request.get_json(silent=True)
 
-        if data is not None:
-            page = data.get('page')
-            per_page = data.get('per_page')
-        else:
-            page = request.form.get('page')
-            per_page = request.form.get('per_page')
+            if data is not None:
+                page = data.get('page')
+                per_page = data.get('per_page')
+            else:
+                page = request.form.get('page')
+                per_page = request.form.get('per_page')
 
-    except Exception as e:
-        app.logger.info('Exception: %s', e)
-        return response("数据接收异常", 1002, {})
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
 
-    return response_dict("查询成功", 200, dao_service.work_order_dao.getFuzzy(status=ORDER_WAIT, page=page, per_page=per_page))
+        return response_dict("查询成功", 200, dao_service.work_order_dao.getFuzzy(status=ORDER_WAIT, page=page, per_page=per_page))
 
 
 # 查看自己负责的工单
@@ -162,9 +165,9 @@ def download_order_file():
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        filename = dao_service.work_order_dao.getByOrderId(order_id).first().file_name
+        filepath = dao_service.work_order_dao.getByOrderId(order_id).first().file_path
 
-        return services_container.file_handler.download_file(filename=filename)
+        return services_container.file_handler.download_file(filepath=filepath)
 
 
 @expert.route("/process_comprehensive", methods=['GET', 'POST'])

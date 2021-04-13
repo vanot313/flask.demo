@@ -64,7 +64,7 @@ class WorkOrderDao:
                 key3,
                 key4
             )
-        )
+        ).filter(WorkOrder.method != 4)
 
         result = result.paginate(page=int(page), per_page=int(per_page))
         ans = {}
