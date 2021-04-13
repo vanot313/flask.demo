@@ -1,1 +1,5 @@
+<<<<<<< Updated upstream
 sdfsdafssdfsdf
+=======
+sdfsdafsdfsgdfsdfg
+>>>>>>> Stashed changes
