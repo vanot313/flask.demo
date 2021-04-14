@@ -74,7 +74,8 @@ class ExpertHandler:
             app.logger.info('Exception: %s', e)
             return response("数据库操作失败", 1001, {})
 
-        new_log = Log(from_id=session.get('id'), to_id=order.user_id, order_id=order.order_id, operation="新建综合估值法工单")
+        new_log = Log(from_id=session.get('id'), to_id=order.user_id, order_id=order.order_id, operation="新建综合估值法工单",
+                      username=dao_service.user_info_dao.getById(session.get("id")).first().username)
         dao_service.log_dao.add(new_log)
 
         return response("提交成功", 200, order_detail)
@@ -107,7 +108,8 @@ class ExpertHandler:
             app.logger.info('Exception: %s', e)
             return response("数据库操作失败", 1001, {})
 
-        new_log = Log(from_id=session.get('id'), to_id=order.user_id, order_id=order.order_id, operation="评估成本法工单")
+        new_log = Log(from_id=session.get('id'), to_id=order.user_id, order_id=order.order_id, operation="评估成本法工单",
+                      username=dao_service.user_info_dao.getById(session.get("id")).first().username)
         dao_service.log_dao.add(new_log)
 
         return response("提交成功", 200, order_detail)
@@ -137,7 +139,8 @@ class ExpertHandler:
             app.logger.info('Exception: %s', e)
             return response("数据库操作失败", 1001, {})
 
-        new_log = Log(from_id=session.get('id'), to_id=order.user_id, order_id=order.order_id, operation="评估收益法工单")
+        new_log = Log(from_id=session.get('id'), to_id=order.user_id, order_id=order.order_id, operation="评估收益法工单",
+                      username=dao_service.user_info_dao.getById(session.get("id")).first().username)
         dao_service.log_dao.add(new_log)
 
         return response("提交成功", 200, order_detail)
@@ -170,8 +173,8 @@ class ExpertHandler:
             app.logger.info('Exception: %s', e)
             return response("数据库操作失败", 1001, {})
 
-        new_log = Log(from_id=session.get('id'), to_id=session.get('id'), operation="更新个人信息")
+        new_log = Log(from_id=session.get('id'), to_id=session.get('id'), operation="更新个人信息",
+                      username=dao_service.user_info_dao.getById(session.get("id")).first().username)
         dao_service.log_dao.add(new_log)
 
         return response("修改成功", 200, resp)
-

@@ -125,7 +125,8 @@ class UserHandler:
         self.executor.submit(self.market_predict, order_id, filepath, expert_id)
         # self.market_predict(order_id, filepath)
 
-        new_log = Log(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建市场法工单")
+        new_log = Log(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建市场法工单",
+                      username=dao_service.user_info_dao.getById(session.get("id")).first().username)
         dao_service.log_dao.add(new_log)
 
         return response("工单申请成功", 200, new_work_order)
@@ -147,7 +148,8 @@ class UserHandler:
         new_comprehensive = ComprehensiveValuation(order_id=order_id)
         dao_service.comprehensive_valuation_dao.add(new_comprehensive)
 
-        new_log = dao_service.log_dao(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建综合估值法工单")
+        new_log = dao_service.log_dao(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建综合估值法工单",
+                                      username=dao_service.user_info_dao.getById(session.get("id")).first().username)
         dao_service.log_dao.add(new_log)
 
         return response("工单申请成功", 200, new_work_order)
@@ -169,7 +171,8 @@ class UserHandler:
         new_cost = CostValuation(order_id=order_id)
         dao_service.cost_valuation_dao.add(new_cost)
 
-        new_log = Log(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建成本法工单")
+        new_log = Log(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建成本法工单",
+                      username=dao_service.user_info_dao.getById(session.get("id")).first().username)
         dao_service.log_dao.add(new_log)
 
         return response("工单申请成功", 200, new_work_order)
@@ -191,7 +194,8 @@ class UserHandler:
         new_earning = EarningValuation(order_id=order_id)
         dao_service.earning_valuation_dao.add(new_earning)
 
-        new_log = Log(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建收益法工单")
+        new_log = Log(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建收益法工单",
+                      username=dao_service.user_info_dao.getById(session.get("id")).first().username)
         dao_service.log_dao.add(new_log)
 
         return response("工单申请成功", 200, new_work_order)
@@ -224,7 +228,8 @@ class UserHandler:
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})
 
-        new_log = Log(from_id=session.get('id'), to_id=session.get('id'), operation="更新个人信息")
+        new_log = Log(from_id=session.get('id'), to_id=session.get('id'), operation="更新个人信息",
+                      username=dao_service.user_info_dao.getById(session.get("id")).first().username)
         dao_service.log_dao.add(new_log)
 
         return response("修改成功", 200, resp)
@@ -240,7 +245,8 @@ class UserHandler:
         except:
             return response("数据库插入失败", 1001, {})
 
-        new_log = Log(from_id=session.get('id'), to_id=session.get('id'), operation="申请专家权限")
+        new_log = Log(from_id=session.get('id'), to_id=session.get('id'), operation="申请专家权限",
+                      username=dao_service.user_info_dao.getById(session.get("id")).first().username)
         dao_service.log_dao.add(new_log)
 
         return response("申请成功", 200, new_apply)

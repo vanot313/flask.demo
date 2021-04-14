@@ -255,7 +255,7 @@ def get_log():
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        return response_multiple("查询成功", 200, dao_service.log_dao.getFuzzy(from_id, to_id, page, per_page))
+        return response_dict("查询成功", 200, dao_service.log_dao.getFuzzy(from_id, to_id, page, per_page))
 
 
 @admin.route('/get_expert_apply', methods=['POST', 'GET'])

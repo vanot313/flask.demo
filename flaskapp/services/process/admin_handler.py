@@ -79,10 +79,13 @@ class AdminHandler:
             dao_service.expert_apply_dao.update(apply)
 
             if int(status) == PASS:
-                new_log = Log(from_id=session.get('id'), to_id=user_id, operation="允许专家权限")
+                new_log = Log(from_id=session.get('id'), to_id=user_id, operation="允许专家权限",
+                              username=dao_service.user_info_dao.getById(session.get("id")).first().username)
                 dao_service.log_dao.add(new_log)
             else:
-                new_log = Log(from_id=session.get('id'), to_id=user_id, operation="拒绝专家权限")
+                new_log = Log(from_id=session.get('id'), to_id=user_id, operation="拒绝专家权限",
+                              username=dao_service.user_info_dao.getById(session.get("id")).first().username)
+
                 dao_service.log_dao.add(new_log)
 
         except:

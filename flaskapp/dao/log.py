@@ -94,4 +94,10 @@ class LogDao:
             )
         )
 
-        return result
+        result = result.paginate(page=int(page), per_page=int(per_page))
+        ans = {}
+        ans['data'] = result.items
+        ans['pages'] = result.pages
+        ans['total'] = result.total
+
+        return ans
