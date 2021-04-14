@@ -4,7 +4,7 @@ from application import db
 
 class UserRole(db.Model):
     """
-    用户表
+    用户权限表
     """
     __tablename__ = "t_user_role"
     user_id = db.Column(db.BIGINT, primary_key=True)

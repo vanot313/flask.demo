@@ -42,6 +42,8 @@ class WorkOrderDao:
             per_page = 10
         if order_id is None:
             order_id = ''
+        if status is None:
+            status = ''
 
         key1 = or_(WorkOrder.user_id.like("%" + str(user_id) + "%"), WorkOrder.user_id.is_(None))
         key2 = or_(WorkOrder.order_id.like("%" + str(order_id) + "%"), WorkOrder.order_id.is_(None))

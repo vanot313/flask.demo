@@ -4,7 +4,7 @@ from application import db
 
 class UserInfo(db.Model):
     """
-    用户表
+    用户信息表
     """
     __tablename__ = "t_user_info"
     id = db.Column(db.BIGINT, primary_key=True)

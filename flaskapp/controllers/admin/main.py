@@ -170,6 +170,12 @@ def get_work_order():
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
+        print(order_id)
+        print(status)
+        print(per_page)
+        print(page)
+
+
         return response_dict("查询成功", 200,
                              dao_service.work_order_dao.getFuzzy(order_id=order_id, page=page, per_page=per_page, status=status))
 
@@ -226,20 +232,22 @@ def get_login_log():
 @permission_required(ADMIN)
 def get_log():
     if request.method == 'GET':
-        # return render_template("get.html")
-        return response_multiple("查询成功", 200, dao_service.log_dao.getAll())
+        return render_template("get.html")
+        # return response_multiple("查询成功", 200, dao_service.log_dao.getAll())
 
     if request.method == 'POST':
         try:
             data = request.get_json(silent=True)
 
             if data is not None:
-                username = data.get('username')
+                from_id = data.get('from_id')
+                to_id = data.get('to_id')
                 page = data.get('page')
                 per_page = data.get('per_page')
 
             else:
-                username = request.form.get('username')
+                from_id = request.form.get('from_id')
+                to_id = request.form.get('to_id')
                 page = request.form.get('page')
                 per_page = request.form.get('per_page')
 
@@ -247,7 +255,7 @@ def get_log():
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        return response_multiple("查询成功", 200, dao_service.log_dao.getFuzzy(username, page, per_page))
+        return response_multiple("查询成功", 200, dao_service.log_dao.getFuzzy(from_id, to_id, page, per_page))
 
 
 @admin.route('/get_expert_apply', methods=['POST', 'GET'])

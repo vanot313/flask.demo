@@ -59,14 +59,25 @@ class LogDao:
 
         return ans
 
-    def getFuzzy(self, username=""):
-        key1 = or_(Log.username.like("%" + username + "%"), Log.username.is_(None))
-        # key2 = or_(UserInfo.id.like("%" + id + "%"), UserInfo.id.is_(None))
+    def getFuzzy(self, from_id="", to_id="", page="1", per_page="10"):
+        if page is None:
+            page = 1
+        if per_page is None:
+            per_page = 10
+        if from_id is None:
+            from_id = ''
+        if to_id is None:
+            to_id = ''
+
+        key1 = or_(Log.from_id.like("%" + from_id + "%"), Log.from_id.is_(None))
+        key2 = or_(Log.to_id.like("%" + to_id + "%"), Log.to_id.is_(None))
         # key3 = or_(UserInfo.email.like("%" + email + "%"), UserInfo.email.is_(None))
         # key4 = or_(UserInfo.location.like("%" + location + "%"), UserInfo.location.is_(None))
 
-        if username is not "":
-            key1 = Log.username.like("%" + username + "%")
+        if from_id is not "":
+            key1 = Log.from_id.like("%" + from_id + "%")
+        if to_id is not "":
+            key1 = Log.to_id.like("%" + to_id + "%")
         # if id is not "":
         #     key2 = UserInfo.id.like("%" + id + "%")
         # if email is not "":
@@ -77,7 +88,7 @@ class LogDao:
         result = Log.query.filter(
             and_(
                 key1,
-                # key2,
+                key2,
                 # key3,
                 # key4
             )
