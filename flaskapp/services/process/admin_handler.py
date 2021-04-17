@@ -46,19 +46,19 @@ class AdminHandler:
             app.logger.info('Exception: %s', e)
             return response("查询用户信息失败", 1001, {})
 
-        if email is not None:
+        if email is not(' ' or None):
             target.email = email
 
-        if mobile is not None:
+        if mobile is not(' ' or None):
             target.mobile = mobile
 
-        if location is not None:
+        if location is not(' ' or None):
             target.location = location
 
-        if birth is not None:
+        if birth is not(' ' or None):
             target.birth = birth
 
-        if description is not None:
+        if description is not(' ' or None):
             target.description = description
 
         try:
@@ -87,7 +87,6 @@ class AdminHandler:
                               username=dao_service.user_info_dao.getById(session.get("id")).first().username)
 
                 dao_service.log_dao.add(new_log)
-
         except:
             return response("数据库操作失败", 1001, {})
 

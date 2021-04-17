@@ -207,19 +207,19 @@ class UserHandler:
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})
 
-        if email is not None and '':
+        if email is not(' ' or None):
             target.email = email
 
-        if mobile is not None and '':
+        if mobile is not(' ' or None):
             target.mobile = mobile
 
-        if location is not None and '':
+        if location is not(' ' or None):
             target.location = location
 
-        if birth is not None and '':
+        if birth is not(' ' or None):
             target.birth = birth
 
-        if description is not None:
+        if description is not(' ' or None):
             target.description = description
 
         try:

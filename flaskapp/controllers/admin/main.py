@@ -6,7 +6,6 @@ from dao import dao_service
 from application import app
 from config.macro_setting import *
 
-# 创建一个蓝图对象
 admin = Blueprint("admin", __name__)
 
 

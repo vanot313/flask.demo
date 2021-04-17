@@ -1,5 +1,3 @@
-import time
-
 from flask import *
 from services import *
 from util.response import *
@@ -329,7 +327,25 @@ def get_work_order():
 def get_log():
     if request.method == 'GET':
         return response_dict("查询成功", 200,
-                             dao_service.log_dao.getByUser(session.get("id")))
+                             dao_service.log_dao.getByUser(user_id=session.get("id")))
+    elif request.method == 'POST':
+        try:
+            data = request.get_json(silent=True)
+
+            if data is not None:
+                page = data.get('page')
+                per_page = data.get('per_page')
+
+            else:
+                page = request.form.get('page')
+                per_page = request.form.get('per_page')
+
+        except Exception as e:
+            app.logger.info('Exception: %s', e)
+            return response("数据接收异常", 1002, {})
+
+        return response_dict("查询成功", 200,
+                             dao_service.work_order_dao.getFuzzy(user_id=session.get("id"),page=page, per_page=per_page))
 
 
 @user.route('/apply_for_expert', methods=['GET', 'POST'])

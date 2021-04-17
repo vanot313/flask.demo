@@ -152,19 +152,19 @@ class ExpertHandler:
             app.logger.info('Exception: %s', e)
             return response("数据库查询失败", 1001, {})
 
-        if email is not None:
+        if email is not(' ' or None):
             target.email = email
 
-        if mobile is not None:
+        if mobile is not(' ' or None):
             target.mobile = mobile
 
-        if location is not None:
+        if location is not(' ' or None):
             target.location = location
 
-        if birth is not None:
+        if birth is (not None and not ''):
             target.birth = birth
 
-        if description is not None:
+        if description is not(' ' or None):
             target.description = description
 
         try:
