@@ -101,7 +101,8 @@ def all_wait_work_order():
             app.logger.info('Exception: %s', e)
             return response("数据接收异常", 1002, {})
 
-        return response_dict("查询成功", 200, dao_service.work_order_dao.getFuzzy(status=ORDER_WAIT, page=page, per_page=per_page))
+        return response_dict("查询成功", 200, dao_service.work_order_dao.getFuzzy(status=ORDER_WAIT, no_method=4, page=page,
+                                                                              per_page=per_page))
 
 
 # 查看自己负责的工单

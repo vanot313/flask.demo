@@ -35,7 +35,7 @@ class WorkOrderDao:
 
         return result
 
-    def getFuzzy(self, user_id="", order_id="", expert_id="", status="", page="1", per_page="10"):
+    def getFuzzy(self, user_id="", order_id="", expert_id="", status="", page="1", per_page="10", no_method=""):
         if page is None:
             page = 1
         if per_page is None:
@@ -44,6 +44,8 @@ class WorkOrderDao:
             order_id = ''
         if status is None:
             status = ''
+        if no_method is None:
+            no_method = ''
 
         key1 = or_(WorkOrder.user_id.like("%" + str(user_id) + "%"), WorkOrder.user_id.is_(None))
         key2 = or_(WorkOrder.order_id.like("%" + str(order_id) + "%"), WorkOrder.order_id.is_(None))
@@ -66,7 +68,7 @@ class WorkOrderDao:
                 key3,
                 key4
             )
-        ).filter(WorkOrder.method != 4)
+        ).filter(WorkOrder.method != no_method)
 
         result = result.paginate(page=int(page), per_page=int(per_page))
         ans = {}
