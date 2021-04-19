@@ -250,7 +250,6 @@ def new_market():
             return response("数据接收异常", 1002, {})
 
         if file is not None:
-            print("########## RECEIVED FILE #########")
             filename = file.filename
             filepath = services_container.file_handler.upload_single(file, "market")
             return services_container.user_handler.market_handler(user_id, remarks, method, filepath, filename,

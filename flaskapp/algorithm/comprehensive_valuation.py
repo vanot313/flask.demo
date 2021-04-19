@@ -109,10 +109,6 @@ class ComprehensiveValuationA:
 
     # 输入矩阵参数 构造权重向量 专家打分法
     def matrix_value(self, weight, applied):
-
-
-        print(1/weight[5])
-
         weight_factor_0 = 1 / weight[0]
         weight_factor_1 = 1 / weight[1]
         weight_factor_2 = 1 / weight[2]

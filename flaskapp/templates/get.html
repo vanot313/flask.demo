@@ -12,4 +12,31 @@
         <input  type="submit"/>
     </form>
 </body>
+
+
+<script>
+
+    let s = "\"[(0.3905242917512701+0j), (0.2761423749153965+0j), (0.195262145875635+0j), (0.13807118745769836-0j)]\""
+
+    s = s.slice(2, s.length-2)
+    console.log(s)
+
+    s = s.replace(/\(/g, '').replace(/\)/g, '').replace(/ /g, '')
+    console.log(s)
+
+    items = s.split(',')
+
+    for (let i = 0; i<items.length; i++){
+        items[i] = items[i].substr(0,6)
+        console.log(items[i])
+    }
+
+    s = items.concat()
+    console.log(s)
+
+    s = "[" + s.toString() + "]"
+    console.log(s)
+
+</script>
+
 </html>
