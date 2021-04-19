@@ -200,8 +200,10 @@ def new_comprehensive():
     if request.method == 'POST':
         try:
             user_id = session.get("id")
-            expert_id = request.form["expert_id"]
-            remarks = request.form["remarks"]
+            # expert_id = request.form["expert_id"]
+            # remarks = request.form["remarks"]
+            expert_id = request.form.get("expert_id")
+            remarks = request.form.get("remarks")
 
             method = COMPREHENSIVE
             file = request.files['file']
@@ -227,8 +229,6 @@ def new_comprehensive():
 def new_market():
     # TEMP 在生产环境中将被弃用
     if request.method == 'GET':
-        print(services_container)
-        print(services_container.i)
         return render_template("new_comprehensive.html")
 
     if request.method == 'POST':
@@ -250,6 +250,7 @@ def new_market():
             return response("数据接收异常", 1002, {})
 
         if file is not None:
+            print("########## RECEIVED FILE #########")
             filename = file.filename
             filepath = services_container.file_handler.upload_single(file, "market")
             return services_container.user_handler.market_handler(user_id, remarks, method, filepath, filename,

@@ -210,10 +210,12 @@ def process_comprehensive():
         timeliness = float(timeliness)
         dimensional = float(dimensional)
         economy = float(economy)
-        for i in range(0, 5):
+        for i in range(0, 6):
             quality_weight[i] = float(quality_weight[i])
-        for i in range(0, 5):
+
+        for i in range(0, 6):
             applied_weight[i] = float(applied_weight[i])
+
 
         return services_container.expert_handler.comprehensive_handler(order_id, rareness, timeliness, dimensional,
                                                                        economy, quality_weight, applied_weight)

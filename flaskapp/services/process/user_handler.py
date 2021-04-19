@@ -31,10 +31,13 @@ class UserHandler:
         app.config.from_pyfile('config/local_setting.py')
         db = SQLAlchemy(app)
 
+        print("########## Enter Market Valuation Algorithm ##########")
+
         file_path = os.path.join('uploadfile', file_path)
         handler = MarketValuationA()
         handler.load(file_path)
         handler.predict()
+
 
         db.session.execute(text("update t_market_valuation \
                 set graininess=:graininess,dimension=:dimension,activity=:activity,correlation=:correlation,amount=:amount,growth=:growth,coverage=:coverage,attribute=:attribute,source=:source,maintenance=:maintenance,incoming=:incoming,outgoing=:outgoing,size=:size,scale=:scale,suggestion=:suggestion\
@@ -103,9 +106,15 @@ class UserHandler:
 
         # dao_service.work_order_dao.update(order)
 
+        print("########## Exit Market Valuation Algorithm ##########")
+
         return response("工单估值成功", 200, {})
 
     def market_handler(self, user_id, remarks, method, filepath, filename, expert_id):
+        print("######## Enter Market Handler #########")
+
+        print("######## File Path ######## ", filepath)
+
         if expert_id != 0:
             expert_name = dao_service.expert_info_dao.getById(expert_id).first().username
             new_work_order = WorkOrder(user_id=user_id, u_remarks=remarks, method=method, file_path=filepath,
@@ -118,16 +127,24 @@ class UserHandler:
         else:
             return response('创建失败', 1002, {})
 
+        print("######## Step 1 #########")
+
         order_id = new_work_order.order_id
         new_market = MarketValuation(order_id=order_id)
         dao_service.market_valutation_dao.add(new_market)
 
+        print("######## Step 2 #########")
+
         self.executor.submit(self.market_predict, order_id, filepath, expert_id)
         # self.market_predict(order_id, filepath)
+
+        print("######## Step 3 #########")
 
         new_log = Log(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建市场法工单",
                       username=dao_service.user_info_dao.getById(session.get("id")).first().username)
         dao_service.log_dao.add(new_log)
+
+        print("######## Exit Market Handler #########")
 
         return response("工单申请成功", 200, new_work_order)
 
@@ -148,8 +165,8 @@ class UserHandler:
         new_comprehensive = ComprehensiveValuation(order_id=order_id)
         dao_service.comprehensive_valuation_dao.add(new_comprehensive)
 
-        new_log = dao_service.log_dao(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建综合估值法工单",
-                                      username=dao_service.user_info_dao.getById(session.get("id")).first().username)
+        new_log = Log(from_id=user_id, to_id=user_id, order_id=order_id, operation="新建综合估值法工单",
+                      username=dao_service.user_info_dao.getById(session.get("id")).first().username)
         dao_service.log_dao.add(new_log)
 
         return response("工单申请成功", 200, new_work_order)
@@ -207,19 +224,19 @@ class UserHandler:
             app.logger.info('Exception: %s', e)
             return response("失败", 1001, {})
 
-        if email is not(' ' or None):
+        if email is not (' ' or None):
             target.email = email
 
-        if mobile is not(' ' or None):
+        if mobile is not (' ' or None):
             target.mobile = mobile
 
-        if location is not(' ' or None):
+        if location is not (' ' or None):
             target.location = location
 
-        if birth is not(' ' or None):
+        if birth is not (' ' or None):
             target.birth = birth
 
-        if description is not(' ' or None):
+        if description is not (' ' or None):
             target.description = description
 
         try:

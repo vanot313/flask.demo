@@ -108,13 +108,22 @@ class ComprehensiveValuationA:
         return SUCCESS
 
     # 输入矩阵参数 构造权重向量 专家打分法
-    def matrix_value(self, weight,
-                     applied):
+    def matrix_value(self, weight, applied):
+
+
+        print(1/weight[5])
+
+        weight_factor_0 = 1 / weight[0]
+        weight_factor_1 = 1 / weight[1]
+        weight_factor_2 = 1 / weight[2]
+        weight_factor_3 = 1 / weight[3]
+        weight_factor_4 = 1 / weight[4]
+        weight_factor_5 = 1 / weight[5]
 
         mat_quality = np.array([[1, weight[0], weight[1], weight[2]],
-                                [1 / weight[0], 1, weight[3], weight[4]],
-                                [1 / weight[1], 1 / weight[3], 1, weight[5]],
-                                [1 / weight[2], 1 / weight[4], 1 / weight[5], 1]
+                                [weight_factor_0, 1, weight[3], weight[4]],
+                                [weight_factor_1, weight_factor_3, 1, weight[5]],
+                                [weight_factor_2, weight_factor_4, weight_factor_5, 1]
                                 ])
 
         mat_applied = np.array([[1, 1 / applied[0], 1 / applied[1], 1 / applied[2]],
@@ -124,6 +133,7 @@ class ComprehensiveValuationA:
                                 ])
 
         weight_quality = self.get_weight(mat_quality)
+
         if len(weight_quality) == 0:
             print("质量对比矩阵未通过一致性检验，需对对比矩阵重新构造")
             return Q_ERROR

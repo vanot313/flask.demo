@@ -44,6 +44,7 @@ class ExpertHandler:
             return response("质量对比矩阵未通过一致性检验，需对对比矩阵重新构造", 1001, {})
         elif msg == A_ERROR:
             return response("应用对比矩阵未通过一致性检验，需对对比矩阵重新构造", 1001, {})
+
         handler.calculate()
 
         # 数据库保存模型片段
