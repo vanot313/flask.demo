@@ -1,5 +1,4 @@
 from flask import jsonify
-from common.models import *
 from collections import Iterable
 
 
